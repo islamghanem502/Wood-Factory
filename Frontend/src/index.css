@@ -1,0 +1,115 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* ألوان وخطوط الموقع — مطابقة للتصميم الأصلي */
+:root {
+  --font-arabic: "Cairo", "Tajawal", system-ui, sans-serif;
+  --font-serif: "Amiri", "Playfair Display", serif;
+  --radius: 0.75rem;
+
+  --background: #0b0c0e;
+  --foreground: #f5eedf;
+  --card: #121418;
+  --card-foreground: #f5eedf;
+  --popover: #16191f;
+  --popover-foreground: #f5eedf;
+  --primary: #cba157;
+  --primary-foreground: #0b0c0e;
+  --secondary: #1d2129;
+  --secondary-foreground: #e4d8c5;
+  --muted: #1c2028;
+  --muted-foreground: #a69e90;
+  --accent: #262c37;
+  --accent-foreground: #e5be70;
+  --destructive: #991b1b;
+  --destructive-foreground: #fff;
+  --border: #cba1572e;
+  --input: #cba15738;
+  --ring: #cba157;
+}
+
+@theme inline {
+  --font-serif: var(--font-serif);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+    outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+  }
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-arabic);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-arabic);
+    overflow-x: hidden;
+  }
+}
+
+/* التدرجات الذهبية */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #f7dfa5, #cba157, #9e732d);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.gold-gradient-bg {
+  background: linear-gradient(135deg, #e3be75, #cba157, #aa7c31);
+}
+.gold-glass {
+  background: #121418d1;
+  border: 1px solid #cba15738;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+.gold-glass-hover:hover {
+  border-color: #cba15773;
+  box-shadow: 0 10px 30px -10px #cba15726;
+}
+.gold-border-glow {
+  box-shadow: 0 0 25px -5px #cba15740;
+}
+.gold-shine {
+  position: relative;
+  overflow: hidden;
+}
+.gold-shine::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(60deg, #0000 30%, #ffffff26, #0000 70%);
+  transform: rotate(25deg) translateY(-100%);
+  transition: transform 0.8s;
+}
+.gold-shine:hover::after {
+  transform: rotate(25deg) translateY(100%);
+}
