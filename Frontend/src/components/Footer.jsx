@@ -15,12 +15,12 @@ export default function Footer({ onOpenConsultation }) {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
-    <footer className="relative bg-[#08090b] text-[#f4ede4] border-t border-[#cba157]/20 pt-16 pb-12 overflow-hidden">
+    <footer className="relative bg-[#08090b] text-[#f4ede4] border-t border-[#cba157]/20 pt-16 pb-28 sm:pb-12 overflow-hidden">
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-64 bg-[#cba157]/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         {/* بطاقة CTA */}
-        <div className="rounded-3xl p-8 sm:p-12 mb-16 bg-gradient-to-r from-[#171a22] via-[#212632] to-[#171a22] border border-[#cba157]/40 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 text-right">
+        <div className="rounded-3xl p-6 sm:p-12 mb-16 bg-gradient-to-r from-[#171a22] via-[#212632] to-[#171a22] border border-[#cba157]/40 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 text-right">
           <div className="space-y-3 max-w-2xl">
             <span className="text-xs font-bold text-[#cba157] tracking-wider uppercase block">
               جاهز لتحويل أرضك أو مزرعتك أو حديقتك إلى ملاذ ريفي استثنائي؟

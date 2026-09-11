@@ -62,14 +62,14 @@ export default function Hero({ onOpenConsultation }) {
             href={waLink("مرحباً مؤسسة خشبي WOODEN، أرغب في استفسار حول بناء كوخ خشبي فاخر.")}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2.5 h-13 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base shadow-xl shadow-emerald-950/60 transition-all active:scale-95"
+            className="w-full sm:w-auto sm:flex-1 inline-flex items-center justify-center gap-2.5 h-13 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base shadow-xl shadow-emerald-950/60 transition-all active:scale-95"
           >
             <MessageCircle className="w-5 h-5" />
             <span>محادثة واتساب فورية</span>
           </a>
           <a
             href={telLink}
-            className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2.5 h-13 px-6 rounded-2xl bg-[#161a22] hover:bg-[#202532] text-[#f7dfa5] border-2 border-[#cba157]/50 font-bold text-base shadow-xl transition-all active:scale-95"
+            className="w-full sm:w-auto sm:flex-1 inline-flex items-center justify-center gap-2.5 h-13 px-6 rounded-2xl bg-[#161a22] hover:bg-[#202532] text-[#f7dfa5] border-2 border-[#cba157]/50 font-bold text-base shadow-xl transition-all active:scale-95"
           >
             <Phone className="w-5 h-5 text-[#cba157]" />
             <span>اتصال هاتفي مباشر</span>
@@ -77,7 +77,7 @@ export default function Hero({ onOpenConsultation }) {
           <button
             type="button"
             onClick={() => onOpenConsultation("استشارة شاملة من الصفحة الرئيسية")}
-            className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2.5 h-13 px-6 rounded-2xl gold-gradient-bg text-black font-black text-base shadow-xl shadow-[#cba157]/25 hover:brightness-110 transition-all active:scale-95"
+            className="w-full sm:w-auto sm:flex-1 inline-flex items-center justify-center gap-2.5 h-13 px-6 rounded-2xl gold-gradient-bg text-black font-black text-base shadow-xl shadow-[#cba157]/25 hover:brightness-110 transition-all active:scale-95"
           >
             <Sparkles className="w-5 h-5 text-black" />
             <span>طلب استشارة مجانية</span>

@@ -19,16 +19,16 @@ export default function Navbar({ onOpenConsultation }) {
     <>
       {/* الشريط العلوي */}
       <div className="bg-[#101217] text-[#cba157] text-[11px] sm:text-xs py-1.5 px-4 border-b border-[#cba157]/20">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-neutral-300">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            <span className="text-neutral-300 truncate">
               عروض استثنائية لمشاريع الأكواخ والشاليهات السياحية • مطابقة للكود الأوروبي
             </span>
           </div>
-          <div className="hidden md:flex items-center gap-6 text-neutral-400">
-            <span>ساعات العمل: السبت - الخميس (متاحون على مدار الساعة للواتساب)</span>
-            <a href={telLink} className="text-[#f7dfa5] hover:underline font-semibold flex items-center gap-1">
+          <div className="flex items-center gap-6 text-neutral-400 shrink-0">
+            <span className="hidden md:inline">ساعات العمل: السبت - الخميس (متاحون على مدار الساعة للواتساب)</span>
+            <a href={telLink} className="text-[#f7dfa5] hover:underline font-semibold flex items-center gap-1" dir="ltr">
               <Phone className="w-3 h-3" />
               {CONTACT.phoneDisplay}
             </a>
@@ -62,12 +62,12 @@ export default function Navbar({ onOpenConsultation }) {
           </a>
 
           {/* روابط سطح المكتب */}
-          <nav className="hidden lg:flex items-center gap-7 text-sm font-medium text-neutral-300">
+          <nav className="hidden xl:flex items-center gap-7 text-sm font-medium text-neutral-300">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="hover:text-[#f7dfa5] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:right-0 after:w-0 after:h-0.5 after:bg-[#cba157] hover:after:w-full after:transition-all"
+                className="whitespace-nowrap hover:text-[#f7dfa5] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:right-0 after:w-0 after:h-0.5 after:bg-[#cba157] hover:after:w-full after:transition-all"
               >
                 {link.label}
               </a>
@@ -78,7 +78,7 @@ export default function Navbar({ onOpenConsultation }) {
           <div className="hidden sm:flex items-center gap-3">
             <a
               href={telLink}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#171a21] hover:bg-[#202530] text-[#f7dfa5] border border-[#cba157]/30 text-xs font-bold transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#171a21] hover:bg-[#202530] text-[#f7dfa5] border border-[#cba157]/30 text-xs font-bold whitespace-nowrap transition-all"
               title="اتصال مباشر"
             >
               <Phone className="w-3.5 h-3.5 text-[#cba157]" />
@@ -88,7 +88,7 @@ export default function Navbar({ onOpenConsultation }) {
               href={waLink(WA_MESSAGE)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-700/80 hover:bg-emerald-600 text-white border border-emerald-500/40 text-xs font-bold transition-all shadow-md"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-700/80 hover:bg-emerald-600 text-white border border-emerald-500/40 text-xs font-bold whitespace-nowrap transition-all shadow-md"
             >
               <MessageCircle className="w-3.5 h-3.5" />
               <span>واتساب سريع</span>
@@ -107,7 +107,7 @@ export default function Navbar({ onOpenConsultation }) {
           <button
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
-            className="lg:hidden p-2 rounded-xl bg-[#161920] border border-[#cba157]/30 text-[#f7dfa5]"
+            className="xl:hidden p-2 rounded-xl bg-[#161920] border border-[#cba157]/30 text-[#f7dfa5]"
             aria-label="القائمة الرئيسية"
           >
             {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -116,7 +116,7 @@ export default function Navbar({ onOpenConsultation }) {
 
         {/* قائمة الجوال */}
         {menuOpen && (
-          <div className="lg:hidden bg-[#0e1015]/98 border-b border-[#cba157]/20 p-5 space-y-4 animate-in slide-in-from-top-4">
+          <div className="xl:hidden bg-[#0e1015]/98 border-b border-[#cba157]/20 p-5 space-y-4 animate-in slide-in-from-top-4">
             <nav className="flex flex-col gap-3 text-right">
               {NAV_LINKS.map((link) => (
                 <a

@@ -67,7 +67,7 @@ export default function ConsultationModal({ open, onOpenChange, defaultService =
       <Dialog.Portal>
         <Dialog.Overlay className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50" />
         <Dialog.Content
-          className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 duration-200 max-w-lg bg-[#111317] border border-[#cba157]/30 text-[#f5eedf] p-6 sm:p-8 rounded-2xl shadow-2xl"
+          className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 duration-200 max-w-lg max-h-[92vh] overflow-y-auto bg-[#111317] border border-[#cba157]/30 text-[#f5eedf] p-6 sm:p-8 rounded-2xl shadow-2xl"
           dir="rtl"
         >
           {/* الترويسة */}
@@ -161,13 +161,13 @@ export default function ConsultationModal({ open, onOpenChange, defaultService =
 
               <div className="space-y-1.5 text-right">
                 <label className={labelClass}>المساحة التقديرية (بالمتر المربع)</label>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   {AREAS.map((a) => (
                     <button
                       key={a}
                       type="button"
                       onClick={() => setArea(a)}
-                      className={`flex-1 py-1.5 text-xs rounded-md border transition-all ${
+                      className={`flex-1 min-w-[4.5rem] py-1.5 text-xs whitespace-nowrap rounded-md border transition-all ${
                         area === a
                           ? "bg-[#cba157] text-black font-bold border-[#cba157]"
                           : "bg-[#181c24] text-neutral-300 border-neutral-800 hover:border-[#cba157]/40"
@@ -194,7 +194,7 @@ export default function ConsultationModal({ open, onOpenChange, defaultService =
                 <button
                   type="button"
                   onClick={() => handleSubmit("whatsapp")}
-                  className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-11 text-base shadow-lg shadow-emerald-950/40 gap-2 transition-all"
+                  className="sm:flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-11 text-base shadow-lg shadow-emerald-950/40 gap-2 transition-all"
                 >
                   <MessageCircle className="w-5 h-5" />
                   تأكيد الاستشارة عبر الواتساب
@@ -202,7 +202,7 @@ export default function ConsultationModal({ open, onOpenChange, defaultService =
                 <button
                   type="button"
                   onClick={() => handleSubmit("call")}
-                  className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md border bg-transparent border-[#cba157] text-[#f7dfa5] hover:bg-[#cba157]/15 font-bold h-11 text-base gap-2 transition-all"
+                  className="sm:flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md border bg-transparent border-[#cba157] text-[#f7dfa5] hover:bg-[#cba157]/15 font-bold h-11 text-base gap-2 transition-all"
                 >
                   <Phone className="w-5 h-5 text-[#cba157]" />
                   اتصال هاتفي مباشر الآن

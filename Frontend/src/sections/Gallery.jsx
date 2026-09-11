@@ -122,11 +122,11 @@ export default function Gallery({ onOpenConsultation }) {
       {/* نافذة معاينة المشروع */}
       {selected && (
         <div
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+          className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
           onClick={() => setSelected(null)}
         >
           <div
-            className="max-w-4xl w-full bg-[#12151b] border border-[#cba157]/40 rounded-3xl overflow-hidden shadow-2xl relative text-right"
+            className="max-w-4xl w-full max-h-[92vh] overflow-y-auto bg-[#12151b] border border-[#cba157]/40 rounded-3xl shadow-2xl relative text-right"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative aspect-video bg-black">
@@ -139,8 +139,8 @@ export default function Gallery({ onOpenConsultation }) {
                 ✕
               </button>
             </div>
-            <div className="p-6 space-y-3">
-              <div className="flex items-center justify-between">
+            <div className="p-4 sm:p-6 space-y-3">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
                 <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#cba157] text-black">{selected.categoryLabel}</span>
                 <span className="text-xs text-neutral-400">
                   المساحة: {selected.area} • التنفيذ: {selected.duration}
@@ -155,7 +155,7 @@ export default function Gallery({ onOpenConsultation }) {
                   </span>
                 ))}
               </div>
-              <div className="pt-4 border-t border-neutral-800 flex gap-3">
+              <div className="pt-4 border-t border-neutral-800 flex flex-col sm:flex-row gap-3">
                 <button
                   type="button"
                   onClick={() => {
@@ -163,7 +163,7 @@ export default function Gallery({ onOpenConsultation }) {
                     setSelected(null);
                     onOpenConsultation(`مشروع: ${title}`);
                   }}
-                  className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md gold-gradient-bg text-black font-bold h-11 text-sm transition-all"
+                  className="sm:flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-md gold-gradient-bg text-black font-bold h-11 text-sm transition-all"
                 >
                   طلب تفاصيل وسعر هذا المشروع
                 </button>

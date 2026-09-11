@@ -38,7 +38,7 @@ export default function WhyUs() {
         </div>
 
         {/* جدول المقارنة */}
-        <div className="mt-16 rounded-3xl bg-[#12151b] border border-[#cba157]/30 p-6 sm:p-10 text-right overflow-x-auto">
+        <div className="mt-16 rounded-3xl bg-[#12151b] border border-[#cba157]/30 p-5 sm:p-10 text-right overflow-x-auto">
           <div className="flex items-center justify-between mb-6 border-b border-neutral-800 pb-4">
             <div>
               <h3 className="text-xl sm:text-2xl font-black text-white">
@@ -47,7 +47,25 @@ export default function WhyUs() {
               <p className="text-xs text-neutral-400 mt-1">لماذا يتجه المستثمرون وملاك الشاليهات إلى الأكواخ الخشبية المودولار؟</p>
             </div>
           </div>
-          <table className="w-full text-right text-xs sm:text-sm">
+          {/* عرض الجوال: بطاقات بدل الجدول */}
+          <div className="sm:hidden space-y-3">
+            {COMPARISON_ROWS.map((row) => (
+              <div key={row.label} className="rounded-2xl bg-[#171a22] border border-neutral-800 p-4 space-y-2.5 text-xs">
+                <h4 className="font-bold text-white text-sm">{row.label}</h4>
+                <div className="flex gap-2.5 items-start">
+                  <span className="shrink-0 mt-0.5 px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 font-bold text-[10px]">خشبي</span>
+                  <span className="text-emerald-400 font-semibold leading-relaxed">{row.wooden}</span>
+                </div>
+                <div className="flex gap-2.5 items-start">
+                  <span className="shrink-0 mt-0.5 px-2 py-0.5 rounded-md bg-neutral-800 text-neutral-400 font-bold text-[10px]">خرساني</span>
+                  <span className="text-neutral-400 leading-relaxed">{row.concrete}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* عرض الشاشات الكبيرة: الجدول */}
+          <table className="hidden sm:table w-full text-right text-xs sm:text-sm">
             <thead>
               <tr className="border-b border-[#cba157]/20 text-neutral-400">
                 <th className="py-3 px-4">وجه المقارنة</th>

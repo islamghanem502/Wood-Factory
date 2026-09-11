@@ -41,7 +41,7 @@ export default function CostCalculator({ onOpenConsultation }) {
   };
 
   return (
-    <div className="relative rounded-3xl p-6 sm:p-10 gold-glass border border-[#cba157]/30 shadow-2xl overflow-hidden">
+    <div className="relative rounded-3xl p-4 sm:p-10 gold-glass border border-[#cba157]/30 shadow-2xl overflow-hidden">
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#cba157]/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-10">
@@ -92,9 +92,9 @@ export default function CostCalculator({ onOpenConsultation }) {
 
             {/* 2. المساحة */}
             <div className="bg-[#14171d] p-5 rounded-2xl border border-neutral-800 space-y-4">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center gap-3">
                 <span className="text-sm font-bold text-white">2. المساحة الإجمالية المطلوبة:</span>
-                <span className="text-xl font-black text-[#f7dfa5] px-3 py-1 bg-[#cba157]/15 rounded-lg border border-[#cba157]/30">
+                <span className="text-xl font-black text-[#f7dfa5] px-3 py-1 bg-[#cba157]/15 rounded-lg border border-[#cba157]/30 whitespace-nowrap shrink-0">
                   {area} <span className="text-xs font-normal text-neutral-300">متر مربع</span>
                 </span>
               </div>
@@ -114,7 +114,7 @@ export default function CostCalculator({ onOpenConsultation }) {
               </Slider.Root>
               <div className="flex justify-between text-[11px] text-neutral-500 font-medium">
                 <span>25 م² (كوخ حديقة صغير)</span>
-                <span>120 م² (شاليه متوسط)</span>
+                <span className="hidden sm:inline">120 م² (شاليه متوسط)</span>
                 <span>400 م² (قصر ريفي متكامل)</span>
               </div>
             </div>
@@ -155,7 +155,7 @@ export default function CostCalculator({ onOpenConsultation }) {
           </div>
 
           {/* النتيجة */}
-          <div className="lg:col-span-5 bg-gradient-to-b from-[#181c24] to-[#0f1115] border-2 border-[#cba157]/40 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-6 relative">
+          <div className="lg:col-span-5 bg-gradient-to-b from-[#181c24] to-[#0f1115] border-2 border-[#cba157]/40 rounded-3xl p-4 sm:p-7 shadow-2xl space-y-6 relative">
             <div className="text-right">
               <span className="text-xs font-semibold uppercase tracking-wider text-[#cba157]">التقدير المالي المبدئي للمشروع</span>
               <h4 className="text-xl font-black text-white mt-1">{model.name}</h4>
@@ -179,9 +179,9 @@ export default function CostCalculator({ onOpenConsultation }) {
 
             <div className="bg-[#0b0c0e]/80 border border-[#cba157]/30 rounded-2xl p-4 text-center">
               <span className="text-xs text-neutral-400 block mb-1">متوسط التكلفة التقديرية</span>
-              <div className="text-3xl sm:text-4xl font-black text-[#f7dfa5] tracking-tight">
-                {fmt(minCost)} - {fmt(maxCost)}
-                <span className="text-sm font-normal text-neutral-400 mr-2">ريال سعودي</span>
+              <div className="text-2xl sm:text-4xl font-black text-[#f7dfa5] tracking-tight">
+                <span className="whitespace-nowrap">{fmt(minCost)} - {fmt(maxCost)}</span>
+                <span className="block sm:inline text-sm font-normal text-neutral-400 sm:mr-2 mt-1 sm:mt-0">ريال سعودي</span>
               </div>
               <p className="text-[11px] text-neutral-400 mt-2">
                 * التكلفة نهائية تعتمد على المخطط التفصيلي، الموقع الجغرافي، ونوعية التشطيب الداخلي
@@ -192,7 +192,7 @@ export default function CostCalculator({ onOpenConsultation }) {
               <button
                 type="button"
                 onClick={sendToWhatsApp}
-                className="w-full inline-flex items-center justify-center whitespace-nowrap bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-12 text-base shadow-lg shadow-emerald-950/50 gap-2 rounded-xl transition-all"
+                className="w-full inline-flex items-center justify-center whitespace-nowrap bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-12 text-sm sm:text-base px-3 shadow-lg shadow-emerald-950/50 gap-2 rounded-xl transition-all"
               >
                 <MessageCircle className="w-5 h-5" />
                 تثبيت الحسبة والمحادثة عبر الواتساب
@@ -201,14 +201,14 @@ export default function CostCalculator({ onOpenConsultation }) {
                 <button
                   type="button"
                   onClick={() => onOpenConsultation(model.name)}
-                  className="inline-flex items-center justify-center whitespace-nowrap border bg-transparent border-[#cba157] text-[#f7dfa5] hover:bg-[#cba157]/15 font-bold h-11 text-xs gap-1.5 rounded-xl transition-all"
+                  className="inline-flex items-center justify-center whitespace-nowrap border bg-transparent border-[#cba157] text-[#f7dfa5] hover:bg-[#cba157]/15 font-bold h-11 text-xs gap-1.5 px-2 rounded-xl transition-all"
                 >
                   <Sparkles className="w-4 h-4 text-[#cba157]" />
                   طلب استشارة مجانية
                 </button>
                 <a
                   href={telLink}
-                  className="inline-flex items-center justify-center whitespace-nowrap border bg-transparent border-neutral-700 text-white hover:bg-neutral-800 font-bold h-11 text-xs gap-1.5 rounded-xl transition-all"
+                  className="inline-flex items-center justify-center whitespace-nowrap border bg-transparent border-neutral-700 text-white hover:bg-neutral-800 font-bold h-11 text-xs gap-1.5 px-2 rounded-xl transition-all"
                 >
                   <Phone className="w-4 h-4 text-[#cba157]" />
                   اتصال هاتفي مباشر
