@@ -1,7 +1,7 @@
 import { Reveal } from "../lib/motion";
 
 /* ترويسة قسم موحّدة: رقم القسم + تسمية صغيرة + عنوان + مقدمة قصيرة */
-export default function SectionHeader({ number, label, title, intro, dark = false, className = "" }) {
+export default function SectionHeader({ number, label, title, intro, dark = false, size = "lg", className = "" }) {
   const muted = dark ? "text-white/55" : "text-walnut";
   const line = dark ? "bg-line-dark" : "bg-line";
   const heading = dark ? "text-white" : "text-ink";
@@ -15,7 +15,11 @@ export default function SectionHeader({ number, label, title, intro, dark = fals
           <span className={`w-8 h-px ${line}`} />
           <span>{label}</span>
         </Reveal>
-        <Reveal as="h2" delay={80} className={`mt-4 font-display font-bold text-4xl sm:text-5xl lg:text-6xl ${heading}`}>
+        <Reveal
+          as="h2"
+          delay={80}
+          className={`mt-4 font-display font-bold ${size === "sm" ? "text-3xl sm:text-4xl lg:text-5xl" : "text-4xl sm:text-5xl lg:text-6xl"} ${heading}`}
+        >
           {title}
         </Reveal>
       </div>

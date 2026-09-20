@@ -9,51 +9,49 @@ import { WhatsAppIcon, waButtonClass } from "./WhatsAppButton";
 
 const fmt = (n) => Math.round(n).toLocaleString("en-US");
 
-/* أيقونات خطية بسيطة لكل نموذج */
+/* أيقونات خطية لكل نوع (viewBox 32×24) */
 const ICONS = {
   aframe: (
     <>
-      <path d="M4 40 L32 6 L60 40 Z" />
-      <path d="M26 40 V26 H38 V40" />
+      <path d="M3 21 16 3l13 18Z" />
+      <path d="M13 21v-6h6v6M9.5 12h13" />
     </>
   ),
   twofloor: (
     <>
-      <path d="M8 22 L32 6 L56 22" />
-      <rect x="12" y="22" width="40" height="18" />
-      <path d="M12 31 H52" />
-      <path d="M20 26 h6 M38 26 h6 M20 35 h6 M38 35 h6" />
+      <path d="M4 11 16 3l12 8" />
+      <path d="M6 11v10h20V11M6 16h20" />
+      <path d="M10 16v-2.5h12V16M9.5 19h3M19.5 19h3" />
     </>
   ),
   single: (
     <>
-      <path d="M4 18 H60" />
-      <rect x="10" y="18" width="44" height="22" />
-      <rect x="16" y="24" width="18" height="16" />
-      <path d="M42 24 h6 v8 h-6 Z" />
+      <path d="M2 8h28" />
+      <path d="M5 8v13h22V8" />
+      <path d="M8 11h11v10M22 13h3v8" />
     </>
   ),
   kiosk: (
     <>
-      <rect x="10" y="18" width="44" height="22" />
-      <path d="M6 18 L10 10 H54 L58 18" />
-      <path d="M6 18 l4 5 l4 -5 l4 5 l4 -5 l4 5 l4 -5 l4 5 l4 -5 l4 5 l4 -5 l4 5 l4 -5 l4 5 l4 -5" />
-      <rect x="20" y="24" width="24" height="9" />
+      <path d="M5 10v11h22V10" />
+      <path d="M3 10l3-5h20l3 5" />
+      <path d="M3 10c1 2.4 3 2.4 4 0 1 2.4 3 2.4 4 0 1 2.4 3 2.4 4 0 1 2.4 3 2.4 4 0 1 2.4 3 2.4 4 0 1 2.4 3 2.4 4 0" />
+      <path d="M9 13h14v5H9Z" />
     </>
   ),
   pergola: (
     <>
-      <path d="M6 14 H58" />
-      <path d="M10 14 V40 M54 14 V40" />
-      <path d="M14 10 V14 M22 10 V14 M30 10 V14 M38 10 V14 M46 10 V14" />
-      <path d="M18 40 V30 H46 V40" />
+      <path d="M3 7h26" />
+      <path d="M6 7v14M26 7v14" />
+      <path d="M10 4v3M14 4v3M18 4v3M22 4v3" />
+      <path d="M10 21v-5h12v5" />
     </>
   ),
 };
 
 function ModelIcon({ id, className = "" }) {
   return (
-    <svg viewBox="0 0 64 46" className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" aria-hidden>
+    <svg viewBox="0 0 32 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" aria-hidden>
       {ICONS[id]}
     </svg>
   );
@@ -72,7 +70,7 @@ function CountUp({ value, className = "" }) {
     }
     const tween = gsap.to(state.current, {
       v: value,
-      duration: 0.7,
+      duration: 0.6,
       ease: "power2.out",
       onUpdate: () => {
         el.textContent = fmt(state.current.v);
@@ -87,18 +85,7 @@ function CountUp({ value, className = "" }) {
   );
 }
 
-/* خطوة مرقّمة */
-function Step({ n, title, children }) {
-  return (
-    <Reveal delay={n * 60}>
-      <div className="flex items-baseline gap-3 mb-5">
-        <span className="w-7 h-7 rounded-full bg-espresso text-white text-xs num flex items-center justify-center shrink-0">{n}</span>
-        <h3 className="font-display font-semibold text-xl text-ink">{title}</h3>
-      </div>
-      {children}
-    </Reveal>
-  );
-}
+const Label = ({ children }) => <span className="block text-[11px] tracking-[0.18em] text-walnut mb-3">{children}</span>;
 
 export default function CostCalculator() {
   const [modelId, setModelId] = useState(CALC_MODELS[0].id);
@@ -122,7 +109,6 @@ export default function CostCalculator() {
   const total = structureCost + addonsCost;
   const minCost = total * 0.95;
   const maxCost = total * 1.08;
-  const addonsShare = total ? (addonsCost / total) * 100 : 0;
 
   const sendToWhatsApp = () => {
     const addonNames = addons
@@ -131,7 +117,7 @@ export default function CostCalculator() {
       .join("، ");
     const message =
       CALC.whatsapp +
-      `%0A- النموذج: ${model.name}` +
+      `%0A- النوع: ${model.name}` +
       `%0A- المساحة: ${area} م²` +
       `%0A- الإضافات: ${addonNames || "بدون"}` +
       `%0A- التقدير: ${fmt(minCost)} – ${fmt(maxCost)} ر.س`;
@@ -139,186 +125,180 @@ export default function CostCalculator() {
   };
 
   return (
-    <section id="calculator" ref={sectionRef} className="bg-white py-24 sm:py-32">
+    <section id="calculator" ref={sectionRef} className="bg-white py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <SectionHeader number="03" label="الحاسبة" title={CALC.title} intro={CALC.intro} />
+        <SectionHeader number="03" label="الحاسبة" title={CALC.title} intro={CALC.intro} size="sm" />
 
-        <div className="mt-14 grid lg:grid-cols-12 gap-10 lg:gap-14 text-right">
-          {/* الخطوات */}
-          <div className="lg:col-span-7 space-y-14">
-            {/* 1 — النوع */}
-            <Step n={1} title="ما نوع البناء؟">
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
-                {CALC_MODELS.map((m) => {
-                  const active = m.id === modelId;
-                  return (
-                    <button
-                      key={m.id}
-                      type="button"
-                      onClick={() => setModelId(m.id)}
-                      aria-pressed={active}
-                      className={`group text-right rounded-lg border p-4 transition-all duration-300 ${
-                        active ? "bg-espresso border-espresso text-white" : "bg-white border-line text-ink hover:border-ink/40"
-                      }`}
-                    >
-                      <ModelIcon id={m.icon} className={`w-12 h-9 ${active ? "text-oak-light" : "text-walnut"}`} />
-                      <span className="block mt-3 font-medium text-sm">{m.name}</span>
-                      <span className={`block text-[11px] mt-0.5 leading-snug ${active ? "text-white/60" : "text-ink/50"}`}>{m.desc}</span>
-                      <span className={`block mt-2 text-xs num ${active ? "text-oak-light" : "text-ink/70"}`}>{fmt(m.ratePerMeter)} ر.س/م²</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </Step>
-
-            {/* 2 — المساحة */}
-            <Step n={2} title="كم المساحة؟">
-              <div className="flex flex-wrap items-end justify-between gap-6">
-                <div className="flex flex-wrap gap-2">
-                  {CALC.areaPresets.map((p) => (
-                    <button
-                      key={p}
-                      type="button"
-                      onClick={() => setArea(p)}
-                      aria-pressed={area === p}
-                      className={`h-10 px-4 rounded-md border text-sm num transition-colors ${
-                        area === p ? "bg-espresso border-espresso text-white" : "border-line text-ink hover:border-ink/40"
-                      }`}
-                    >
-                      {p} م²
-                    </button>
-                  ))}
-                </div>
-                <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setArea((a) => Math.max(25, a - 5))}
-                    className="w-10 h-10 rounded-full border border-line text-ink hover:bg-stone transition-colors text-lg"
-                    aria-label="تقليل المساحة"
-                  >
-                    −
-                  </button>
-                  <span className="font-display font-bold text-4xl num text-ink w-24 text-center tabular-nums">{area}</span>
-                  <button
-                    type="button"
-                    onClick={() => setArea((a) => Math.min(400, a + 5))}
-                    className="w-10 h-10 rounded-full border border-line text-ink hover:bg-stone transition-colors text-lg"
-                    aria-label="زيادة المساحة"
-                  >
-                    +
-                  </button>
-                  <span className="text-sm text-ink/50">م²</span>
-                </div>
-              </div>
-              <Slider.Root
-                value={[area]}
-                onValueChange={(v) => setArea(v[0])}
-                min={25}
-                max={400}
-                step={5}
-                dir="rtl"
-                className="relative flex w-full touch-none items-center select-none py-4 mt-2"
-                aria-label="المساحة بالمتر المربع"
-              >
-                <Slider.Track className="relative grow h-1 rounded-full bg-stone">
-                  <Slider.Range className="absolute h-full rounded-full bg-espresso" />
-                </Slider.Track>
-                <Slider.Thumb className="block w-6 h-6 rounded-full bg-white border-2 border-espresso shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-espresso/15" />
-              </Slider.Root>
-            </Step>
-
-            {/* 3 — الإضافات */}
-            <Step n={3} title="إضافات؟ (اختياري)">
-              <ul className="grid sm:grid-cols-2 gap-2.5">
-                {CALC_ADDONS.map((a) => {
-                  const active = addons.includes(a.id);
-                  return (
-                    <li key={a.id}>
+        <Reveal delay={120} className="mt-10">
+          <div className="grid lg:grid-cols-12 rounded-3xl border border-line overflow-hidden bg-white text-right">
+            {/* ── المدخلات ── */}
+            <div className="lg:col-span-8 min-w-0 p-5 sm:p-8 space-y-8">
+              {/* النوع */}
+              <div>
+                <Label>النوع</Label>
+                <div className="flex gap-2 overflow-x-auto hide-scrollbar -mx-5 px-5 sm:mx-0 sm:px-0 sm:flex-wrap">
+                  {CALC_MODELS.map((m) => {
+                    const active = m.id === modelId;
+                    return (
                       <button
+                        key={m.id}
                         type="button"
-                        role="switch"
-                        aria-checked={active}
-                        onClick={() => toggleAddon(a.id)}
-                        className={`w-full flex items-center justify-between gap-4 rounded-lg border px-4 py-3.5 text-right transition-colors ${
-                          active ? "border-espresso bg-stone" : "border-line hover:border-ink/40"
+                        onClick={() => setModelId(m.id)}
+                        aria-pressed={active}
+                        className={`shrink-0 inline-flex items-center gap-2.5 h-12 ps-4 pe-5 rounded-full border text-sm font-medium transition-colors duration-300 ${
+                          active ? "bg-espresso border-espresso text-white" : "border-line text-ink hover:border-ink/40"
                         }`}
                       >
-                        <span className="flex items-center gap-3">
-                          <span className={`relative w-10 h-6 rounded-full transition-colors ${active ? "bg-espresso" : "bg-line"}`}>
-                            <span
-                              className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform duration-300 ${
-                                active ? "right-1 translate-x-0" : "right-1 -translate-x-4"
-                              }`}
-                            />
-                          </span>
-                          <span className="text-sm font-medium text-ink">{a.name}</span>
-                        </span>
-                        <span className="text-xs num text-ink/60 whitespace-nowrap">+{fmt(a.cost)} ر.س</span>
+                        <ModelIcon id={m.icon} className={`w-7 h-5 ${active ? "text-oak-light" : "text-walnut"}`} />
+                        {m.name}
                       </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </Step>
-          </div>
-
-          {/* النتيجة */}
-          <Reveal delay={180} className="lg:col-span-5">
-            <div className="lg:sticky lg:top-28 rounded-xl bg-espresso text-white p-7 sm:p-9 overflow-hidden">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <span className="text-xs tracking-[0.18em] text-white/50">التقدير المبدئي</span>
-                  <h4 className="mt-2 font-display font-semibold text-2xl">{model.name}</h4>
-                  <p className="text-sm text-white/55 num">{area} م² · {fmt(model.ratePerMeter)} ر.س/م²</p>
+                    );
+                  })}
                 </div>
-                <ModelIcon id={model.icon} className="w-16 h-12 text-oak-light shrink-0" />
               </div>
 
-              <div className="mt-8">
-                <div className="font-display font-bold text-4xl sm:text-[2.75rem] leading-none num flex flex-wrap items-baseline gap-x-3">
-                  <CountUp value={minCost} />
-                  <span className="text-white/40 text-2xl">–</span>
-                  <CountUp value={maxCost} />
-                </div>
-                <span className="block mt-2 text-sm text-white/55">ريال سعودي، شامل التوريد والتركيب</span>
-              </div>
-
-              {/* شريط التوزيع */}
-              <div className="mt-8">
-                <div className="h-2 rounded-full bg-white/10 overflow-hidden flex">
-                  <span className="h-full bg-oak-light transition-all duration-700" style={{ width: `${100 - addonsShare}%` }} />
-                  <span className="h-full bg-oak transition-all duration-700" style={{ width: `${addonsShare}%` }} />
-                </div>
-                <dl className="mt-3 grid grid-cols-2 gap-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-sm bg-oak-light" />
-                    <dt className="text-white/60">الهيكل</dt>
-                    <dd className="num ms-auto">{fmt(structureCost)}</dd>
+              {/* المساحة */}
+              <div>
+                <div className="flex flex-wrap items-end justify-between gap-4 mb-2">
+                  <div>
+                    <Label>المساحة</Label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {CALC.areaPresets.map((p) => (
+                        <button
+                          key={p}
+                          type="button"
+                          onClick={() => setArea(p)}
+                          aria-pressed={area === p}
+                          className={`h-9 px-3.5 rounded-full border text-xs num transition-colors ${
+                            area === p ? "bg-espresso border-espresso text-white" : "border-line text-ink/80 hover:border-ink/40"
+                          }`}
+                        >
+                          {p} م²
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-sm bg-oak" />
-                    <dt className="text-white/60">الإضافات</dt>
-                    <dd className="num ms-auto">{fmt(addonsCost)}</dd>
+                  <div className="flex items-center gap-2.5">
+                    <button
+                      type="button"
+                      onClick={() => setArea((a) => Math.max(25, a - 5))}
+                      className="w-9 h-9 rounded-full border border-line text-ink hover:bg-stone transition-colors"
+                      aria-label="تقليل المساحة"
+                    >
+                      −
+                    </button>
+                    <span className="font-display font-bold text-3xl num text-ink w-16 text-center tabular-nums">{area}</span>
+                    <button
+                      type="button"
+                      onClick={() => setArea((a) => Math.min(400, a + 5))}
+                      className="w-9 h-9 rounded-full border border-line text-ink hover:bg-stone transition-colors"
+                      aria-label="زيادة المساحة"
+                    >
+                      +
+                    </button>
+                    <span className="text-xs text-ink/50">م²</span>
+                  </div>
+                </div>
+                <Slider.Root
+                  value={[area]}
+                  onValueChange={(v) => setArea(v[0])}
+                  min={25}
+                  max={400}
+                  step={5}
+                  dir="rtl"
+                  className="relative flex w-full touch-none items-center select-none py-3"
+                  aria-label="المساحة بالمتر المربع"
+                >
+                  <Slider.Track className="relative grow h-1 rounded-full bg-stone">
+                    <Slider.Range className="absolute h-full rounded-full bg-espresso" />
+                  </Slider.Track>
+                  <Slider.Thumb className="block w-5 h-5 rounded-full bg-white border-2 border-espresso shadow focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-espresso/15" />
+                </Slider.Root>
+              </div>
+
+              {/* الإضافات */}
+              <div>
+                <Label>إضافات (اختياري)</Label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {CALC_ADDONS.map((a) => {
+                    const active = addons.includes(a.id);
+                    return (
+                      <button
+                        key={a.id}
+                        type="button"
+                        role="checkbox"
+                        aria-checked={active}
+                        onClick={() => toggleAddon(a.id)}
+                        className={`flex items-center justify-between gap-3 h-11 px-3.5 rounded-xl border text-sm transition-colors ${
+                          active ? "border-espresso bg-espresso/5 text-ink" : "border-line text-ink/75 hover:border-ink/40"
+                        }`}
+                      >
+                        <span className="flex items-center gap-2.5">
+                          <span
+                            className={`w-4.5 h-4.5 rounded-md border flex items-center justify-center text-[10px] transition-colors ${
+                              active ? "bg-espresso border-espresso text-white" : "border-ink/30"
+                            }`}
+                          >
+                            {active && "✓"}
+                          </span>
+                          {a.name}
+                        </span>
+                        <span className="text-xs num text-ink/50">+{fmt(a.cost)}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* ── النتيجة — بني بنسيج خشب ── */}
+            <div className="lg:col-span-4 min-w-0 relative bg-espresso wood-overlay text-white">
+              <div className="relative p-6 sm:p-8 h-full flex flex-col">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <span className="block text-[11px] tracking-[0.18em] text-white/50">التقدير</span>
+                    <span className="block mt-1 font-display font-semibold text-lg">{model.name}</span>
+                  </div>
+                  <ModelIcon id={model.icon} className="w-12 h-9 text-oak-light shrink-0" />
+                </div>
+
+                <div className="mt-7">
+                  <div className="font-display font-bold text-3xl xl:text-[2.4rem] leading-none num flex flex-wrap items-baseline gap-x-2">
+                    <CountUp value={minCost} />
+                    <span className="text-white/35 text-xl">–</span>
+                    <CountUp value={maxCost} />
+                  </div>
+                  <span className="block mt-2 text-xs text-white/55">ر.س · شامل التوريد والتركيب</span>
+                </div>
+
+                <dl className="mt-6 pt-5 border-t border-line-dark grid grid-cols-3 gap-3 text-xs">
+                  <div>
+                    <dt className="text-white/45">المساحة</dt>
+                    <dd className="num mt-0.5">{area} م²</dd>
+                  </div>
+                  <div>
+                    <dt className="text-white/45">سعر المتر</dt>
+                    <dd className="num mt-0.5">{fmt(model.ratePerMeter)}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-white/45">الإضافات</dt>
+                    <dd className="num mt-0.5">{fmt(addonsCost)}</dd>
                   </div>
                 </dl>
-              </div>
 
-              <div className="mt-8 space-y-3">
-                <button type="button" onClick={sendToWhatsApp} className={waButtonClass("lg", "w-full")}>
-                  <WhatsAppIcon />
-                  أرسل التقدير على الواتساب
-                </button>
-                <a href={telLink} className="block text-center text-sm text-white/65 link-underline w-fit mx-auto">
-                  أو اتصل: <span className="num" dir="ltr">{CONTACT.phoneDisplay}</span>
-                </a>
+                <div className="mt-auto pt-7 space-y-3">
+                  <button type="button" onClick={sendToWhatsApp} className={waButtonClass("md", "w-full")}>
+                    <WhatsAppIcon />
+                    أرسل التقدير على الواتساب
+                  </button>
+                  <a href={telLink} className="block text-center text-xs text-white/60 link-underline w-fit mx-auto">
+                    أو اتصل: <span className="num" dir="ltr">{CONTACT.phoneDisplay}</span>
+                  </a>
+                </div>
               </div>
-
-              <p className="mt-6 text-[11px] leading-relaxed text-white/40">
-                نطاق تقديري. السعر النهائي بعد المخطط التفصيلي والموقع ونوع التشطيب.
-              </p>
             </div>
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
       </div>
 
       {/* شريط ثابت أسفل الشاشة على الجوال */}
