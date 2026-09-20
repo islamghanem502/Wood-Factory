@@ -24,16 +24,16 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 inset-x-0 z-40 transition-[background-color,border-color,box-shadow] duration-300 ${
-        scrolled && !open ? "bg-cream/92 backdrop-blur-md border-b border-line" : "bg-transparent border-b border-transparent"
+        scrolled && !open ? "bg-white/92 backdrop-blur-md border-b border-line" : "bg-transparent border-b border-transparent"
       }`}
     >
       <div className="mx-auto max-w-7xl px-5 sm:px-8 h-20 flex items-center justify-between">
         {/* الشعار */}
         <a href="#hero" className="flex items-center gap-3" onClick={() => setOpen(false)}>
           <img src={open ? IMAGES.logoCream : IMAGES.logo} alt="" className="h-9 w-auto" width="32" height="36" />
-          <span className={`font-display font-bold text-xl leading-none ${open ? "text-cream" : "text-ink"}`}>
+          <span className={`font-display font-bold text-xl leading-none ${open ? "text-white" : "text-ink"}`}>
             خشبي
-            <span className={`ms-2 text-[10px] font-medium tracking-[0.2em] ${open ? "text-cream/60" : "text-walnut"}`}>WOODEN</span>
+            <span className={`ms-2 text-[10px] font-medium tracking-[0.2em] ${open ? "text-white/60" : "text-walnut"}`}>WOODEN</span>
           </span>
         </a>
 
@@ -55,7 +55,7 @@ export default function Navbar() {
             href={waLink(HERO.whatsapp)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center h-10 px-5 rounded-md bg-walnut-deep text-cream text-sm font-medium hover:bg-walnut transition-colors"
+            className="inline-flex items-center h-10 px-5 rounded-md bg-espresso text-white text-sm font-medium hover:bg-walnut transition-colors"
           >
             واتساب
           </a>
@@ -65,7 +65,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className={`md:hidden relative w-10 h-10 -me-2 flex flex-col items-center justify-center gap-1.5 ${open ? "text-cream" : "text-ink"}`}
+          className={`md:hidden relative w-10 h-10 -me-2 flex flex-col items-center justify-center gap-1.5 ${open ? "text-white" : "text-ink"}`}
           aria-label={open ? "إغلاق القائمة" : "فتح القائمة"}
           aria-expanded={open}
         >
@@ -76,7 +76,7 @@ export default function Navbar() {
 
       {/* قائمة الجوال — لوحة بنية كاملة */}
       <div
-        className={`md:hidden fixed inset-0 top-0 -z-10 bg-walnut-deep text-cream transition-opacity duration-300 ${
+        className={`md:hidden fixed inset-0 top-0 -z-10 bg-espresso text-white transition-opacity duration-300 ${
           open ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
       >
@@ -102,7 +102,7 @@ export default function Navbar() {
               href={waLink(HERO.whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center w-full h-12 rounded-md bg-cream text-ink font-medium"
+              className="inline-flex items-center justify-center w-full h-12 rounded-md bg-white text-ink font-medium"
             >
               محادثة واتساب
             </a>

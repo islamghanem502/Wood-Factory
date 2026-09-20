@@ -4,7 +4,7 @@ import { Reveal } from "../lib/motion";
 /* شريط الأرقام — بني داكن، الأرقام مُعبّأة بنسيج الخشب */
 export default function Numbers() {
   return (
-    <section className="bg-walnut-deep text-cream">
+    <section className="bg-espresso text-white">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4">
           {NUMBERS.map((n, i) => (
@@ -19,7 +19,7 @@ export default function Numbers() {
                 <span className="wood-text font-display font-bold text-6xl sm:text-7xl leading-none num">{n.value}</span>
                 <span className="font-display text-xl sm:text-2xl text-oak-light">{n.unit}</span>
               </div>
-              <p className="mt-3 text-sm text-cream/60">{n.label}</p>
+              <p className="mt-3 text-sm text-white/60">{n.label}</p>
             </Reveal>
           ))}
         </div>

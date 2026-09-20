@@ -7,15 +7,16 @@
   --font-display: "Alexandria", "IBM Plex Sans Arabic", system-ui, sans-serif;
   --font-body: "IBM Plex Sans Arabic", "Alexandria", system-ui, sans-serif;
 
-  --cream: #f3eee6;
-  --cream-2: #e9e0d3;
+  /* أبيض نقي × إسبريسو. لا كريمي. */
+  --white: #ffffff;
+  --stone: #f4f4f2;
+  --ink: #14100d;
+  --espresso: #2a170e;
+  --walnut: #5c3a21;
   --oak: #b98a5e;
   --oak-light: #d9bd98;
-  --walnut: #6b4a32;
-  --walnut-deep: #3a2214;
-  --ink: #221510;
-  --line: rgba(58, 34, 20, 0.16);
-  --line-on-dark: rgba(243, 238, 230, 0.16);
+  --line: rgba(20, 16, 13, 0.12);
+  --line-on-dark: rgba(255, 255, 255, 0.14);
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -23,13 +24,12 @@
 @theme inline {
   --font-display: var(--font-display);
   --font-body: var(--font-body);
-  --color-cream: var(--cream);
-  --color-cream-2: var(--cream-2);
+  --color-stone: var(--stone);
+  --color-ink: var(--ink);
+  --color-espresso: var(--espresso);
+  --color-walnut: var(--walnut);
   --color-oak: var(--oak);
   --color-oak-light: var(--oak-light);
-  --color-walnut: var(--walnut);
-  --color-walnut-deep: var(--walnut-deep);
-  --color-ink: var(--ink);
   --color-line: var(--line);
   --color-line-dark: var(--line-on-dark);
 }
@@ -40,7 +40,7 @@
     -webkit-text-size-adjust: 100%;
   }
   body {
-    background: var(--cream);
+    background: var(--white);
     color: var(--ink);
     font-family: var(--font-body);
     font-weight: 400;
@@ -50,8 +50,8 @@
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    line-height: 1.2;
-    letter-spacing: -0.01em;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
   }
   ::selection {
     background: var(--oak-light);
@@ -63,7 +63,7 @@
 
 /* ───────── نسيج الخشب ───────── */
 .wood-dark {
-  background-color: var(--walnut-deep);
+  background-color: var(--espresso);
   background-image: url("/textures/wood-dark.svg");
   background-size: 1200px 900px;
 }
@@ -156,3 +156,9 @@
   to { opacity: 1; transform: none; }
 }
 .fade-in { animation: fade-in 0.6s var(--ease-out) both; }
+
+/* خط تقدّم الآراء */
+@keyframes progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}

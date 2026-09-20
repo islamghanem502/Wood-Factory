@@ -2,10 +2,10 @@ import { Reveal } from "../lib/motion";
 
 /* ترويسة قسم موحّدة: رقم القسم + تسمية صغيرة + عنوان + مقدمة قصيرة */
 export default function SectionHeader({ number, label, title, intro, dark = false, className = "" }) {
-  const muted = dark ? "text-cream/55" : "text-walnut";
+  const muted = dark ? "text-white/55" : "text-walnut";
   const line = dark ? "bg-line-dark" : "bg-line";
-  const heading = dark ? "text-cream" : "text-ink";
-  const body = dark ? "text-cream/70" : "text-ink/70";
+  const heading = dark ? "text-white" : "text-ink";
+  const body = dark ? "text-white/70" : "text-ink/70";
 
   return (
     <div className={`grid lg:grid-cols-12 gap-6 items-end text-right ${className}`}>

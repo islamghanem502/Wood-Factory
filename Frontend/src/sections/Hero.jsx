@@ -51,6 +51,7 @@ export default function Hero() {
           gsap.set(part("beam"), { y: 110 });
           gsap.set(part("glassBottom"), { y: 150, opacity: 0.85 });
           gsap.set(part("deck"), { y: 170, opacity: 0.6 });
+          gsap.set(part("props"), { y: 170, opacity: 0 });
           gsap.set(part("shadow"), { opacity: 0, scaleX: 0.5, svgOrigin: "500 772" });
           gsap.set([part("lights"), part("glow")], { opacity: 0 });
           gsap.set(seams, { drawSVG: "0%", opacity: 0 });
@@ -64,6 +65,7 @@ export default function Hero() {
             .to(part("glassTop"), { scale: 1, opacity: 1, duration: 0.9 }, 1.6)
             .to(part("glassBottom"), { y: 0, opacity: 1, duration: 0.9 }, 2.0)
             .to(part("deck"), { y: 0, opacity: 1, duration: 0.9 }, 2.3)
+            .to(part("props"), { y: 0, opacity: 1, duration: 0.7 }, 2.6)
             .to(part("shadow"), { opacity: 0.1, scaleX: 1, duration: 0.8 }, 2.5)
             // اللحام: خطوط ضوء تمر على الوصلات ثم تختفي
             .to(seams, { drawSVG: "100%", opacity: 1, duration: 0.55, stagger: 0.06, ease: "power1.out" }, 3.1)
@@ -101,7 +103,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="hero" ref={sectionRef} className="relative bg-cream">
+    <section id="hero" ref={sectionRef} className="relative bg-white overflow-hidden">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 min-h-screen grid lg:grid-cols-12 items-center gap-10 lg:gap-6 pt-28 pb-16 lg:py-0">
         {/* النص — على اليمين */}
         <div ref={textRef} className="lg:col-span-5 text-right">
@@ -115,16 +117,24 @@ export default function Hero() {
               </span>
             ))}
           </h1>
-          <p data-line className="mt-6 max-w-md text-base sm:text-lg text-ink/75 leading-relaxed">
+          <p data-line className="mt-6 max-w-md text-base sm:text-lg text-ink/70 leading-relaxed">
             {HERO.text}
           </p>
+          <ul data-line className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink/60">
+            {HERO.facts.map((f) => (
+              <li key={f} className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-oak" />
+                <span className="num">{f}</span>
+              </li>
+            ))}
+          </ul>
 
           <div data-line className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
             <a
               href={waLink(HERO.whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 h-12 px-6 rounded-md bg-walnut-deep text-cream font-medium hover:bg-walnut transition-colors"
+              className="inline-flex items-center gap-2 h-12 px-6 rounded-md bg-espresso text-white font-medium hover:bg-walnut transition-colors"
             >
               محادثة واتساب
               <span aria-hidden>←</span>
@@ -142,7 +152,7 @@ export default function Hero() {
 
         {/* الكوخ — على اليسار */}
         <div ref={cabinRef} className="lg:col-span-7 lg:pl-4">
-          <Cabin className="w-full h-auto max-h-[68vh]" />
+          <Cabin className="w-full h-auto max-h-[70vh]" />
         </div>
       </div>
     </section>

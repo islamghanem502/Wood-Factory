@@ -19,57 +19,59 @@ export const IMAGES = {
 /* روابط شريط التنقل */
 export const NAV_LINKS = [
   { label: "المواصفات", href: "#specs" },
-  { label: "المشاريع", href: "#gallery" },
+  { label: "الأفكار", href: "#ideas" },
   { label: "الحاسبة", href: "#calculator" },
   { label: "الأسئلة", href: "#faq" },
 ];
 
 /* الهيرو */
 export const HERO = {
-  kicker: "أكواخ ريفية وبرجولات خشبية — المملكة العربية السعودية",
-  title: ["نبني كوخك", "الخشبي ليبقى."],
-  text: "أكواخ ريفية وبرجولات حديثة من خشب السنوبر: جدران بسماكة 12 سم، سقف من 5 طبقات، وضمان يصل إلى 15 سنة.",
+  kicker: "مصنع أكواخ وبرجولات من خشب السنوبر — السعودية",
+  title: ["كوخك الخشبي،", "جاهز خلال أيام."],
+  text: "نصنع القطع في مصنعنا، ونركّبها في مزرعتك أو استراحتك. جدار سنوبر مصمت 12 سم، سقف من 5 طبقات، وضمان 15 سنة.",
+  facts: ["12 سم جدار", "5 طبقات سقف", "15 سنة ضمان"],
   scrollHint: "مرّر لتركيب الكوخ",
-  whatsapp: "مرحباً خشبي WOODEN، أرغب في الاستفسار عن بناء كوخ خشبي.",
+  whatsapp: "مرحباً خشبي، أرغب في الاستفسار عن بناء كوخ خشبي.",
 };
 
 /* شريط الأرقام */
 export const NUMBERS = [
-  { value: "12", unit: "سم", label: "سماكة جدران السنوبر" },
-  { value: "5", unit: "طبقات", label: "في نظام السقف" },
-  { value: "15", unit: "سنة", label: "ضمان على الهيكل" },
-  { value: "180", unit: "+", label: "مشروع منفّذ في المملكة" },
+  { value: "12", unit: "سم", label: "جدار سنوبر مصمت" },
+  { value: "5", unit: "طبقات", label: "نظام السقف" },
+  { value: "15", unit: "سنة", label: "ضمان مكتوب" },
+  { value: "72", unit: "ساعة", label: "تركيب الأكواخ الصغيرة والمتوسطة" },
 ];
 
 /* المواصفات الفنية */
 export const SPECS = {
-  intro: "تفاصيل البناء التي تحدد جودة الكوخ ومتانته.",
+  title: "الجدار، السقف، الزجاج.",
+  intro: "ثلاثة أشياء تحدد عمر الكوخ في صيف المملكة وشتائها. هذه مواصفاتنا فيها.",
   walls: {
-    title: "جدران خشبية بالكامل",
+    title: "جدار خشبي مصمت",
     value: "12",
     unit: "سم",
-    material: "خشب السنوبر الطبيعي",
-    description: "جدار خشبي مصمت من خشب السنوبر بسماكة 12 سم — نفس الخشب من الداخل والخارج.",
+    material: "خشب السنوبر",
+    description: "الخشب نفسه هو الجدار — من الداخل والخارج — بسماكة 12 سم، بلا تكسيات.",
   },
   roof: {
     title: "سقف من 5 طبقات",
-    description: "خشب ظاهر من الداخل، وحماية كاملة من الخارج.",
+    description: "خشب من الداخل، حماية من الخارج.",
     // مرتبة من الداخل إلى الخارج
     layers: [
-      { name: "خشب السنوبر", note: "الطبقة الداخلية الظاهرة" },
-      { name: "عزل حراري", note: "يحفظ درجة الحرارة" },
-      { name: "عازل مائي", note: "ضد الأمطار والرطوبة" },
+      { name: "خشب السنوبر", note: "الطبقة الظاهرة من الداخل" },
+      { name: "عزل حراري", note: "يثبّت درجة الحرارة" },
+      { name: "عازل مائي", note: "ضد المطر والرطوبة" },
       { name: "جرميد معدني", note: "الطبقة الخارجية" },
     ],
   },
   glass: {
     title: "الزجاج",
     options: ["6 ملم", "8 ملم"],
-    description: "تُحدَّد سماكة الزجاج لكل كوخ عند اعتماد التصميم والتعاقد.",
+    description: "6 أو 8 ملم — تُحدَّد لكل كوخ حسب مقاس الواجهة عند اعتماد التصميم.",
   },
 };
 
-/* فلاتر معرض المشاريع */
+/* تصنيفات الأفكار */
 export const GALLERY_FILTERS = [
   { id: "all", label: "الكل" },
   { id: "triangle", label: "أكواخ A-Frame" },
@@ -79,8 +81,15 @@ export const GALLERY_FILTERS = [
   { id: "interior", label: "داخلي" },
 ];
 
-/* معرض المشاريع */
-export const PROJECTS = [
+/* أفكار جاهزة — تصاميم نفّذناها ويمكن طلب مثلها */
+export const IDEAS = {
+  title: "اختر تصميمك. ننفّذه.",
+  intro: "ثمانية تصاميم نفّذناها بالفعل. اختر الأقرب لما تريده، ونبني عليه مقاسك وتفاصيلك.",
+  cta: "اطلب تصميماً مثله",
+  whatsapp: (title) => `مرحباً خشبي، أعجبني تصميم «${title}» وأرغب في تنفيذ مثله.`,
+};
+
+export const DESIGNS = [
   {
     id: "p1",
     title: "منتجع العلا",
@@ -172,6 +181,7 @@ export const PROJECTS = [
 ];
 
 /* آراء العملاء */
+export const REVIEWS_TITLE = "ما قاله من بنينا لهم.";
 export const TESTIMONIALS = [
   {
     name: "م. فهد السبيعي",
@@ -200,6 +210,7 @@ export const TESTIMONIALS = [
 ];
 
 /* الأسئلة الشائعة */
+export const FAQ_TITLE = "أسئلة تُطرح علينا كثيراً.";
 export const FAQS = [
   {
     q: "هل الأكواخ الخشبية تتحمل حرارة المملكة؟",
@@ -228,12 +239,19 @@ export const FAQS = [
 ];
 
 /* حاسبة التكاليف — النماذج والملحقات */
+export const CALC = {
+  title: "كم يكلّف كوخك؟",
+  intro: "ثلاث خطوات ونطاق سعري مبدئي — قبل أي مكالمة.",
+  areaPresets: [40, 80, 120, 200, 300],
+  whatsapp: "مرحباً خشبي، جرّبت الحاسبة وأرغب في تقدير تفصيلي:",
+};
+
 export const CALC_MODELS = [
-  { id: "triangle", name: "كوخ A-Frame", ratePerMeter: 890, desc: "واجهة زجاجية كاملة، دور أو دورين" },
-  { id: "two-floor", name: "كوخ ريفي دورين", ratePerMeter: 1050, desc: "غرف متعددة وبلكونات خشبية" },
-  { id: "single-floor", name: "كوخ دور واحد", ratePerMeter: 790, desc: "للحدائق والاستراحات وأسطح الفلل" },
-  { id: "commercial", name: "كشك أو منفذ تجاري", ratePerMeter: 1150, desc: "جاهز للتشغيل ومطابق لاشتراطات البلدية" },
-  { id: "pergola", name: "برجولة خارجية", ratePerMeter: 450, desc: "خشب معالج مقاوم للعوامل الجوية" },
+  { id: "triangle", name: "كوخ A-Frame", icon: "aframe", ratePerMeter: 890, desc: "واجهة زجاجية، دور أو دورين" },
+  { id: "two-floor", name: "كوخ دورين", icon: "twofloor", ratePerMeter: 1050, desc: "غرف متعددة وبلكونات" },
+  { id: "single-floor", name: "كوخ دور واحد", icon: "single", ratePerMeter: 790, desc: "للحدائق والاستراحات" },
+  { id: "commercial", name: "كشك تجاري", icon: "kiosk", ratePerMeter: 1150, desc: "كافيه أو منفذ بيع" },
+  { id: "pergola", name: "برجولة", icon: "pergola", ratePerMeter: 450, desc: "جلسة خارجية مظللة" },
 ];
 
 export const CALC_ADDONS = [
@@ -244,4 +262,5 @@ export const CALC_ADDONS = [
 ];
 
 /* الفوتر */
-export const SERVICE_AREAS = "الرياض · جدة · مكة المكرمة · العلا · عسير · القصيم · وكافة مدن المملكة";
+export const FOOTER_TEXT = "أكواخ وبرجولات من خشب السنوبر، تُصنع في مصنعنا وتُركَّب في موقعك.";
+export const SERVICE_AREAS = "الرياض · جدة · مكة · العلا · عسير · القصيم · وكل مدن المملكة";

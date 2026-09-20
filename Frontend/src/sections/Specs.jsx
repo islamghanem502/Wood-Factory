@@ -58,11 +58,11 @@ function RoofLayers({ innerRef }) {
           {i === 3 && <path d={corrugation} fill="none" stroke="#6b7178" strokeWidth="2" />}
           {/* رقم الطبقة عند الطرف الأيمن (الأعلى) */}
           <g transform={`translate(${X1 + 26}, ${(g.yb + g.yt) / 2 - SLOPE})`}>
-            <circle r="12" fill="#3a2214" />
+            <circle r="12" fill="#2a170e" />
             <text
               textAnchor="middle"
               dominantBaseline="central"
-              fill="#f3eee6"
+              fill="#ffffff"
               fontSize="12"
               fontWeight="600"
               className="num"
@@ -87,21 +87,21 @@ function WallSection() {
       {/* الجدار */}
       <rect x="160" y="52" width="80" height="180" fill="url(#sp-wood-wall)" stroke="#a67a4e" strokeWidth="1.5" />
       {/* خط الأبعاد */}
-      <g stroke="#3a2214" strokeWidth="1.5">
+      <g stroke="#2a170e" strokeWidth="1.5">
         <line x1="160" y1="30" x2="240" y2="30" />
         <line x1="160" y1="24" x2="160" y2="36" />
         <line x1="240" y1="24" x2="240" y2="36" />
         <line x1="160" y1="36" x2="160" y2="50" strokeDasharray="2 3" />
         <line x1="240" y1="36" x2="240" y2="50" strokeDasharray="2 3" />
       </g>
-      <text x="200" y="20" textAnchor="middle" fill="#3a2214" fontSize="15" fontWeight="600" className="num">
+      <text x="200" y="20" textAnchor="middle" fill="#2a170e" fontSize="15" fontWeight="600" className="num">
         12 سم
       </text>
       {/* خارج / داخل */}
-      <text x="80" y="146" textAnchor="middle" fill="#6b4a32" fontSize="13">
+      <text x="80" y="146" textAnchor="middle" fill="#5c3a21" fontSize="13">
         خارج
       </text>
-      <text x="320" y="146" textAnchor="middle" fill="#6b4a32" fontSize="13">
+      <text x="320" y="146" textAnchor="middle" fill="#5c3a21" fontSize="13">
         داخل
       </text>
       <line x1="110" y1="142" x2="150" y2="142" stroke="#6b4a32" strokeWidth="1" strokeDasharray="3 3" />
@@ -138,9 +138,9 @@ export default function Specs() {
   }, []);
 
   return (
-    <section id="specs" className="bg-cream py-24 sm:py-32">
+    <section id="specs" className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <SectionHeader number="01" label="المواصفات" title="المواصفات الفنية" intro={SPECS.intro} />
+        <SectionHeader number="01" label="المواصفات" title={SPECS.title} intro={SPECS.intro} />
 
         <div className="mt-16 sm:mt-20 grid lg:grid-cols-12 gap-12 lg:gap-16 text-right">
           {/* الجدران */}
@@ -174,7 +174,7 @@ export default function Specs() {
               <ol className="sm:col-span-5 lg:col-span-4 space-y-4">
                 {roof.layers.map((layer, i) => (
                   <Reveal as="li" key={layer.name} delay={i * 80} className="flex items-start gap-3">
-                    <span className="mt-1 w-6 h-6 rounded-full bg-walnut-deep text-cream text-[11px] font-semibold flex items-center justify-center shrink-0 num">
+                    <span className="mt-1 w-6 h-6 rounded-full bg-espresso text-white text-[11px] font-semibold flex items-center justify-center shrink-0 num">
                       {i + 1}
                     </span>
                     <div>

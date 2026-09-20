@@ -1,15 +1,15 @@
 import { useState } from "react";
 import SectionHeader from "../components/SectionHeader";
-import { FAQS } from "../data/content";
+import { FAQS, FAQ_TITLE } from "../data/content";
 import { Reveal } from "../lib/motion";
 
 export default function Faq() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section id="faq" className="bg-cream-2 py-24 sm:py-32">
+    <section id="faq" className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <SectionHeader number="05" label="الأسئلة" title="أسئلة شائعة" />
+        <SectionHeader number="05" label="الأسئلة" title={FAQ_TITLE} />
 
         <div className="mt-14 border-t border-line text-right">
           {FAQS.map((item, i) => {
