@@ -3,7 +3,7 @@ import { IMAGES, FOOTER } from "../data/content";
 import WhatsAppButton from "./WhatsAppButton";
 import { Reveal } from "../lib/motion";
 
-/* الفوتر: دعوة أخيرة + الشعار والحقوق، وكلمة "خشبي" الضخمة مقصوصة عند الحافة السفلية */
+/* الفوتر: دعوة أخيرة + الشعار والحقوق + كلمة "خشبي" بنسيج الخشب */
 export default function Footer() {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -38,9 +38,9 @@ export default function Footer() {
           </button>
         </div>
 
-        {/* كلمة خشبي — مقصوصة عند الحافة السفلية */}
-        <div className="h-[19vw] sm:h-[15vw] lg:h-[12rem] overflow-hidden" aria-hidden>
-          <span className="wood-text block font-display font-bold leading-none text-[30vw] sm:text-[24vw] lg:text-[19rem] select-none opacity-90 -mt-[0.22em]">
+        {/* كلمة خشبي بنسيج الخشب — كاملة */}
+        <div className="pt-4 pb-8 text-right" aria-hidden>
+          <span className="wood-text inline-block font-display font-bold leading-[1.25] text-[22vw] sm:text-[16vw] lg:text-[11rem] select-none opacity-90">
             خشبي
           </span>
         </div>
