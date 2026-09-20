@@ -35,28 +35,32 @@ export default function Testimonials() {
     <section id="reviews" className="relative bg-espresso wood-overlay text-white py-24 sm:py-32">
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeader number="04" label="آراء العملاء" title={REVIEWS_TITLE} dark />
+        <p className="sm:hidden mt-6 text-xs text-white/45">اسحب لقراءة المزيد ←</p>
 
-        <div ref={gridRef} className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-7">
+        <div
+          ref={gridRef}
+          className="mt-14 flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-7 overflow-x-auto sm:overflow-visible snap-x snap-mandatory hide-scrollbar -mx-5 px-5 sm:mx-0 sm:px-0 pb-2 sm:pb-0"
+        >
           {TESTIMONIALS.map((t, i) => (
             <article
               key={t.name}
               data-card
-              className="wood-card rounded-2xl p-7 sm:p-8 flex flex-col justify-between gap-8 text-right text-espresso min-h-[300px]"
+              className="wood-card snap-center shrink-0 w-[82vw] sm:w-auto rounded-2xl p-8 sm:p-9 flex flex-col justify-between gap-8 text-right text-espresso min-h-[300px]"
             >
               <div>
-                <span className="block font-display text-5xl leading-none text-walnut/45 select-none" aria-hidden>
+                <span className="block font-display text-4xl leading-none text-walnut/50 select-none" aria-hidden>
                   «
                 </span>
-                <p className="mt-2 text-[15px] leading-[1.9] text-espresso/90">{t.text}</p>
+                <p className="mt-3 text-base leading-[1.9] text-espresso">{t.text}</p>
               </div>
-              <footer className="flex items-end justify-between gap-3 border-t border-espresso/15 pt-4">
+              <footer className="flex items-end justify-between gap-3 border-t border-espresso/20 pt-4">
                 <div className="min-w-0">
-                  <span className="block font-display font-semibold text-sm truncate">{t.name}</span>
-                  <span className="block text-xs text-espresso/60 mt-0.5 truncate">
+                  <span className="block font-display font-semibold text-[15px] truncate">{t.name}</span>
+                  <span className="block text-xs text-espresso/65 mt-1 truncate">
                     {t.city} · {t.type}
                   </span>
                 </div>
-                <span className="num text-xs text-espresso/45 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+                <span className="num text-xs text-espresso/50 shrink-0">{String(i + 1).padStart(2, "0")}</span>
               </footer>
             </article>
           ))}
