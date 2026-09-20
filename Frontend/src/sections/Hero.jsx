@@ -1,15 +1,14 @@
-import { Sparkles, Clock, ThermometerSnowflake, Award, ShieldCheck, MessageCircle, Phone } from "lucide-react";
+import { TreePine, Fence, ShieldCheck, MessageCircle, Phone } from "lucide-react";
 import { waLink, telLink } from "../config/contact";
 import { IMAGES } from "../data/content";
 
 const HIGHLIGHTS = [
-  { icon: Clock, text: "تركيب سريع في أيام معدودة" },
-  { icon: ThermometerSnowflake, text: "عزل حراري بنسبة 95%" },
-  { icon: Award, text: "مطابق للكود الأوروبي CNC" },
+  { icon: TreePine, text: "أكواخ ريفية من خشب السنوبر" },
+  { icon: Fence, text: "برجولات حديثة بتصاميم عصرية" },
   { icon: ShieldCheck, text: "ضمان شامل يصل إلى 15 سنة" },
 ];
 
-export default function Hero({ onOpenConsultation }) {
+export default function Hero() {
   return (
     <section id="hero" className="relative min-h-[90vh] flex items-center justify-center pt-8 pb-20 overflow-hidden">
       {/* الخلفية */}
@@ -24,11 +23,6 @@ export default function Hero({ onOpenConsultation }) {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-[#161a22]/90 text-[#f7dfa5] border border-[#cba157]/40 shadow-xl mb-6 backdrop-blur-md">
-          <Sparkles className="w-4 h-4 text-[#cba157]" />
-          <span>الريادة السعودية في بناء الأكواخ والشاليهات الخشبية الفاخرة</span>
-        </div>
-
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-snug sm:leading-snug max-w-5xl mx-auto space-y-2">
           <span className="block">حوّل حلمك إلى واقع ريفي ساحر مع</span>
           <span className="gold-gradient-text inline-flex items-center gap-3 font-serif font-black text-3xl sm:text-5xl md:text-6xl">
@@ -40,12 +34,12 @@ export default function Hero({ onOpenConsultation }) {
         </h1>
 
         <p className="text-base sm:text-xl text-[#d4cbbe] max-w-3xl mx-auto mt-6 leading-relaxed font-normal">
-          أكواخ ريفية اسكندنافية، شاليهات فاخرة، وبرجولات حديثة تُصنّع بأحدث تقنيات{" "}
-          <span className="text-[#f7dfa5] font-semibold">CNC الألمانية</span> ومطابقة تامة لـ{" "}
-          <span className="text-[#f7dfa5] font-semibold">الكود الأوروبي</span>، مع عزل حراري فائق وضمان حقيقي حتى 15 سنة.
+          <span className="text-[#f7dfa5] font-semibold">أكواخ ريفية</span> من خشب السنوبر الطبيعي،{" "}
+          <span className="text-[#f7dfa5] font-semibold">وبرجولات حديثة</span> بتصاميم عصرية تُنفَّذ بأعلى معايير الجودة، مع{" "}
+          <span className="text-[#f7dfa5] font-semibold">ضمان حقيقي يصل إلى 15 سنة</span>.
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto mt-8 text-xs text-neutral-300">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto mt-8 text-xs text-neutral-300">
           {HIGHLIGHTS.map(({ icon: Icon, text }) => (
             <div
               key={text}
@@ -74,19 +68,7 @@ export default function Hero({ onOpenConsultation }) {
             <Phone className="w-5 h-5 text-[#cba157]" />
             <span>اتصال هاتفي مباشر</span>
           </a>
-          <button
-            type="button"
-            onClick={() => onOpenConsultation("استشارة شاملة من الصفحة الرئيسية")}
-            className="w-full sm:w-auto sm:flex-1 inline-flex items-center justify-center gap-2.5 h-13 px-6 rounded-2xl gold-gradient-bg text-black font-black text-base shadow-xl shadow-[#cba157]/25 hover:brightness-110 transition-all active:scale-95"
-          >
-            <Sparkles className="w-5 h-5 text-black" />
-            <span>طلب استشارة مجانية</span>
-          </button>
         </div>
-
-        <p className="text-xs text-neutral-400 mt-4">
-          الاستشارة الهندية مجانية 100% وبدون أي التزام مسبق • تواصل فوري خلال دقائق
-        </p>
       </div>
     </section>
   );

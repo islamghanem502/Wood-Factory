@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import * as Slider from "@radix-ui/react-slider";
-import { Calculator, Sparkles, Check, MessageCircle, Phone, ShieldCheck } from "lucide-react";
+import { Sparkles, Check, MessageCircle, Phone, ShieldCheck } from "lucide-react";
 import { CONTACT, telLink } from "../config/contact";
 import { CALC_MODELS, CALC_ADDONS } from "../data/content";
 
@@ -48,11 +48,7 @@ export default function CostCalculator({ onOpenConsultation }) {
         {/* الترويسة */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 border-b border-[#cba157]/20 pb-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#cba157]/15 text-[#e5be70] border border-[#cba157]/30 mb-3">
-              <Calculator className="w-3.5 h-3.5" />
-              أحدث حاسبة تكاليف ذكية 2026
-            </div>
-            <h3 className="text-2xl sm:text-3xl font-black text-white">احسب تكلفة كوخك أو شاليهك المستقبلي بدقة</h3>
+            <h3 className="text-2xl sm:text-3xl font-black text-white">احسب تكلفة كوخك أو برجولتك المستقبلية بدقة</h3>
             <p className="text-sm text-neutral-400 mt-1">حدد النموذج والمساحة والمميزات للحصول على تقدير استثماري فوري وشفاف</p>
           </div>
           <div className="hidden sm:flex items-center gap-2 text-xs text-[#cba157]">
@@ -114,7 +110,7 @@ export default function CostCalculator({ onOpenConsultation }) {
               </Slider.Root>
               <div className="flex justify-between text-[11px] text-neutral-500 font-medium">
                 <span>25 م² (كوخ حديقة صغير)</span>
-                <span className="hidden sm:inline">120 م² (شاليه متوسط)</span>
+                <span className="hidden sm:inline">120 م² (كوخ متوسط)</span>
                 <span>400 م² (قصر ريفي متكامل)</span>
               </div>
             </div>
@@ -164,7 +160,7 @@ export default function CostCalculator({ onOpenConsultation }) {
 
             <div className="space-y-3 border-y border-neutral-800 py-4 text-xs text-neutral-300">
               <div className="flex justify-between items-center">
-                <span>تكلفة الهيكل الخشبي والتصنيع (CNC):</span>
+                <span>تكلفة الهيكل الخشبي والتصنيع:</span>
                 <span className="font-bold text-white">{fmt(structureCost)} ر.س</span>
               </div>
               <div className="flex justify-between items-center">
@@ -218,7 +214,7 @@ export default function CostCalculator({ onOpenConsultation }) {
 
             <div className="flex items-center justify-center gap-2 text-[11px] text-neutral-400 pt-1">
               <ShieldCheck className="w-4 h-4 text-[#cba157]" />
-              <span>ضمان 15 سنة • كود أوروبي معتمد • عزل بنسبة 95%</span>
+              <span>ضمان 15 سنة • جدران خشب سنوبر 12 سم • أسقف 5 طبقات</span>
             </div>
           </div>
         </div>

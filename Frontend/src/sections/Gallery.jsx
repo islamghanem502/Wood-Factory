@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TreePine, Maximize2, ArrowLeft, MessageCircle } from "lucide-react";
+import { Maximize2, ArrowLeft, MessageCircle } from "lucide-react";
 import { waLink } from "../config/contact";
 import { PROJECTS, GALLERY_FILTERS } from "../data/content";
 
@@ -14,15 +14,11 @@ export default function Gallery({ onOpenConsultation }) {
       <section id="gallery" className="py-20 bg-[#0b0c0e] relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#cba157]/15 text-[#e5be70] border border-[#cba157]/30">
-              <TreePine className="w-3.5 h-3.5" />
-              معرض المشاريع الحقيقية
-            </div>
             <h2 className="text-3xl sm:text-5xl font-black text-white">
               إبداعات <span className="gold-gradient-text">خشبي WOODEN</span> على أرض الواقع
             </h2>
             <p className="text-sm sm:text-base text-neutral-400 leading-relaxed">
-              شاهد نماذج لمشاريع حقيقية تم تسليمها في الرياض، جدة، العلا، وأبها لمنتجعات وشاليهات وفلل خاصة.
+              شاهد نماذج لمشاريع حقيقية تم تسليمها في الرياض، جدة، العلا، وأبها لمنتجعات واستراحات وفلل خاصة.
             </p>
           </div>
 

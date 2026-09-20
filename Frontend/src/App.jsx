@@ -8,9 +8,8 @@ import CostCalculator from "./components/CostCalculator";
 
 import Hero from "./sections/Hero";
 import Stats from "./sections/Stats";
-import Products from "./sections/Products";
 import Gallery from "./sections/Gallery";
-import WhyUs from "./sections/WhyUs";
+import Specs from "./sections/Specs";
 import Testimonials from "./sections/Testimonials";
 import Faq from "./sections/Faq";
 
@@ -26,12 +25,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0b0c0e] text-[#f4ede4] overflow-x-hidden selection:bg-[#cba157]/30 selection:text-[#ffd700]">
-      <Navbar onOpenConsultation={() => openConsultation()} />
+      <Navbar />
 
       <main className="flex-1">
-        <Hero onOpenConsultation={openConsultation} />
+        <Hero />
         <Stats />
-        <Products onOpenConsultation={openConsultation} />
 
         <section id="calculator" className="py-20 bg-[#0e1015] relative border-y border-[#cba157]/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -40,12 +38,12 @@ export default function App() {
         </section>
 
         <Gallery onOpenConsultation={openConsultation} />
-        <WhyUs />
+        <Specs />
         <Testimonials />
         <Faq />
       </main>
 
-      <FloatingActions onOpenConsultation={() => openConsultation()} />
+      <FloatingActions />
       <ConsultationModal open={consultOpen} onOpenChange={setConsultOpen} defaultService={consultService} />
       <Footer onOpenConsultation={() => openConsultation()} />
     </div>

@@ -1,13 +1,12 @@
-import { Phone, MessageCircle, MapPin, ShieldCheck, Award, Clock, ArrowUp } from "lucide-react";
+import { Phone, MessageCircle, MapPin, ShieldCheck, BrickWall, Clock, ArrowUp } from "lucide-react";
 import { CONTACT, waLink, telLink } from "../config/contact";
 import { IMAGES } from "../data/content";
 
 const SITE_LINKS = [
   { href: "#hero", label: "الرئيسية ومقدمة المشروع" },
-  { href: "#products", label: "باقات ونماذج الأكواخ (A-Frame، دورين، دور واحد)" },
   { href: "#gallery", label: "معرض الأعمال والمشاريع المنفذة" },
   { href: "#calculator", label: "حاسبة التكاليف التفاعلية الفورية" },
-  { href: "#why-us", label: "المواصفات الفنية والمميزات الهندسية" },
+  { href: "#specs", label: "المواصفات الفنية للأكواخ" },
   { href: "#faq", label: "الأسئلة الشائعة وإجابات الخبراء" },
 ];
 
@@ -66,7 +65,7 @@ export default function Footer({ onOpenConsultation }) {
               </div>
             </div>
             <p className="text-xs text-neutral-400 leading-relaxed">
-              الوجهة السعودية الأولى المتخصصة في هندسة وتصنيع وتشييد الأكواخ الريفية، الشاليهات، والمظلات الخشبية بتقنية CNC الحديثة ومطابقة الكود الأوروبي.
+              الوجهة السعودية الأولى المتخصصة في هندسة وتصنيع وتشييد الأكواخ الريفية والبرجولات الحديثة من خشب السنوبر الطبيعي، بضمان يصل إلى 15 سنة.
             </p>
             <div className="flex items-center gap-2 pt-2 text-xs text-[#cba157]">
               <ShieldCheck className="w-4 h-4" />
@@ -136,8 +135,8 @@ export default function Footer({ onOpenConsultation }) {
             <h5 className="text-sm font-bold text-white border-r-2 border-[#cba157] pr-2.5">معايير الجودة والاعتماد</h5>
             <div className="space-y-2.5 text-xs text-neutral-400">
               <div className="p-3 rounded-xl bg-[#12151b] border border-[#cba157]/20 flex items-center gap-2.5">
-                <Award className="w-5 h-5 text-[#cba157] shrink-0" />
-                <span>تصنيع آلي متقدم بتقنية CNC بدون أخطاء نجارة يدوية</span>
+                <BrickWall className="w-5 h-5 text-[#cba157] shrink-0" />
+                <span>جدران خشبية بالكامل من خشب السنوبر بسماكة 12 سم</span>
               </div>
               <div className="p-3 rounded-xl bg-[#12151b] border border-[#cba157]/20 flex items-center gap-2.5">
                 <Clock className="w-5 h-5 text-[#cba157] shrink-0" />
