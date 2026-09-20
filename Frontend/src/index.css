@@ -4,8 +4,12 @@
    الهوية: بني × أبيض دافئ. لا تدرجات ذهبية، لا توهج.
    ───────────────────────────────────────────── */
 :root {
-  --font-display: "Alexandria", "IBM Plex Sans Arabic", system-ui, sans-serif;
-  --font-body: "IBM Plex Sans Arabic", "Alexandria", system-ui, sans-serif;
+  --font-display: "Readex Pro", "Almarai", system-ui, sans-serif;
+  --font-body: "Almarai", "Readex Pro", system-ui, sans-serif;
+
+  --wa: #25d366;
+  --wa-dark: #1fb85a;
+  --wa-ink: #062b17;
 
   /* أبيض نقي × إسبريسو. لا كريمي. */
   --white: #ffffff;
@@ -50,8 +54,8 @@
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
   }
   ::selection {
     background: var(--oak-light);
@@ -120,6 +124,20 @@
   transition: transform 1s var(--ease-out) var(--d);
 }
 .reveal-line.is-in { transform: scaleX(1); }
+
+/* ───────── زر واتساب ───────── */
+.wa-btn {
+  background: var(--wa);
+  color: var(--wa-ink);
+  box-shadow: 0 10px 24px -10px rgba(37, 211, 102, 0.55);
+  transition: background-color 0.25s var(--ease-out), transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+}
+.wa-btn:hover {
+  background: var(--wa-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px -10px rgba(37, 211, 102, 0.6);
+}
+.wa-btn:active { transform: translateY(0); }
 
 /* ───────── روابط بخط سفلي ينمو ───────── */
 .link-underline {

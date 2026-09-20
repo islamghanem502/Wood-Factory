@@ -5,6 +5,7 @@ import SectionHeader from "./SectionHeader";
 import { CONTACT, telLink } from "../config/contact";
 import { CALC, CALC_MODELS, CALC_ADDONS } from "../data/content";
 import { Reveal, prefersReducedMotion } from "../lib/motion";
+import { WhatsAppIcon, waButtonClass } from "./WhatsAppButton";
 
 const fmt = (n) => Math.round(n).toLocaleString("en-US");
 
@@ -303,13 +304,9 @@ export default function CostCalculator() {
               </div>
 
               <div className="mt-8 space-y-3">
-                <button
-                  type="button"
-                  onClick={sendToWhatsApp}
-                  className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-md bg-white text-ink font-medium hover:bg-stone transition-colors"
-                >
+                <button type="button" onClick={sendToWhatsApp} className={waButtonClass("lg", "w-full")}>
+                  <WhatsAppIcon />
                   أرسل التقدير على الواتساب
-                  <span aria-hidden>←</span>
                 </button>
                 <a href={telLink} className="block text-center text-sm text-white/65 link-underline w-fit mx-auto">
                   أو اتصل: <span className="num" dir="ltr">{CONTACT.phoneDisplay}</span>
@@ -338,7 +335,8 @@ export default function CostCalculator() {
             {fmt(minCost)} – {fmt(maxCost)} <span className="text-xs font-normal text-white/60">ر.س</span>
           </span>
         </div>
-        <button type="button" onClick={sendToWhatsApp} className="shrink-0 h-10 px-4 rounded-md bg-white text-ink text-sm font-medium">
+        <button type="button" onClick={sendToWhatsApp} className={waButtonClass("sm", "shrink-0")}>
+          <WhatsAppIcon className="w-4 h-4" />
           واتساب
         </button>
       </div>

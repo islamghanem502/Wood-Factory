@@ -1,4 +1,5 @@
-import { CONTACT, waLink, telLink } from "../config/contact";
+import { CONTACT, telLink } from "../config/contact";
+import WhatsAppButton from "./WhatsAppButton";
 import { IMAGES, NAV_LINKS, SERVICE_AREAS, FOOTER_TEXT, HERO } from "../data/content";
 import { Reveal } from "../lib/motion";
 
@@ -42,15 +43,7 @@ export default function Footer() {
             <a href={telLink} className="block font-display text-3xl num hover:text-oak-light transition-colors" dir="ltr" style={{ textAlign: "right" }}>
               {CONTACT.phoneDisplay}
             </a>
-            <a
-              href={waLink(HERO.whatsapp)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-5 inline-flex items-center gap-2 h-11 px-5 rounded-md bg-white text-ink font-medium hover:bg-stone transition-colors"
-            >
-              محادثة واتساب
-              <span aria-hidden>←</span>
-            </a>
+            <WhatsAppButton message={HERO.whatsapp} className="mt-5">محادثة واتساب</WhatsAppButton>
           </div>
         </div>
 

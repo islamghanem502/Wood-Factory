@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Phone, MessageCircle } from "lucide-react";
+import { Phone } from "lucide-react";
+import { WhatsAppIcon } from "./WhatsAppButton";
 import { waLink, telLink } from "../config/contact";
 import { HERO } from "../data/content";
 
@@ -31,11 +32,11 @@ export default function FloatingActions() {
         href={waLink(HERO.whatsapp)}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-12 h-12 rounded-full bg-oak text-ink flex items-center justify-center shadow-lg shadow-ink/20 hover:bg-oak-light transition-colors"
+        className="wa-btn w-12 h-12 rounded-full flex items-center justify-center"
         title="محادثة واتساب"
         aria-label="محادثة واتساب"
       >
-        <MessageCircle className="w-5 h-5" />
+        <WhatsAppIcon className="w-6 h-6" />
       </a>
       <a
         href={telLink}

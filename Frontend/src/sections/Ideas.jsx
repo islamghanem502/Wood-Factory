@@ -3,7 +3,7 @@ import gsap from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { InertiaPlugin } from "gsap/InertiaPlugin";
 import SectionHeader from "../components/SectionHeader";
-import { waLink } from "../config/contact";
+import WhatsAppButton from "../components/WhatsAppButton";
 import { DESIGNS, IDEAS } from "../data/content";
 import { Reveal, prefersReducedMotion } from "../lib/motion";
 
@@ -167,15 +167,7 @@ export default function Ideas() {
             </div>
 
             <div data-stage-text className="flex items-center justify-between gap-4">
-              <a
-                href={waLink(IDEAS.whatsapp(design.title))}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 h-12 px-6 rounded-md bg-white text-ink font-medium hover:bg-stone transition-colors"
-              >
-                {IDEAS.cta}
-                <span aria-hidden>←</span>
-              </a>
+              <WhatsAppButton message={IDEAS.whatsapp(design.title)}>{IDEAS.cta}</WhatsAppButton>
               <div className="hidden sm:flex gap-2">
                 <button
                   type="button"

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { CONTACT, waLink, telLink } from "../config/contact";
+import { CONTACT, telLink } from "../config/contact";
+import WhatsAppButton from "./WhatsAppButton";
 import { IMAGES, NAV_LINKS, HERO } from "../data/content";
 
 export default function Navbar() {
@@ -51,14 +52,7 @@ export default function Navbar() {
           <a href={telLink} className="link-underline text-sm text-ink num" dir="ltr">
             {CONTACT.phoneDisplay}
           </a>
-          <a
-            href={waLink(HERO.whatsapp)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center h-10 px-5 rounded-md bg-espresso text-white text-sm font-medium hover:bg-walnut transition-colors"
-          >
-            واتساب
-          </a>
+          <WhatsAppButton message={HERO.whatsapp} size="sm">واتساب</WhatsAppButton>
         </div>
 
         {/* زر القائمة */}
@@ -98,14 +92,7 @@ export default function Navbar() {
             <a href={telLink} className="block text-2xl num" dir="ltr" style={{ textAlign: "right" }}>
               {CONTACT.phoneDisplay}
             </a>
-            <a
-              href={waLink(HERO.whatsapp)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center w-full h-12 rounded-md bg-white text-ink font-medium"
-            >
-              محادثة واتساب
-            </a>
+            <WhatsAppButton message={HERO.whatsapp} size="lg" className="w-full">محادثة واتساب</WhatsAppButton>
           </div>
         </div>
       </div>

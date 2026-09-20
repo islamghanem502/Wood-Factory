@@ -3,7 +3,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import Cabin from "../components/Cabin";
-import { CONTACT, waLink, telLink } from "../config/contact";
+import { CONTACT, telLink } from "../config/contact";
+import WhatsAppButton from "../components/WhatsAppButton";
 import { HERO } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
@@ -44,14 +45,14 @@ export default function Hero() {
           }
 
           // ── الحالة المفككة ──
-          gsap.set(part("ridge"), { y: -240 });
-          gsap.set(part("roofL"), { rotation: -14, x: -150, y: -30, svgOrigin: "500 40" });
-          gsap.set(part("roofR"), { rotation: 14, x: 150, y: -30, svgOrigin: "500 40" });
+          gsap.set(part("ridge"), { y: -150 });
+          gsap.set(part("roofL"), { rotation: -12, x: -120, y: -22, svgOrigin: "500 40" });
+          gsap.set(part("roofR"), { rotation: 12, x: 120, y: -22, svgOrigin: "500 40" });
           gsap.set(part("glassTop"), { scale: 0.72, opacity: 0.85, svgOrigin: "500 380" });
-          gsap.set(part("beam"), { y: 110 });
-          gsap.set(part("glassBottom"), { y: 150, opacity: 0.85 });
-          gsap.set(part("deck"), { y: 170, opacity: 0.6 });
-          gsap.set(part("props"), { y: 170, opacity: 0 });
+          gsap.set(part("beam"), { y: 80 });
+          gsap.set(part("glassBottom"), { y: 100, opacity: 0.85 });
+          gsap.set(part("deck"), { y: 120, opacity: 0.6 });
+          gsap.set(part("props"), { y: 120, opacity: 0 });
           gsap.set(part("shadow"), { opacity: 0, scaleX: 0.5, svgOrigin: "500 772" });
           gsap.set([part("lights"), part("glow")], { opacity: 0 });
           gsap.set(seams, { drawSVG: "0%", opacity: 0 });
@@ -104,13 +105,13 @@ export default function Hero() {
 
   return (
     <section id="hero" ref={sectionRef} className="relative bg-white overflow-hidden">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 min-h-screen grid lg:grid-cols-12 items-center gap-10 lg:gap-6 pt-28 pb-16 lg:py-0">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 min-h-screen grid lg:grid-cols-12 items-center gap-10 lg:gap-8 pt-28 pb-16 lg:pt-20 lg:pb-0">
         {/* النص — على اليمين */}
         <div ref={textRef} className="lg:col-span-5 text-right">
           <p data-line className="text-xs sm:text-sm text-walnut font-medium tracking-wide">
             {HERO.kicker}
           </p>
-          <h1 className="mt-5 text-[2.6rem] leading-[1.15] sm:text-6xl lg:text-[3.75rem] font-bold text-ink">
+          <h1 className="mt-5 text-[2.5rem] leading-[1.2] sm:text-6xl lg:text-[3.6rem] font-bold text-ink">
             {HERO.title.map((line) => (
               <span data-line key={line} className="block">
                 {line}
@@ -120,40 +121,26 @@ export default function Hero() {
           <p data-line className="mt-6 max-w-md text-base sm:text-lg text-ink/70 leading-relaxed">
             {HERO.text}
           </p>
-          <ul data-line className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink/60">
-            {HERO.facts.map((f) => (
-              <li key={f} className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-oak" />
-                <span className="num">{f}</span>
-              </li>
-            ))}
-          </ul>
 
           <div data-line className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
-            <a
-              href={waLink(HERO.whatsapp)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 h-12 px-6 rounded-md bg-espresso text-white font-medium hover:bg-walnut transition-colors"
-            >
-              محادثة واتساب
-              <span aria-hidden>←</span>
-            </a>
+            <WhatsAppButton message={HERO.whatsapp} size="lg">محادثة واتساب</WhatsAppButton>
             <a href={telLink} className="link-underline text-ink font-medium num" dir="ltr">
               {CONTACT.phoneDisplay}
             </a>
           </div>
 
-          <div ref={hintRef} className="hidden lg:flex items-center gap-3 mt-16 text-xs text-walnut">
-            <span className="block w-px h-10 bg-walnut/40" />
-            <span>{HERO.scrollHint}</span>
-          </div>
         </div>
 
         {/* الكوخ — على اليسار */}
         <div ref={cabinRef} className="lg:col-span-7 lg:pl-4">
-          <Cabin className="w-full h-auto max-h-[70vh]" />
+          <Cabin className="w-full h-auto max-h-[66vh]" />
         </div>
+      </div>
+
+      {/* تلميح الاسكرول — خارج تدفّق النص حتى لا يُخِلّ بالتوسيط */}
+      <div ref={hintRef} className="hidden lg:flex absolute bottom-8 right-8 items-center gap-3 text-xs text-walnut">
+        <span className="block w-px h-10 bg-walnut/40" />
+        <span>{HERO.scrollHint}</span>
       </div>
     </section>
   );
