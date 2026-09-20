@@ -105,13 +105,13 @@ export default function Hero() {
 
   return (
     <section id="hero" ref={sectionRef} className="relative bg-white overflow-hidden">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 min-h-screen grid lg:grid-cols-12 items-center gap-8 lg:gap-8 pt-24 pb-12 lg:pt-20 lg:pb-0">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 min-h-screen grid lg:grid-cols-12 items-center gap-6 lg:gap-8 pt-20 pb-12 lg:pt-20 lg:pb-0">
         {/* النص — على اليمين */}
         <div ref={textRef} className="lg:col-span-5 text-right">
-          <p data-line className="text-xs sm:text-sm text-walnut font-medium tracking-wide">
+          <p data-line className="text-[11px] sm:text-sm text-walnut font-medium tracking-wide">
             {HERO.kicker}
           </p>
-          <h1 className="mt-4 sm:mt-5 text-[1.8rem] leading-[1.25] sm:text-6xl lg:text-[3.6rem] font-bold text-ink">
+          <h1 className="mt-3 sm:mt-5 text-[1.5rem] leading-[1.3] sm:text-6xl lg:text-[3.6rem] font-bold text-ink">
             {HERO.title.map((line) => (
               <span data-line key={line} className="block">
                 {line}

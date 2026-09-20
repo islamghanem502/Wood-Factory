@@ -28,13 +28,13 @@ export default function Navbar() {
         scrolled && !open ? "bg-white/92 backdrop-blur-md border-b border-line" : "bg-transparent border-b border-transparent"
       }`}
     >
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 h-20 flex items-center justify-between">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 h-14 sm:h-20 flex items-center justify-between">
         {/* الشعار */}
         <a href="#hero" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-          <img src={open ? IMAGES.logoCream : IMAGES.logo} alt="" className="h-9 w-auto" width="32" height="36" />
-          <span className={`font-display font-bold text-xl leading-none ${open ? "text-white" : "text-ink"}`}>
+          <img src={open ? IMAGES.logoCream : IMAGES.logo} alt="" className="h-7 sm:h-9 w-auto" width="32" height="36" />
+          <span className={`font-display font-bold text-base sm:text-xl leading-none ${open ? "text-white" : "text-ink"}`}>
             خشبي
-            <span className={`ms-2 text-[10px] font-medium tracking-[0.2em] ${open ? "text-white/60" : "text-walnut"}`}>WOODEN</span>
+            <span className={`ms-1.5 sm:ms-2 text-[8px] sm:text-[10px] font-medium tracking-[0.2em] ${open ? "text-white/60" : "text-walnut"}`}>WOODEN</span>
           </span>
         </a>
 
@@ -59,12 +59,12 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className={`md:hidden relative w-10 h-10 -me-2 flex flex-col items-center justify-center gap-1.5 ${open ? "text-white" : "text-ink"}`}
+          className={`md:hidden relative w-9 h-9 -me-1.5 flex flex-col items-center justify-center gap-1.5 ${open ? "text-white" : "text-ink"}`}
           aria-label={open ? "إغلاق القائمة" : "فتح القائمة"}
           aria-expanded={open}
         >
-          <span className={`block w-6 h-px bg-current transition-transform duration-300 ${open ? "translate-y-[3.5px] rotate-45" : ""}`} />
-          <span className={`block w-6 h-px bg-current transition-transform duration-300 ${open ? "-translate-y-[3.5px] -rotate-45" : ""}`} />
+          <span className={`block w-5 h-px bg-current transition-transform duration-300 ${open ? "translate-y-[3.5px] rotate-45" : ""}`} />
+          <span className={`block w-5 h-px bg-current transition-transform duration-300 ${open ? "-translate-y-[3.5px] -rotate-45" : ""}`} />
         </button>
       </div>
 
@@ -74,14 +74,14 @@ export default function Navbar() {
           open ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
       >
-        <div className="h-full flex flex-col justify-between px-6 pt-28 pb-10">
+        <div className="h-full flex flex-col justify-between px-6 pt-20 pb-8">
           <nav className="flex flex-col gap-2">
             {NAV_LINKS.map((l, i) => (
               <a
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="font-display text-4xl font-semibold py-3 border-b border-line-dark"
+                className="font-display text-2xl font-semibold py-3.5 border-b border-line-dark"
                 style={{ transitionDelay: `${i * 40}ms` }}
               >
                 {l.label}
@@ -89,10 +89,10 @@ export default function Navbar() {
             ))}
           </nav>
           <div className="space-y-4">
-            <a href={telLink} className="block text-2xl num" dir="ltr" style={{ textAlign: "right" }}>
+            <a href={telLink} className="block text-xl num" dir="ltr" style={{ textAlign: "right" }}>
               {CONTACT.phoneDisplay}
             </a>
-            <WhatsAppButton message={HERO.whatsapp} size="lg" className="w-full">محادثة واتساب</WhatsAppButton>
+            <WhatsAppButton message={HERO.whatsapp} size="md" className="w-full">محادثة واتساب</WhatsAppButton>
           </div>
         </div>
       </div>
