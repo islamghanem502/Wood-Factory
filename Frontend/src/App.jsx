@@ -5,6 +5,7 @@ import CostCalculator from "./components/CostCalculator";
 
 import Hero from "./sections/Hero";
 import Numbers from "./sections/Numbers";
+import Offer from "./sections/Offer";
 import Specs from "./sections/Specs";
 import Ideas from "./sections/Ideas";
 import Testimonials from "./sections/Testimonials";
@@ -18,6 +19,7 @@ export default function App() {
       <main>
         <Hero />
         <Numbers />
+        <Offer />
         <Specs />
         <Ideas />
         <CostCalculator />

@@ -3,7 +3,7 @@ import * as Slider from "@radix-ui/react-slider";
 import gsap from "gsap";
 import SectionHeader from "./SectionHeader";
 import { CONTACT, telLink } from "../config/contact";
-import { CALC, CALC_MODELS, CALC_ADDONS } from "../data/content";
+import { CALC, CALC_MODELS, CALC_ADDONS, OFFER } from "../data/content";
 import { Reveal, prefersReducedMotion } from "../lib/motion";
 import { WhatsAppIcon, waButtonClass } from "./WhatsAppButton";
 
@@ -102,9 +102,11 @@ export default function CostCalculator() {
   }, []);
 
   const model = useMemo(() => CALC_MODELS.find((m) => m.id === modelId) || CALC_MODELS[0], [modelId]);
+  // أثناء العرض يُحسب بسعر العرض ويظهر السعر الأصلي مشطوباً
+  const rate = OFFER.active ? OFFER.price : model.ratePerMeter;
   const toggleAddon = (id) => setAddons((prev) => (prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]));
 
-  const structureCost = area * model.ratePerMeter;
+  const structureCost = area * rate;
   const addonsCost = addons.reduce((sum, id) => sum + (CALC_ADDONS.find((a) => a.id === id)?.cost || 0), 0);
   const total = structureCost + addonsCost;
   const minCost = total * 0.95;
@@ -120,7 +122,8 @@ export default function CostCalculator() {
       `%0A- النوع: ${model.name}` +
       `%0A- المساحة: ${area} م²` +
       `%0A- الإضافات: ${addonNames || "بدون"}` +
-      `%0A- التقدير: ${fmt(minCost)} – ${fmt(maxCost)} ر.س`;
+      `%0A- التقدير: ${fmt(minCost)} – ${fmt(maxCost)} ر.س` +
+      (OFFER.active ? `%0A- بسعر عرض ${OFFER.badge} (${fmt(OFFER.price)} ر.س/م²)` : "");
     window.open(`${CONTACT.whatsappUrl}?text=${message}`, "_blank");
   };
 
@@ -256,7 +259,10 @@ export default function CostCalculator() {
               <div className="relative p-6 sm:p-8 h-full flex flex-col">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <span className="block text-[11px] tracking-[0.18em] text-white/50">التقدير</span>
+                    <span className="block text-[11px] tracking-[0.18em] text-white/50">
+                      التقدير
+                      {OFFER.active && <span className="ms-2 inline-flex items-center h-5 px-2 rounded-full bg-[#006c35] text-white text-[10px] tracking-normal align-middle">{OFFER.badge}</span>}
+                    </span>
                     <span className="block mt-1 font-display font-semibold text-lg">{model.name}</span>
                   </div>
                   <ModelIcon id={model.icon} className="w-12 h-9 text-oak-light shrink-0" />
@@ -278,7 +284,10 @@ export default function CostCalculator() {
                   </div>
                   <div>
                     <dt className="text-white/45">سعر المتر</dt>
-                    <dd className="num mt-0.5">{fmt(model.ratePerMeter)}</dd>
+                    <dd className="num mt-0.5">
+                      {fmt(rate)}
+                      {OFFER.active && <span className="ms-1.5 text-white/40 line-through">{fmt(model.ratePerMeter)}</span>}
+                    </dd>
                   </div>
                   <div>
                     <dt className="text-white/45">الإضافات</dt>
