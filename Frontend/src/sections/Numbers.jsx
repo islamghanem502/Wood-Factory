@@ -54,9 +54,9 @@ export default function Numbers() {
             <Reveal
               key={n.label}
               delay={i * 90}
-              className={`py-12 sm:py-16 text-right ${i > 0 ? "border-t sm:border-t-0 sm:border-s border-line-dark sm:ps-8" : ""}`}
+              className={`py-12 sm:py-16 flex flex-col items-center text-center ${i > 0 ? "border-t sm:border-t-0 sm:border-s border-line-dark" : ""}`}
             >
-              <div className="flex items-baseline gap-2">
+              <div className="flex items-baseline justify-center gap-2">
                 <CountUp value={n.value} className="wood-text font-display font-bold text-6xl sm:text-7xl leading-none num tabular-nums" />
                 <span className="font-display text-xl sm:text-2xl text-oak-light">{n.unit}</span>
               </div>
