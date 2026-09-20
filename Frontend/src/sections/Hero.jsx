@@ -122,18 +122,26 @@ export default function Hero() {
             {HERO.text}
           </p>
 
-          <div data-line className="mt-7 sm:mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
+          {/* الأزرار — على الشاشات الكبيرة تحت النص مباشرة */}
+          <div data-line className="hidden lg:flex mt-9 flex-wrap items-center gap-x-6 gap-y-4">
             <WhatsAppButton message={HERO.whatsapp} size="lg">محادثة واتساب</WhatsAppButton>
             <a href={telLink} className="link-underline text-ink font-medium num" dir="ltr">
               {CONTACT.phoneDisplay}
             </a>
           </div>
-
         </div>
 
-        {/* الكوخ — على اليسار */}
+        {/* الكوخ — على اليسار (وعلى الجوال يظهر قبل الأزرار) */}
         <div ref={cabinRef} className="lg:col-span-7 lg:pl-4">
-          <Cabin className="w-full h-auto max-h-[66vh]" />
+          <Cabin className="w-full h-auto max-h-[46vh] lg:max-h-[66vh]" />
+        </div>
+
+        {/* الأزرار — على الجوال بعد الكوخ */}
+        <div className="lg:hidden -mt-2 flex flex-wrap items-center gap-x-6 gap-y-4 text-right">
+          <WhatsAppButton message={HERO.whatsapp} size="lg">محادثة واتساب</WhatsAppButton>
+          <a href={telLink} className="link-underline text-ink font-medium num" dir="ltr">
+            {CONTACT.phoneDisplay}
+          </a>
         </div>
       </div>
 
