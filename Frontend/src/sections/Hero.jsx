@@ -111,7 +111,7 @@ export default function Hero() {
           <p data-line className="text-xs sm:text-sm text-walnut font-medium tracking-wide">
             {HERO.kicker}
           </p>
-          <h1 className="mt-4 sm:mt-5 text-[2.15rem] leading-[1.2] sm:text-6xl lg:text-[3.6rem] font-bold text-ink">
+          <h1 className="mt-4 sm:mt-5 text-[1.8rem] leading-[1.25] sm:text-6xl lg:text-[3.6rem] font-bold text-ink">
             {HERO.title.map((line) => (
               <span data-line key={line} className="block">
                 {line}
