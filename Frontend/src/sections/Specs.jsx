@@ -110,37 +110,6 @@ function WallSection() {
   );
 }
 
-/* لوحان زجاجيان بسماكتين 6 و8 ملم (المقياس ×3) */
-function GlassPanes() {
-  const pane = (x, w, label) => (
-    <g key={label}>
-      <rect x={x} y="40" width={w} height="150" fill="url(#sp-glass)" stroke="#7fa3b8" strokeWidth="1" />
-      <rect x={x + 2} y="44" width={Math.max(2, w * 0.25)} height="142" fill="#ffffff" opacity="0.55" />
-      <g stroke="#2a170e" strokeWidth="1.2">
-        <line x1={x} y1="22" x2={x + w} y2="22" />
-        <line x1={x} y1="17" x2={x} y2="27" />
-        <line x1={x + w} y1="17" x2={x + w} y2="27" />
-      </g>
-      <text x={x + w / 2} y="12" textAnchor="middle" fill="#2a170e" fontSize="13" fontWeight="600" className="num">
-        {label}
-      </text>
-      <line x1={x - 40} y1="190" x2={x + w + 40} y2="190" stroke="#2a170e" strokeWidth="1.5" />
-    </g>
-  );
-  return (
-    <svg viewBox="0 0 400 220" className="w-full h-auto" role="img" aria-label="سماكتا الزجاج 6 و8 ملم">
-      <defs>
-        <linearGradient id="sp-glass" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#dbeaf2" />
-          <stop offset="1" stopColor="#b9d3e2" />
-        </linearGradient>
-      </defs>
-      {pane(120, 18, "6 ملم")}
-      {pane(262, 24, "8 ملم")}
-    </svg>
-  );
-}
-
 export default function Specs() {
   const { walls, roof, glass } = SPECS;
   const roofRef = useRef(null);
@@ -169,83 +138,72 @@ export default function Specs() {
   }, []);
 
   return (
-    <section id="specs" className="bg-white py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <SectionHeader number="01" label="المواصفات" title={SPECS.title} intro={SPECS.intro} />
+    <section id="specs" className="bg-white py-16 sm:py-20 lg:min-h-screen lg:flex lg:flex-col lg:justify-center">
+      <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
+        <SectionHeader number="01" label="المواصفات" title={SPECS.title} intro={SPECS.intro} size="sm" />
 
-        <div className="mt-16 sm:mt-20 border-t border-line">
-          {/* ── الجدار ── */}
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center py-16 sm:py-20 border-b border-line text-right">
-            <div className="lg:col-span-5">
-              <Reveal className="text-xs tracking-[0.18em] text-walnut">01 — الجدار</Reveal>
-              <Reveal as="h3" delay={60} className="mt-3 font-display font-bold text-3xl sm:text-4xl text-ink">
-                {walls.title}
-              </Reveal>
-              <Reveal delay={120} className="mt-6 flex items-end gap-3">
-                <span className="wood-text-dark font-display font-bold text-8xl leading-none num">{walls.value}</span>
-                <span className="font-display text-2xl text-walnut mb-2">{walls.unit}</span>
-              </Reveal>
-              <Reveal as="p" delay={180} className="mt-5 text-lg text-ink/70 leading-relaxed max-w-md">
-                {walls.description}
-              </Reveal>
-            </div>
-            <Reveal variant="clip" delay={100} className="lg:col-span-7">
-              <div className="max-w-xl mx-auto lg:me-0 lg:ms-auto">
-                <WallSection />
-              </div>
+        {/* ثلاث مواصفات في صف واحد — تُرى كاملة بدون تمرير على الشاشات الكبيرة */}
+        <div className="mt-10 lg:mt-12 grid lg:grid-cols-12 gap-10 lg:gap-8 border-t border-line pt-10 text-right">
+          {/* الجدار */}
+          <div className="lg:col-span-3 lg:border-e lg:border-line lg:pe-8">
+            <Reveal className="text-xs tracking-[0.18em] text-walnut">01 — الجدار</Reveal>
+            <Reveal as="h3" delay={60} className="mt-2 font-display font-bold text-2xl text-ink">
+              {walls.title}
+            </Reveal>
+            <Reveal delay={120} className="mt-4 flex items-end gap-2">
+              <span className="wood-text-dark font-display font-bold text-6xl leading-none num">{walls.value}</span>
+              <span className="font-display text-xl text-walnut mb-1">{walls.unit}</span>
+            </Reveal>
+            <Reveal delay={160} className="mt-4 max-w-[260px]">
+              <WallSection />
+            </Reveal>
+            <Reveal as="p" delay={200} className="mt-3 text-sm text-ink/65 leading-relaxed">
+              {walls.description}
             </Reveal>
           </div>
 
-          {/* ── السقف ── */}
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center py-16 sm:py-20 border-b border-line text-right">
-            <div className="lg:col-span-5">
-              <Reveal className="text-xs tracking-[0.18em] text-walnut">02 — السقف</Reveal>
-              <Reveal as="h3" delay={60} className="mt-3 font-display font-bold text-3xl sm:text-4xl text-ink">
-                {roof.title}
-              </Reveal>
-              <Reveal as="p" delay={120} className="mt-4 text-lg text-ink/70 leading-relaxed max-w-md">
-                {roof.description}
-              </Reveal>
-              <ol className="mt-8 space-y-3">
-                {roof.layers.map((layer, i) => (
-                  <Reveal as="li" key={layer.name} delay={160 + i * 70} className="flex items-center gap-4">
-                    <span className="w-8 h-8 rounded-full bg-espresso text-white text-xs font-semibold flex items-center justify-center shrink-0 num">
-                      {i + 1}
-                    </span>
-                    <span className="font-medium text-ink">{layer.name}</span>
-                    <span className="text-sm text-ink/50">{layer.note}</span>
-                  </Reveal>
-                ))}
-              </ol>
+          {/* السقف */}
+          <div className="lg:col-span-6 lg:border-e lg:border-line lg:pe-8">
+            <Reveal className="text-xs tracking-[0.18em] text-walnut">02 — السقف</Reveal>
+            <Reveal as="h3" delay={60} className="mt-2 font-display font-bold text-2xl text-ink">
+              {roof.title}
+            </Reveal>
+            <div className="mt-3 max-w-[420px] mx-auto">
+              <RoofLayers innerRef={roofRef} />
             </div>
-            <div className="lg:col-span-7">
-              <div className="max-w-xl mx-auto lg:me-0 lg:ms-auto">
-                <RoofLayers innerRef={roofRef} />
-              </div>
-            </div>
+            <ol className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 max-w-[460px] mx-auto">
+              {roof.layers.map((layer, i) => (
+                <Reveal as="li" key={layer.name} delay={120 + i * 60} className="flex items-center gap-2 text-sm">
+                  <span className="w-6 h-6 rounded-full bg-espresso text-white text-[11px] font-semibold flex items-center justify-center shrink-0 num">
+                    {i + 1}
+                  </span>
+                  <span className="font-medium text-ink">{layer.name}</span>
+                  {layer.note && <span className="text-ink/45">— {layer.note}</span>}
+                </Reveal>
+              ))}
+            </ol>
           </div>
 
-          {/* ── الزجاج ── */}
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center py-16 sm:py-20 border-b border-line text-right">
-            <div className="lg:col-span-5">
-              <Reveal className="text-xs tracking-[0.18em] text-walnut">03 — الزجاج</Reveal>
-              <Reveal as="h3" delay={60} className="mt-3 font-display font-bold text-3xl sm:text-4xl text-ink">
-                {glass.title}
-              </Reveal>
-              <Reveal delay={120} className="mt-6 flex items-end gap-3">
-                <span className="wood-text-dark font-display font-bold text-8xl leading-none num" dir="ltr">
-                  6 / 8
-                </span>
-                <span className="font-display text-2xl text-walnut mb-2">ملم</span>
-              </Reveal>
-              <Reveal as="p" delay={180} className="mt-5 text-lg text-ink/70 leading-relaxed max-w-md">
-                {glass.description}
-              </Reveal>
-            </div>
-            <Reveal variant="clip" delay={100} className="lg:col-span-7">
-              <div className="max-w-xl mx-auto lg:me-0 lg:ms-auto">
-                <GlassPanes />
-              </div>
+          {/* الزجاج */}
+          <div className="lg:col-span-3">
+            <Reveal className="text-xs tracking-[0.18em] text-walnut">03 — الزجاج</Reveal>
+            <Reveal as="h3" delay={60} className="mt-2 font-display font-bold text-2xl text-ink">
+              {glass.title}
+            </Reveal>
+            <Reveal delay={120} className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-2">
+              {glass.options.map((opt, i) => {
+                const [n, unit] = opt.split(" ");
+                return (
+                  <span key={opt} className="flex items-baseline gap-2">
+                    {i > 0 && <span className="text-3xl text-line me-2" aria-hidden>/</span>}
+                    <span className="wood-text-dark font-display font-bold text-6xl leading-none num">{n}</span>
+                    <span className="font-display text-xl text-walnut">{unit}</span>
+                  </span>
+                );
+              })}
+            </Reveal>
+            <Reveal as="p" delay={180} className="mt-5 text-sm text-ink/65 leading-relaxed">
+              {glass.description}
             </Reveal>
           </div>
         </div>
