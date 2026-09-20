@@ -49,18 +49,18 @@ export default function Numbers() {
   return (
     <section className="bg-espresso text-white">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-3">
+        <div className="grid grid-cols-3">
           {NUMBERS.map((n, i) => (
             <Reveal
               key={n.label}
               delay={i * 90}
-              className={`py-12 sm:py-16 flex flex-col items-center text-center ${i > 0 ? "border-t sm:border-t-0 sm:border-s border-line-dark" : ""}`}
+              className={`py-8 sm:py-16 px-2 flex flex-col items-center text-center ${i > 0 ? "border-s border-line-dark" : ""}`}
             >
-              <div className="flex items-baseline justify-center gap-2">
-                <CountUp value={n.value} className="wood-text font-display font-bold text-6xl sm:text-7xl leading-none num tabular-nums" />
-                <span className="font-display text-xl sm:text-2xl text-oak-light">{n.unit}</span>
+              <div className="flex items-baseline justify-center gap-1.5 sm:gap-2">
+                <CountUp value={n.value} className="wood-text font-display font-bold text-4xl sm:text-7xl leading-none num tabular-nums" />
+                <span className="font-display text-sm sm:text-2xl text-oak-light">{n.unit}</span>
               </div>
-              <p className="mt-3 text-sm text-white/60">{n.label}</p>
+              <p className="mt-2 sm:mt-3 text-[11px] sm:text-sm text-white/60 leading-snug">{n.label}</p>
             </Reveal>
           ))}
         </div>

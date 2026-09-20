@@ -128,18 +128,18 @@ export default function CostCalculator() {
   };
 
   return (
-    <section id="calculator" ref={sectionRef} className="bg-white py-20 sm:py-24">
+    <section id="calculator" ref={sectionRef} className="bg-white py-14 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeader number="03" label="الحاسبة" title={CALC.title} intro={CALC.intro} size="sm" />
 
-        <Reveal delay={120} className="mt-10">
+        <Reveal delay={120} className="mt-8 sm:mt-10">
           <div className="grid lg:grid-cols-12 rounded-3xl border border-line overflow-hidden bg-white text-right">
             {/* ── المدخلات ── */}
-            <div className="lg:col-span-8 min-w-0 p-5 sm:p-8 space-y-8">
+            <div className="lg:col-span-8 min-w-0 p-4 sm:p-8 space-y-7 sm:space-y-8">
               {/* النوع */}
               <div>
                 <Label>النوع</Label>
-                <div className="flex gap-2 overflow-x-auto hide-scrollbar -mx-5 px-5 sm:mx-0 sm:px-0 sm:flex-wrap">
+                <div className="flex gap-2 overflow-x-auto hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
                   {CALC_MODELS.map((m) => {
                     const active = m.id === modelId;
                     return (
@@ -148,7 +148,7 @@ export default function CostCalculator() {
                         type="button"
                         onClick={() => setModelId(m.id)}
                         aria-pressed={active}
-                        className={`shrink-0 inline-flex items-center gap-2.5 h-12 ps-4 pe-5 rounded-full border text-sm font-medium transition-colors duration-300 ${
+                        className={`shrink-0 inline-flex items-center gap-2 sm:gap-2.5 h-11 sm:h-12 ps-3.5 pe-4 sm:ps-4 sm:pe-5 rounded-full border text-[13px] sm:text-sm font-medium transition-colors duration-300 ${
                           active ? "bg-espresso border-espresso text-white" : "border-line text-ink hover:border-ink/40"
                         }`}
                       >
@@ -190,7 +190,7 @@ export default function CostCalculator() {
                     >
                       −
                     </button>
-                    <span className="font-display font-bold text-3xl num text-ink w-16 text-center tabular-nums">{area}</span>
+                    <span className="font-display font-bold text-2xl sm:text-3xl num text-ink w-14 sm:w-16 text-center tabular-nums">{area}</span>
                     <button
                       type="button"
                       onClick={() => setArea((a) => Math.min(400, a + 5))}
@@ -256,7 +256,7 @@ export default function CostCalculator() {
 
             {/* ── النتيجة — بني بنسيج خشب ── */}
             <div className="lg:col-span-4 min-w-0 relative bg-espresso wood-overlay text-white">
-              <div className="relative p-6 sm:p-8 h-full flex flex-col">
+              <div className="relative p-5 sm:p-8 h-full flex flex-col">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <span className="block text-[11px] tracking-[0.18em] text-white/50">
@@ -269,7 +269,7 @@ export default function CostCalculator() {
                 </div>
 
                 <div className="mt-7">
-                  <div className="font-display font-bold text-3xl xl:text-[2.4rem] leading-none num flex flex-wrap items-baseline gap-x-2">
+                  <div className="font-display font-bold text-[1.7rem] sm:text-3xl xl:text-[2.4rem] leading-none num flex flex-wrap items-baseline gap-x-2">
                     <CountUp value={minCost} />
                     <span className="text-white/35 text-xl">–</span>
                     <CountUp value={maxCost} />

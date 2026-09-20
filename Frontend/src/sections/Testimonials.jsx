@@ -32,26 +32,26 @@ export default function Testimonials() {
   }, []);
 
   return (
-    <section id="reviews" className="relative bg-espresso wood-overlay text-white py-24 sm:py-32">
+    <section id="reviews" className="relative bg-espresso wood-overlay text-white py-16 sm:py-24 lg:py-32">
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeader number="04" label="آراء العملاء" title={REVIEWS_TITLE} dark />
         <p className="sm:hidden mt-6 text-xs text-white/45">اسحب لقراءة المزيد ←</p>
 
         <div
           ref={gridRef}
-          className="mt-14 flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-7 overflow-x-auto sm:overflow-visible snap-x snap-mandatory hide-scrollbar -mx-5 px-5 sm:mx-0 sm:px-0 pb-2 sm:pb-0"
+          className="mt-8 sm:mt-14 flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-7 overflow-x-auto sm:overflow-visible snap-x snap-mandatory hide-scrollbar -mx-5 px-5 sm:mx-0 sm:px-0 pb-2 sm:pb-0"
         >
           {TESTIMONIALS.map((t, i) => (
             <article
               key={t.name}
               data-card
-              className="wood-card snap-center shrink-0 w-[82vw] sm:w-auto rounded-2xl p-8 sm:p-9 flex flex-col justify-between gap-8 text-right text-espresso min-h-[300px]"
+              className="wood-card snap-center shrink-0 w-[76vw] sm:w-auto rounded-2xl p-6 sm:p-9 flex flex-col justify-between gap-6 sm:gap-8 text-right text-espresso min-h-[260px] sm:min-h-[300px]"
             >
               <div>
                 <span className="block font-display text-4xl leading-none text-walnut/50 select-none" aria-hidden>
                   «
                 </span>
-                <p className="mt-3 text-base leading-[1.9] text-espresso">{t.text}</p>
+                <p className="mt-2 sm:mt-3 text-[15px] sm:text-base leading-[1.85] text-espresso">{t.text}</p>
               </div>
               <footer className="flex items-end justify-between gap-3 border-t border-espresso/20 pt-4">
                 <div className="min-w-0">

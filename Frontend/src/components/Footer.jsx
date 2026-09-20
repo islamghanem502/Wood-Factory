@@ -11,13 +11,13 @@ export default function Footer() {
     <footer className="relative bg-espresso wood-overlay text-white overflow-hidden">
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
         {/* الدعوة الأخيرة */}
-        <Reveal className="pt-20 pb-14 flex flex-col lg:flex-row lg:items-center justify-between gap-8 text-right">
-          <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl">{FOOTER.ctaTitle}</h2>
+        <Reveal className="pt-14 sm:pt-20 pb-10 sm:pb-14 flex flex-col lg:flex-row lg:items-center justify-between gap-6 sm:gap-8 text-right">
+          <h2 className="font-display font-bold text-2xl sm:text-4xl lg:text-5xl">{FOOTER.ctaTitle}</h2>
           <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
             <WhatsAppButton message={FOOTER.whatsapp} size="lg">
               محادثة واتساب
             </WhatsAppButton>
-            <a href={telLink} className="font-display font-semibold text-2xl num hover:text-oak-light transition-colors" dir="ltr">
+            <a href={telLink} className="font-display font-semibold text-xl sm:text-2xl num hover:text-oak-light transition-colors" dir="ltr">
               {CONTACT.phoneDisplay}
             </a>
           </div>

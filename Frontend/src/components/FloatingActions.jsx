@@ -32,15 +32,15 @@ export default function FloatingActions() {
         href={waLink(HERO.whatsapp)}
         target="_blank"
         rel="noopener noreferrer"
-        className="wa-btn w-12 h-12 rounded-full flex items-center justify-center"
+        className="wa-btn w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center"
         title="محادثة واتساب"
         aria-label="محادثة واتساب"
       >
-        <WhatsAppIcon className="w-6 h-6" />
+        <WhatsAppIcon className="w-5 h-5 sm:w-6 sm:h-6" />
       </a>
       <a
         href={telLink}
-        className="w-12 h-12 rounded-full bg-white text-ink border border-line flex items-center justify-center shadow-lg shadow-ink/10 hover:bg-stone transition-colors"
+        className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white text-ink border border-line flex items-center justify-center shadow-lg shadow-ink/10 hover:bg-stone transition-colors"
         title="اتصال هاتفي"
         aria-label="اتصال هاتفي"
       >

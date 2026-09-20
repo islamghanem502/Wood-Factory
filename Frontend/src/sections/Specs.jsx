@@ -196,14 +196,14 @@ export default function Specs() {
         <SectionHeader number="01" label="المواصفات" title={SPECS.title} intro={SPECS.intro} size="sm" />
 
         {/* ثلاث مواصفات في صف واحد — تُرى كاملة بدون تمرير على الشاشات الكبيرة */}
-        <div className="mt-10 lg:mt-12 grid lg:grid-cols-12 gap-10 lg:gap-8 border-t border-line pt-10 text-right">
+        <div className="mt-8 lg:mt-12 grid lg:grid-cols-12 gap-10 lg:gap-8 border-t border-line pt-8 sm:pt-10 text-right">
           {/* الجدار */}
           <div className="lg:col-span-3 lg:border-e lg:border-line lg:pe-8">
-            <Reveal as="h3" delay={60} className="font-display font-bold text-2xl text-ink">
+            <Reveal as="h3" delay={60} className="font-display font-bold text-xl sm:text-2xl text-ink">
               {walls.title}
             </Reveal>
             <Reveal delay={120} className="mt-4 flex items-end gap-2">
-              <span className="wood-text-dark font-display font-bold text-6xl leading-none num">{walls.value}</span>
+              <span className="wood-text-dark font-display font-bold text-5xl sm:text-6xl leading-none num">{walls.value}</span>
               <span className="font-display text-xl text-walnut mb-1">{walls.unit}</span>
             </Reveal>
             <Reveal delay={160} className="mt-4 max-w-[260px]">
@@ -216,13 +216,13 @@ export default function Specs() {
 
           {/* السقف */}
           <div className="lg:col-span-6 lg:border-e lg:border-line lg:pe-8">
-            <Reveal as="h3" delay={60} className="font-display font-bold text-2xl text-ink">
+            <Reveal as="h3" delay={60} className="font-display font-bold text-xl sm:text-2xl text-ink">
               {roof.title}
             </Reveal>
             <div className="mt-3 max-w-[420px] mx-auto">
               <RoofLayers innerRef={roofRef} />
             </div>
-            <ol className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 max-w-[460px] mx-auto">
+            <ol className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 max-w-[460px] mx-auto">
               {roof.layers.map((layer, i) => (
                 <Reveal as="li" key={layer.name} delay={120 + i * 60} className="flex items-center gap-2 text-sm">
                   <span className="w-6 h-6 rounded-full bg-espresso text-white text-[11px] font-semibold flex items-center justify-center shrink-0 num">
@@ -237,7 +237,7 @@ export default function Specs() {
 
           {/* الزجاج */}
           <div className="lg:col-span-3">
-            <Reveal as="h3" delay={60} className="font-display font-bold text-2xl text-ink">
+            <Reveal as="h3" delay={60} className="font-display font-bold text-xl sm:text-2xl text-ink">
               {glass.title}
             </Reveal>
             <Reveal delay={120} className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-2">
@@ -246,7 +246,7 @@ export default function Specs() {
                 return (
                   <span key={opt} className="flex items-baseline gap-2">
                     {i > 0 && <span className="text-3xl text-line me-2" aria-hidden>/</span>}
-                    <span className="wood-text-dark font-display font-bold text-6xl leading-none num">{n}</span>
+                    <span className="wood-text-dark font-display font-bold text-5xl sm:text-6xl leading-none num">{n}</span>
                     <span className="font-display text-xl text-walnut">{unit}</span>
                   </span>
                 );

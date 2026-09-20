@@ -105,24 +105,24 @@ export default function Hero() {
 
   return (
     <section id="hero" ref={sectionRef} className="relative bg-white overflow-hidden">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 min-h-screen grid lg:grid-cols-12 items-center gap-10 lg:gap-8 pt-28 pb-16 lg:pt-20 lg:pb-0">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 min-h-screen grid lg:grid-cols-12 items-center gap-8 lg:gap-8 pt-24 pb-12 lg:pt-20 lg:pb-0">
         {/* النص — على اليمين */}
         <div ref={textRef} className="lg:col-span-5 text-right">
           <p data-line className="text-xs sm:text-sm text-walnut font-medium tracking-wide">
             {HERO.kicker}
           </p>
-          <h1 className="mt-5 text-[2.5rem] leading-[1.2] sm:text-6xl lg:text-[3.6rem] font-bold text-ink">
+          <h1 className="mt-4 sm:mt-5 text-[2.15rem] leading-[1.2] sm:text-6xl lg:text-[3.6rem] font-bold text-ink">
             {HERO.title.map((line) => (
               <span data-line key={line} className="block">
                 {line}
               </span>
             ))}
           </h1>
-          <p data-line className="mt-6 max-w-md text-base sm:text-lg text-ink/70 leading-relaxed">
+          <p data-line className="mt-5 sm:mt-6 max-w-md text-[15px] sm:text-lg text-ink/70 leading-relaxed">
             {HERO.text}
           </p>
 
-          <div data-line className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+          <div data-line className="mt-7 sm:mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
             <WhatsAppButton message={HERO.whatsapp} size="lg">محادثة واتساب</WhatsAppButton>
             <a href={telLink} className="link-underline text-ink font-medium num" dir="ltr">
               {CONTACT.phoneDisplay}

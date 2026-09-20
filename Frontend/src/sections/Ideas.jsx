@@ -141,11 +141,11 @@ export default function Ideas() {
 
   return (
     <section id="ideas" className="relative bg-white overflow-hidden">
-      <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 pt-24 sm:pt-32 pb-10">
+      <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 pt-16 sm:pt-24 lg:pt-32 pb-8 sm:pb-10">
         <SectionHeader number="02" label="أفكار" title={IDEAS.title} intro={IDEAS.intro} />
       </div>
 
-      <div className="relative pt-4 pb-20 sm:pb-24">
+      <div className="relative pt-2 sm:pt-4 pb-14 sm:pb-24">
         <div className="absolute inset-x-0 bottom-0 top-[30%] bg-espresso wood-overlay" />
 
         <div
@@ -159,7 +159,7 @@ export default function Ideas() {
                 <article
                   key={`${d.id}-${i}`}
                   aria-hidden={i >= DESIGNS.length || undefined}
-                  className="snap-center shrink-0 w-[78vw] sm:w-[360px] lg:w-[400px] bg-white rounded-2xl p-3 shadow-[0_30px_60px_-30px_rgba(20,16,13,0.45)]"
+                  className="snap-center shrink-0 w-[72vw] sm:w-[360px] lg:w-[400px] bg-white rounded-2xl p-2.5 sm:p-3 shadow-[0_30px_60px_-30px_rgba(20,16,13,0.45)]"
                 >
                   <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-stone">
                     <img src={d.image} alt={i < DESIGNS.length ? d.description : ""} loading={i < 3 ? "eager" : "lazy"} draggable="false" className="w-full h-full object-cover" />
@@ -167,9 +167,9 @@ export default function Ideas() {
                       {String(n).padStart(2, "0")}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between gap-4 px-2 pt-4 pb-2 text-right">
-                    <p className="text-sm text-ink/75 leading-relaxed">{d.description}</p>
-                    <WhatsAppButton message={IDEAS.whatsapp(n)} size="sm" className="shrink-0" tabIndex={i >= DESIGNS.length ? -1 : undefined}>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 px-2 pt-3 sm:pt-4 pb-2 text-right">
+                    <p className="text-[13px] sm:text-sm text-ink/75 leading-relaxed">{d.description}</p>
+                    <WhatsAppButton message={IDEAS.whatsapp(n)} size="sm" className="shrink-0 self-start sm:self-auto" tabIndex={i >= DESIGNS.length ? -1 : undefined}>
                       {IDEAS.cta}
                     </WhatsAppButton>
                   </div>
@@ -180,9 +180,9 @@ export default function Ideas() {
         </div>
 
         {!reduced && (
-          <div className="relative mx-auto max-w-7xl px-5 sm:px-8 mt-8 flex items-center justify-between gap-6">
+          <div className="relative mx-auto max-w-7xl px-5 sm:px-8 mt-4 sm:mt-8 hidden sm:flex items-center justify-between gap-6">
             <p className="text-xs text-white/55 hidden sm:block">{IDEAS.hint}</p>
-            <div className="flex gap-2 ms-auto">
+            <div className="hidden sm:flex gap-2 ms-auto">
               <button
                 type="button"
                 onClick={() => api.current.step(-1)}

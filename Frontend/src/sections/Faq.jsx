@@ -11,8 +11,8 @@ export default function Faq() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section id="faq" className="bg-white py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 grid lg:grid-cols-12 gap-12 lg:gap-16 text-right">
+    <section id="faq" className="bg-white py-16 sm:py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 grid lg:grid-cols-12 gap-8 lg:gap-16 text-right">
         {/* الترويسة — ثابتة على الشاشات الكبيرة */}
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-28">
@@ -21,14 +21,14 @@ export default function Faq() {
               <span className="w-8 h-px bg-line" />
               <span>الأسئلة</span>
             </Reveal>
-            <Reveal as="h2" delay={80} className="mt-4 font-display font-bold text-4xl sm:text-5xl text-ink">
+            <Reveal as="h2" delay={80} className="mt-3 sm:mt-4 font-display font-bold text-3xl sm:text-5xl text-ink">
               {FAQ.title}
             </Reveal>
-            <Reveal as="p" delay={140} className="mt-4 text-ink/65 leading-relaxed max-w-sm">
+            <Reveal as="p" delay={140} className="mt-3 sm:mt-4 text-sm sm:text-base text-ink/65 leading-relaxed max-w-sm">
               {FAQ.intro}
             </Reveal>
 
-            <Reveal delay={200} className="mt-10 rounded-2xl border border-line p-6">
+            <Reveal delay={200} className="hidden lg:block mt-10 rounded-2xl border border-line p-6">
               <span className="block font-display font-semibold text-lg text-ink">{FAQ.moreTitle}</span>
               <p className="mt-1.5 text-sm text-ink/60 leading-relaxed">{FAQ.moreText}</p>
               <WhatsAppButton message={FAQ.whatsapp} size="sm" className="mt-5">
@@ -49,18 +49,18 @@ export default function Faq() {
                     type="button"
                     onClick={() => setOpenIndex(isOpen ? null : i)}
                     aria-expanded={isOpen}
-                    className="w-full py-6 pe-2 ps-1 flex items-start gap-5 sm:gap-7 text-right group"
+                    className="w-full py-5 sm:py-6 pe-1 sm:pe-2 ps-0 sm:ps-1 flex items-start gap-4 sm:gap-7 text-right group"
                   >
                     <span className="num text-xs text-walnut pt-2 w-6 shrink-0">{String(i + 1).padStart(2, "0")}</span>
                     <span
-                      className={`flex-1 font-display font-medium text-lg sm:text-[1.35rem] leading-snug transition-colors ${
+                      className={`flex-1 font-display font-medium text-base sm:text-[1.35rem] leading-snug transition-colors ${
                         isOpen ? "text-ink" : "text-ink/85 group-hover:text-ink"
                       }`}
                     >
                       {item.q}
                     </span>
                     <span
-                      className={`relative w-9 h-9 shrink-0 rounded-full border flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${
+                      className={`relative w-8 h-8 sm:w-9 sm:h-9 shrink-0 rounded-full border flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${
                         isOpen ? "bg-espresso border-espresso text-white rotate-45" : "border-line text-ink group-hover:border-ink/40"
                       }`}
                       aria-hidden
@@ -75,7 +75,7 @@ export default function Faq() {
                   >
                     <div className="overflow-hidden">
                       <p
-                        className={`ps-1 pe-12 sm:pe-14 pb-7 max-w-2xl text-ink/70 leading-relaxed transition-opacity duration-500 ${
+                        className={`ps-0 sm:ps-1 pe-10 sm:pe-14 pb-6 sm:pb-7 max-w-2xl text-sm sm:text-base text-ink/70 leading-relaxed transition-opacity duration-500 ${
                           isOpen ? "opacity-100" : "opacity-0"
                         }`}
                       >
@@ -87,6 +87,13 @@ export default function Faq() {
               );
             })}
           </div>
+          <Reveal delay={100} className="lg:hidden mt-8 rounded-2xl border border-line p-5">
+            <span className="block font-display font-semibold text-base text-ink">{FAQ.moreTitle}</span>
+            <p className="mt-1 text-sm text-ink/60 leading-relaxed">{FAQ.moreText}</p>
+            <WhatsAppButton message={FAQ.whatsapp} size="sm" className="mt-4">
+              اسأل على الواتساب
+            </WhatsAppButton>
+          </Reveal>
         </div>
       </div>
     </section>

@@ -18,13 +18,13 @@ export default function SectionHeader({ number, label, title, intro, dark = fals
         <Reveal
           as="h2"
           delay={80}
-          className={`mt-4 font-display font-bold ${size === "sm" ? "text-3xl sm:text-4xl lg:text-5xl" : "text-4xl sm:text-5xl lg:text-6xl"} ${heading}`}
+          className={`mt-3 sm:mt-4 font-display font-bold ${size === "sm" ? "text-2xl sm:text-4xl lg:text-5xl" : "text-3xl sm:text-5xl lg:text-6xl"} ${heading}`}
         >
           {title}
         </Reveal>
       </div>
       {intro && (
-        <Reveal as="p" delay={160} className={`lg:col-span-4 lg:pb-2 text-base sm:text-lg leading-relaxed ${body}`}>
+        <Reveal as="p" delay={160} className={`lg:col-span-4 lg:pb-2 text-sm sm:text-lg leading-relaxed ${body}`}>
           {intro}
         </Reveal>
       )}
