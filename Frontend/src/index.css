@@ -180,3 +180,19 @@
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
 }
+
+/* ───────── نسيج خشب خفيف فوق البني (يتطلب عنصراً له position) ───────── */
+.wood-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/textures/wood-dark.svg");
+  background-size: 1200px 900px;
+  opacity: 0.32;
+  mix-blend-mode: luminosity;
+  pointer-events: none;
+}
+
+/* إخفاء شريط التمرير الأفقي مع إبقاء التمرير */
+.hide-scrollbar { scrollbar-width: none; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
