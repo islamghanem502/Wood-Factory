@@ -44,13 +44,7 @@ export default function Faq() {
             {FAQS.map((item, i) => {
               const isOpen = openIndex === i;
               return (
-                <Reveal as="div" key={i} delay={i * 50} className="relative border-b border-line">
-                  <span
-                    className={`absolute top-6 bottom-6 right-0 w-0.5 rounded-full bg-oak transition-opacity duration-500 ${
-                      isOpen ? "opacity-100" : "opacity-0"
-                    }`}
-                    aria-hidden
-                  />
+                <Reveal as="div" key={i} delay={i * 50} className="border-b border-line">
                   <button
                     type="button"
                     onClick={() => setOpenIndex(isOpen ? null : i)}

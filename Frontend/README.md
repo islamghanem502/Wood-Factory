@@ -58,7 +58,7 @@ Frontend/
 افتح `src/config/contact.js` وغيّر السطر:
 
 ```js
-const WHATSAPP_NUMBER = "966542055042"; // بدون + وبدون مسافات
+const WHATSAPP_NUMBER = "966502190921"; // بدون + وبدون مسافات
 ```
 
 وغيّر `phoneDisplay` للرقم الذي يظهر للزائر. كل الأزرار تتحدث تلقائياً.
