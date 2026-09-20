@@ -10,7 +10,7 @@ export default function SectionHeader({ number, label, title, intro, dark = fals
   return (
     <div className={`grid lg:grid-cols-12 gap-6 items-end text-right ${className}`}>
       <div className="lg:col-span-8">
-        <Reveal className={`flex items-center gap-3 text-xs tracking-[0.18em] ${muted}`}>
+        <Reveal className={`flex items-center gap-3 text-[11px] sm:text-xs tracking-[0.18em] ${muted}`}>
           <span className="num">{number}</span>
           <span className={`w-8 h-px ${line}`} />
           <span>{label}</span>
@@ -18,7 +18,7 @@ export default function SectionHeader({ number, label, title, intro, dark = fals
         <Reveal
           as="h2"
           delay={80}
-          className={`mt-3 sm:mt-4 font-display font-bold ${size === "sm" ? "text-2xl sm:text-4xl lg:text-5xl" : "text-3xl sm:text-5xl lg:text-6xl"} ${heading}`}
+          className={`mt-3 sm:mt-4 font-display font-bold ${size === "sm" ? "text-xl sm:text-4xl lg:text-5xl" : "text-2xl sm:text-5xl lg:text-6xl"} ${heading}`}
         >
           {title}
         </Reveal>

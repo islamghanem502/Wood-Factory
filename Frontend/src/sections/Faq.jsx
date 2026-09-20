@@ -16,12 +16,12 @@ export default function Faq() {
         {/* الترويسة — ثابتة على الشاشات الكبيرة */}
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-28">
-            <Reveal className="flex items-center gap-3 text-xs tracking-[0.18em] text-walnut">
+            <Reveal className="flex items-center gap-3 text-[11px] sm:text-xs tracking-[0.18em] text-walnut">
               <span className="num">05</span>
               <span className="w-8 h-px bg-line" />
               <span>الأسئلة</span>
             </Reveal>
-            <Reveal as="h2" delay={80} className="mt-3 sm:mt-4 font-display font-bold text-3xl sm:text-5xl text-ink">
+            <Reveal as="h2" delay={80} className="mt-3 sm:mt-4 font-display font-bold text-2xl sm:text-5xl text-ink">
               {FAQ.title}
             </Reveal>
             <Reveal as="p" delay={140} className="mt-3 sm:mt-4 text-sm sm:text-base text-ink/65 leading-relaxed max-w-sm">

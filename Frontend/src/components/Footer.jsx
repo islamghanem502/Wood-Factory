@@ -12,7 +12,7 @@ export default function Footer() {
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
         {/* الدعوة الأخيرة */}
         <Reveal className="pt-14 sm:pt-20 pb-10 sm:pb-14 flex flex-col lg:flex-row lg:items-center justify-between gap-6 sm:gap-8 text-right">
-          <h2 className="font-display font-bold text-2xl sm:text-4xl lg:text-5xl">{FOOTER.ctaTitle}</h2>
+          <h2 className="font-display font-bold text-xl sm:text-4xl lg:text-5xl">{FOOTER.ctaTitle}</h2>
           <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
             <WhatsAppButton message={FOOTER.whatsapp} size="lg">
               محادثة واتساب
