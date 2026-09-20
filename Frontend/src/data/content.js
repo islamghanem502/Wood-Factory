@@ -162,11 +162,11 @@ export const CALC = {
 };
 
 export const CALC_MODELS = [
-  { id: "triangle", name: "كوخ A-Frame", icon: "aframe", ratePerMeter: 890, desc: "واجهة زجاجية، دور أو دورين" },
-  { id: "two-floor", name: "كوخ دورين", icon: "twofloor", ratePerMeter: 1050, desc: "غرف متعددة وبلكونات" },
-  { id: "single-floor", name: "كوخ دور واحد", icon: "single", ratePerMeter: 790, desc: "للحدائق والاستراحات" },
+  { id: "triangle", name: "كوخ A-Frame", icon: "aframe", ratePerMeter: 1150, desc: "واجهة زجاجية، دور أو دورين" },
+  { id: "two-floor", name: "كوخ دورين", icon: "twofloor", ratePerMeter: 1150, desc: "غرف متعددة وبلكونات" },
+  { id: "single-floor", name: "كوخ دور واحد", icon: "single", ratePerMeter: 1150, desc: "للحدائق والاستراحات" },
   { id: "commercial", name: "كشك تجاري", icon: "kiosk", ratePerMeter: 1150, desc: "كافيه أو منفذ بيع" },
-  { id: "pergola", name: "برجولة", icon: "pergola", ratePerMeter: 450, desc: "جلسة خارجية مظللة" },
+  { id: "pergola", name: "برجولة", icon: "pergola", ratePerMeter: 1150, desc: "جلسة خارجية مظللة" },
 ];
 
 export const CALC_ADDONS = [
