@@ -2,11 +2,11 @@
 // بيانات التواصل — المكان الوحيد لتغيير رقم الواتساب والهاتف
 // كل الأزرار في الموقع تقرأ من هذا الملف
 // ─────────────────────────────────────────────────────────────
-const WHATSAPP_NUMBER = "966554400798"; // بدون + وبدون مسافات
+const WHATSAPP_NUMBER = "966542055042"; // بدون + وبدون مسافات
 
 export const CONTACT = {
   phone: `+${WHATSAPP_NUMBER}`,
-  phoneDisplay: "0554400798",
+  phoneDisplay: "0542055042",
   whatsapp: WHATSAPP_NUMBER,
   whatsappUrl: `https://wa.me/${WHATSAPP_NUMBER}`,
 };

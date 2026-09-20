@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Phone, MessageCircle, Sparkles, Menu, X } from "lucide-react";
-import { CONTACT, waLink, telLink } from "../config/contact";
+import { Phone, MessageCircle, Menu, X } from "lucide-react";
+import { waLink, telLink } from "../config/contact";
 import { IMAGES, NAV_LINKS } from "../data/content";
 
 const WA_MESSAGE = "مرحباً مؤسسة خشبي WOODEN، أرغب في استفسار حول بناء وتصميم كوخ خشبي.";
 
-export default function Navbar({ onOpenConsultation }) {
+export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -17,25 +17,6 @@ export default function Navbar({ onOpenConsultation }) {
 
   return (
     <>
-      {/* الشريط العلوي */}
-      <div className="bg-[#101217] text-[#cba157] text-[11px] sm:text-xs py-1.5 px-4 border-b border-[#cba157]/20">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-            <span className="text-neutral-300 truncate">
-              عروض استثنائية لمشاريع الأكواخ والشاليهات السياحية • مطابقة للكود الأوروبي
-            </span>
-          </div>
-          <div className="flex items-center gap-6 text-neutral-400 shrink-0">
-            <span className="hidden md:inline">ساعات العمل: السبت - الخميس (متاحون على مدار الساعة للواتساب)</span>
-            <a href={telLink} className="text-[#f7dfa5] hover:underline font-semibold flex items-center gap-1" dir="ltr">
-              <Phone className="w-3 h-3" />
-              {CONTACT.phoneDisplay}
-            </a>
-          </div>
-        </div>
-      </div>
-
       {/* الهيدر الرئيسي */}
       <header
         className={`sticky top-0 z-40 transition-all duration-300 ${
@@ -57,7 +38,7 @@ export default function Navbar({ onOpenConsultation }) {
                   WOODEN
                 </span>
               </div>
-              <span className="text-[10px] sm:text-[11px] text-[#b4a99b]">أكواخ ريفية وشاليهات فاخرة</span>
+              <span className="text-[10px] sm:text-[11px] text-[#b4a99b]">أكواخ ريفية وبرجولات حديثة</span>
             </div>
           </a>
 
@@ -93,14 +74,6 @@ export default function Navbar({ onOpenConsultation }) {
               <MessageCircle className="w-3.5 h-3.5" />
               <span>واتساب سريع</span>
             </a>
-            <button
-              type="button"
-              onClick={onOpenConsultation}
-              className="inline-flex items-center justify-center whitespace-nowrap h-9 gold-gradient-bg text-black font-extrabold text-xs sm:text-sm px-4 py-2 rounded-xl hover:brightness-110 shadow-lg shadow-[#cba157]/20 gap-1.5 transition-all"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>طلب استشارة مجانية</span>
-            </button>
           </div>
 
           {/* زر القائمة للجوال */}
@@ -129,18 +102,7 @@ export default function Navbar({ onOpenConsultation }) {
                 </a>
               ))}
             </nav>
-            <div className="pt-3 border-t border-neutral-800 flex flex-col gap-2.5">
-              <button
-                type="button"
-                onClick={() => {
-                  setMenuOpen(false);
-                  onOpenConsultation();
-                }}
-                className="w-full inline-flex items-center justify-center whitespace-nowrap rounded-md gold-gradient-bg text-black font-bold h-11 text-sm gap-2"
-              >
-                <Sparkles className="w-4 h-4" />
-                طلب استشارة مجانية وعرض سعر
-              </button>
+            <div className="pt-3 border-t border-neutral-800">
               <div className="grid grid-cols-2 gap-2">
                 <a
                   href={waLink(WA_MESSAGE)}

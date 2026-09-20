@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Sparkles, CircleCheck, MessageCircle, Phone, ShieldCheck, X } from "lucide-react";
+import { CircleCheck, MessageCircle, Phone, ShieldCheck, X } from "lucide-react";
 import { CONTACT, telLink } from "../config/contact";
 
 const CITIES = [
@@ -15,7 +15,7 @@ const CITIES = [
 
 const SERVICES = [
   { value: "أكواخ هرمية A-Frame", label: "كوخ هرمي A-Frame مودرن" },
-  { value: "شاليه ريفي دورين", label: "شاليه ريفي فاخر دورين" },
+  { value: "كوخ ريفي دورين", label: "كوخ ريفي دورين" },
   { value: "كوخ دور واحد عصري", label: "كوخ دور واحد أرضي" },
   { value: "كافيه أو منفذ تجاري", label: "كافيه أو مشروع تجاري" },
   { value: "برجولة وجلسات حدائق", label: "برجولة ومظلات خارجية" },
@@ -72,12 +72,6 @@ export default function ConsultationModal({ open, onOpenChange, defaultService =
         >
           {/* الترويسة */}
           <div className="flex flex-col gap-2 text-right">
-            <div className="flex items-center justify-between mb-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#cba157]/15 text-[#e5be70] border border-[#cba157]/30">
-                <Sparkles className="w-3.5 h-3.5" />
-                خدمة استشارة هندسية مجانية 100%
-              </span>
-            </div>
             <Dialog.Title className="text-2xl font-black text-[#f7dfa5] tracking-tight leading-none">
               احصل على دراسة وتكلفة مبدئية لكوخك
             </Dialog.Title>
