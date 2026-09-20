@@ -8,13 +8,15 @@ import { Reveal } from "../lib/motion";
 gsap.registerPlugin(ScrollTrigger);
 
 /* طبقات السقف من الداخل (الأسفل) إلى الخارج (الأعلى) — السماكات بوحدات الرسم */
-const LAYER_THICKNESS = [36, 44, 12, 14];
-const SLOPE = 140; // فرق الارتفاع بين طرفي السقف
-const X0 = 70;
-const X1 = 570;
+const LAYER_THICKNESS = [36, 40, 14, 16];
+const SLOPE = 120; // فرق الارتفاع بين طرفي السقف
+const X0 = 40;
+const X1 = 470;
+const DX = 26; // عمق اللوح (إزاحة الوجه العلوي)
+const DY = -14;
 
 const layerGeometry = () => {
-  let bottom = 340;
+  let bottom = 330;
   return LAYER_THICKNESS.map((t) => {
     const yb = bottom;
     const yt = bottom - t;
@@ -23,17 +25,23 @@ const layerGeometry = () => {
   });
 };
 
+const LAYER_STYLE = [
+  { front: "url(#sp-wood)", top: "#e2c59d", end: "#a67a4e", stroke: "#a67a4e" },
+  { front: "url(#sp-hatch)", top: "#f4efe6", end: "#c9b9a1", stroke: "#b9a893" },
+  { front: "#4a3222", top: "#6b4a32", end: "#2f1f15", stroke: "#2f1f15" },
+  { front: "#9aa0a6", top: "#c3c8cc", end: "#6b7178", stroke: "#6b7178" },
+];
+
 function RoofLayers({ innerRef }) {
   const geo = layerGeometry();
-  const fills = ["url(#sp-wood)", "url(#sp-hatch)", "#5b3d2a", "#9aa0a6"];
-  const strokes = ["#a67a4e", "#b9a893", "#3a2214", "#6b7178"];
+  const slopeAt = (x) => ((x - X0) / (X1 - X0)) * SLOPE;
 
-  // تموّج الجرميد على السطح العلوي للطبقة الأخيرة
+  // تموّج الجرميد على الوجه العلوي للطبقة الأخيرة
   const metal = geo[3];
-  const corrugation = Array.from({ length: 26 }, (_, i) => {
-    const x = X0 + i * 20;
-    const base = metal.yt - ((x - X0) / (X1 - X0)) * SLOPE;
-    return `${i === 0 ? "M" : "L"} ${x} ${base + (i % 2 ? 6 : -2)}`;
+  const corrugation = Array.from({ length: 23 }, (_, i) => {
+    const x = X0 + DX / 2 + i * 20;
+    const y = metal.yt - slopeAt(x) + DY / 2 + (i % 2 ? 5 : -3);
+    return `${i === 0 ? "M" : "L"} ${x} ${y}`;
   }).join(" ");
 
   return (
@@ -47,31 +55,76 @@ function RoofLayers({ innerRef }) {
           <line x1="0" y1="0" x2="0" y2="10" stroke="#c9b9a1" strokeWidth="2" />
         </pattern>
       </defs>
-      {geo.map((g, i) => (
-        <g key={i} data-layer={i}>
-          <polygon
-            points={`${X0},${g.yb} ${X1},${g.yb - SLOPE} ${X1},${g.yt - SLOPE} ${X0},${g.yt}`}
-            fill={fills[i]}
-            stroke={strokes[i]}
-            strokeWidth="1.5"
-          />
-          {i === 3 && <path d={corrugation} fill="none" stroke="#6b7178" strokeWidth="2" />}
-          {/* رقم الطبقة عند الطرف الأيمن (الأعلى) */}
-          <g transform={`translate(${X1 + 26}, ${(g.yb + g.yt) / 2 - SLOPE})`}>
-            <circle r="12" fill="#2a170e" />
-            <text
-              textAnchor="middle"
-              dominantBaseline="central"
-              fill="#ffffff"
-              fontSize="12"
-              fontWeight="600"
-              className="num"
-            >
-              {i + 1}
-            </text>
+      {geo.map((g, i) => {
+        const st = LAYER_STYLE[i];
+        const badgeY = 250 - i * 46; // شارات متباعدة بالتساوي على اليمين
+        const endMidY = (g.yb + g.yt) / 2 - SLOPE;
+        return (
+          <g key={i} data-layer={i}>
+            {/* الوجه العلوي */}
+            <polygon
+              points={`${X0},${g.yt} ${X1},${g.yt - SLOPE} ${X1 + DX},${g.yt - SLOPE + DY} ${X0 + DX},${g.yt + DY}`}
+              fill={st.top}
+              stroke={st.stroke}
+              strokeWidth="1"
+            />
+            {/* الوجه الأمامي (السماكة) */}
+            <polygon
+              points={`${X0},${g.yb} ${X1},${g.yb - SLOPE} ${X1},${g.yt - SLOPE} ${X0},${g.yt}`}
+              fill={st.front}
+              stroke={st.stroke}
+              strokeWidth="1"
+            />
+            {/* الوجه الجانبي الأيمن */}
+            <polygon
+              points={`${X1},${g.yb - SLOPE} ${X1 + DX},${g.yb - SLOPE + DY} ${X1 + DX},${g.yt - SLOPE + DY} ${X1},${g.yt - SLOPE}`}
+              fill={st.end}
+              stroke={st.stroke}
+              strokeWidth="1"
+            />
+            {i === 3 && <path d={corrugation} fill="none" stroke="#6b7178" strokeWidth="2" />}
+            {/* خط دليلي + شارة الرقم */}
+            <line x1={X1 + DX} y1={endMidY + DY / 2} x2={X1 + 66} y2={badgeY} stroke="#2a170e" strokeWidth="1" strokeDasharray="3 3" />
+            <g transform={`translate(${X1 + 80}, ${badgeY})`}>
+              <circle r="13" fill="#2a170e" />
+              <text textAnchor="middle" dominantBaseline="central" fill="#ffffff" fontSize="12" fontWeight="600" className="num">
+                {i + 1}
+              </text>
+            </g>
           </g>
-        </g>
-      ))}
+        );
+      })}
+    </svg>
+  );
+}
+
+/* لوحان زجاجيان بسماكتين 6 و8 ملم (المقياس ×3) */
+function GlassPanes() {
+  const pane = (x, w, label) => (
+    <g key={label}>
+      <rect x={x} y="44" width={w} height="150" fill="url(#sp-glass)" stroke="#7fa3b8" strokeWidth="1" />
+      <rect x={x + 2} y="48" width={Math.max(2, w * 0.25)} height="142" fill="#ffffff" opacity="0.6" />
+      <g stroke="#2a170e" strokeWidth="1.2">
+        <line x1={x} y1="26" x2={x + w} y2="26" />
+        <line x1={x} y1="21" x2={x} y2="31" />
+        <line x1={x + w} y1="21" x2={x + w} y2="31" />
+      </g>
+      <text x={x + w / 2} y="14" textAnchor="middle" fill="#2a170e" fontSize="14" fontWeight="600" className="num">
+        {label}
+      </text>
+      <line x1={x - 44} y1="194" x2={x + w + 44} y2="194" stroke="#2a170e" strokeWidth="1.5" />
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 400 210" className="w-full h-auto" role="img" aria-label="سماكتا الزجاج 6 و8 ملم">
+      <defs>
+        <linearGradient id="sp-glass" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#dbeaf2" />
+          <stop offset="1" stopColor="#b9d3e2" />
+        </linearGradient>
+      </defs>
+      {pane(110, 18, "6 ملم")}
+      {pane(262, 24, "8 ملم")}
     </svg>
   );
 }
@@ -120,7 +173,7 @@ export default function Specs() {
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         const layers = roofRef.current.querySelectorAll("[data-layer]");
-        gsap.set(layers, { y: (i) => -i * 42 });
+        gsap.set(layers, { y: (i) => -i * 34 });
         gsap.to(layers, {
           y: 0,
           ease: "none",
@@ -202,7 +255,10 @@ export default function Specs() {
                 );
               })}
             </Reveal>
-            <Reveal as="p" delay={180} className="mt-5 text-sm text-ink/65 leading-relaxed">
+            <Reveal delay={160} className="mt-4 max-w-[260px]">
+              <GlassPanes />
+            </Reveal>
+            <Reveal as="p" delay={200} className="mt-3 text-sm text-ink/65 leading-relaxed">
               {glass.description}
             </Reveal>
           </div>
