@@ -15,46 +15,124 @@ const SPEED = 34; // بكسل في الثانية
 export default function Ideas() {
   const viewportRef = useRef(null);
   const trackRef = useRef(null);
+  const api = useRef({ step: () => {} });
   const reduced = prefersReducedMotion();
 
   useLayoutEffect(() => {
     if (reduced) return;
     const track = trackRef.current;
     const viewport = viewportRef.current;
-    let tween;
 
-    const build = () => {
-      tween?.kill();
-      gsap.set(track, { x: 0 });
-      // عرض مجموعة واحدة (نصف الشريط) شاملاً الفجوة بعدها
-      const first = track.children[0];
-      const set = track.children[DESIGNS.length];
-      const setWidth = Math.abs(set.getBoundingClientRect().left - first.getBoundingClientRect().left);
-      if (!setWidth) return;
-      // RTL: الشريط يفيض إلى اليسار؛ تحريكه نحو اليمين (x موجب) يُدخل البطاقات من اليسار
-      tween = gsap.to(track, { x: setWidth, duration: setWidth / SPEED, ease: "none", repeat: -1 });
+    // الحالة: الموضع الحالي، السرعة المتبقية بعد السحب، وحالة السحب/المؤشر
+    const st = { pos: 0, vel: 0, setWidth: 0, cardStep: 0, dragging: false, hover: false, moved: 0, lastX: 0, lastT: 0, tween: null };
+    const wrap = (p) => (st.setWidth ? ((p % st.setWidth) + st.setWidth) % st.setWidth : p);
+    const apply = () => gsap.set(track, { x: st.pos });
+
+    const measure = () => {
+      const c = track.children;
+      const l0 = c[0].getBoundingClientRect().left - st.pos;
+      st.setWidth = Math.abs(c[DESIGNS.length].getBoundingClientRect().left - st.pos - l0);
+      st.cardStep = Math.abs(c[1].getBoundingClientRect().left - st.pos - l0);
+      st.pos = wrap(st.pos);
+      apply();
     };
-
-    build();
-    const ro = new ResizeObserver(build);
+    measure();
+    const ro = new ResizeObserver(measure);
     ro.observe(viewport);
 
-    const pause = () => tween?.pause();
-    const play = () => tween?.play();
-    viewport.addEventListener("pointerenter", pause);
-    viewport.addEventListener("pointerleave", play);
-    viewport.addEventListener("touchstart", pause, { passive: true });
-    viewport.addEventListener("touchend", play, { passive: true });
-    viewport.addEventListener("touchcancel", play, { passive: true });
+    // حلقة الحركة: تلقائي ببطء، أو قصور ذاتي بعد السحب
+    const tick = (_, dt) => {
+      if (st.dragging || st.tween) return;
+      const s = dt / 1000;
+      if (Math.abs(st.vel) > 4) {
+        st.pos += st.vel * s;
+        st.vel *= Math.pow(0.9, dt / 16.7);
+      } else {
+        st.vel = 0;
+        if (!st.hover) st.pos += SPEED * s;
+      }
+      st.pos = wrap(st.pos);
+      apply();
+    };
+    gsap.ticker.add(tick);
+
+    // السحب اليدوي بالمؤشر أو الإصبع
+    const onDown = (e) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      st.dragging = true;
+      st.moved = 0;
+      st.vel = 0;
+      st.lastX = e.clientX;
+      st.lastT = e.timeStamp;
+      st.tween?.kill();
+      st.tween = null;
+      viewport.setPointerCapture?.(e.pointerId);
+      viewport.style.cursor = "grabbing";
+    };
+    const onMove = (e) => {
+      if (!st.dragging) return;
+      const dx = e.clientX - st.lastX;
+      const dt = Math.max(1, e.timeStamp - st.lastT);
+      st.moved += Math.abs(dx);
+      st.pos = wrap(st.pos + dx);
+      st.vel = st.vel * 0.6 + (dx / dt) * 1000 * 0.4;
+      st.lastX = e.clientX;
+      st.lastT = e.timeStamp;
+      apply();
+    };
+    const onUp = (e) => {
+      if (!st.dragging) return;
+      st.dragging = false;
+      viewport.releasePointerCapture?.(e.pointerId);
+      viewport.style.cursor = "grab";
+    };
+    // منع النقر على الأزرار إذا كان هناك سحب فعلي
+    const onClick = (e) => {
+      if (st.moved > 6) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    const onEnter = () => (st.hover = true);
+    const onLeave = () => (st.hover = false);
+
+    // تقليب يدوي بالأسهم: بطاقة واحدة في كل مرة
+    api.current.step = (dir) => {
+      st.tween?.kill();
+      st.vel = 0;
+      const target = { p: st.pos };
+      st.tween = gsap.to(target, {
+        p: st.pos + dir * st.cardStep,
+        duration: 0.7,
+        ease: "power3.out",
+        onUpdate: () => {
+          st.pos = wrap(target.p);
+          apply();
+        },
+        onComplete: () => (st.tween = null),
+      });
+    };
+
+    viewport.style.cursor = "grab";
+    viewport.addEventListener("pointerdown", onDown);
+    viewport.addEventListener("pointermove", onMove);
+    viewport.addEventListener("pointerup", onUp);
+    viewport.addEventListener("pointercancel", onUp);
+    viewport.addEventListener("click", onClick, true);
+    viewport.addEventListener("pointerenter", onEnter);
+    viewport.addEventListener("pointerleave", onLeave);
 
     return () => {
+      gsap.ticker.remove(tick);
       ro.disconnect();
-      tween?.kill();
-      viewport.removeEventListener("pointerenter", pause);
-      viewport.removeEventListener("pointerleave", play);
-      viewport.removeEventListener("touchstart", pause);
-      viewport.removeEventListener("touchend", play);
-      viewport.removeEventListener("touchcancel", play);
+      st.tween?.kill();
+      viewport.removeEventListener("pointerdown", onDown);
+      viewport.removeEventListener("pointermove", onMove);
+      viewport.removeEventListener("pointerup", onUp);
+      viewport.removeEventListener("pointercancel", onUp);
+      viewport.removeEventListener("click", onClick, true);
+      viewport.removeEventListener("pointerenter", onEnter);
+      viewport.removeEventListener("pointerleave", onLeave);
     };
   }, [reduced]);
 
@@ -74,7 +152,7 @@ export default function Ideas() {
           ref={viewportRef}
           className={`relative ${reduced ? "overflow-x-auto snap-x snap-mandatory hide-scrollbar px-5 sm:px-8" : "overflow-hidden"}`}
         >
-          <div ref={trackRef} className="flex gap-5 sm:gap-6 w-max py-2">
+          <div ref={trackRef} className="flex gap-5 sm:gap-6 w-max py-2 select-none" style={{ touchAction: "pan-y" }}>
             {items.map((d, i) => {
               const n = (i % DESIGNS.length) + 1;
               return (
@@ -102,7 +180,27 @@ export default function Ideas() {
         </div>
 
         {!reduced && (
-          <p className="relative mx-auto max-w-7xl px-5 sm:px-8 mt-8 text-xs text-white/55 hidden sm:block">{IDEAS.hint}</p>
+          <div className="relative mx-auto max-w-7xl px-5 sm:px-8 mt-8 flex items-center justify-between gap-6">
+            <p className="text-xs text-white/55 hidden sm:block">{IDEAS.hint}</p>
+            <div className="flex gap-2 ms-auto">
+              <button
+                type="button"
+                onClick={() => api.current.step(-1)}
+                className="w-11 h-11 rounded-full border border-line-dark text-white hover:bg-white hover:text-ink transition-colors"
+                aria-label="التصميم السابق"
+              >
+                →
+              </button>
+              <button
+                type="button"
+                onClick={() => api.current.step(1)}
+                className="w-11 h-11 rounded-full border border-line-dark text-white hover:bg-white hover:text-ink transition-colors"
+                aria-label="التصميم التالي"
+              >
+                ←
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </section>
