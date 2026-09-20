@@ -1,26 +1,23 @@
 import { useMemo, useState } from "react";
 import * as Slider from "@radix-ui/react-slider";
-import { Sparkles, Check, MessageCircle, Phone, ShieldCheck } from "lucide-react";
+import SectionHeader from "./SectionHeader";
 import { CONTACT, telLink } from "../config/contact";
 import { CALC_MODELS, CALC_ADDONS } from "../data/content";
+import { Reveal } from "../lib/motion";
 
-const fmt = (n) => n.toLocaleString("ar-SA");
+const fmt = (n) => n.toLocaleString("en-US");
 
-export default function CostCalculator({ onOpenConsultation }) {
+export default function CostCalculator() {
   const [modelId, setModelId] = useState(CALC_MODELS[0].id);
   const [area, setArea] = useState(80);
-  const [addons, setAddons] = useState(["terrace", "glass"]);
+  const [addons, setAddons] = useState(["terrace"]);
 
   const model = useMemo(() => CALC_MODELS.find((m) => m.id === modelId) || CALC_MODELS[0], [modelId]);
 
-  const toggleAddon = (id) =>
-    setAddons((prev) => (prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]));
+  const toggleAddon = (id) => setAddons((prev) => (prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]));
 
-  const structureCost = useMemo(() => area * model.ratePerMeter, [area, model]);
-  const addonsCost = useMemo(
-    () => addons.reduce((sum, id) => sum + (CALC_ADDONS.find((a) => a.id === id)?.cost || 0), 0),
-    [addons],
-  );
+  const structureCost = area * model.ratePerMeter;
+  const addonsCost = addons.reduce((sum, id) => sum + (CALC_ADDONS.find((a) => a.id === id)?.cost || 0), 0);
   const total = structureCost + addonsCost;
   const minCost = Math.round(total * 0.95);
   const maxCost = Math.round(total * 1.08);
@@ -29,69 +26,57 @@ export default function CostCalculator({ onOpenConsultation }) {
     const addonNames = addons
       .map((id) => CALC_ADDONS.find((a) => a.id === id)?.name)
       .filter(Boolean)
-      .join(", ");
+      .join("، ");
     const message =
-      `مرحباً خشبي WOODEN 👋%0A%0Aاستخدمت حاسبة التكاليف التفاعلية في موقعكم وأرغب في تثبيت هذا العرض التقديري:` +
-      `%0A- النموذج المختار: ${model.name}` +
-      `%0A- المساحة: ${area} متر مربع` +
-      `%0A- الإضافات المختارة: ${addonNames || "بدون إضافات"}` +
-      `%0A- التكلفة التقديرية المحسوبة: ${fmt(minCost)} - ${fmt(maxCost)} ر.س` +
-      `%0A%0Aأرجو تزويدي بدراسة تفصيلية وموعد بدء التنفيذ.`;
+      `مرحباً خشبي WOODEN، استخدمت حاسبة التكاليف وأرغب في تقدير تفصيلي:` +
+      `%0A- النموذج: ${model.name}` +
+      `%0A- المساحة: ${area} م²` +
+      `%0A- الإضافات: ${addonNames || "بدون"}` +
+      `%0A- التقدير: ${fmt(minCost)} – ${fmt(maxCost)} ر.س`;
     window.open(`${CONTACT.whatsappUrl}?text=${message}`, "_blank");
   };
 
   return (
-    <div className="relative rounded-3xl p-4 sm:p-10 gold-glass border border-[#cba157]/30 shadow-2xl overflow-hidden">
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#cba157]/10 rounded-full blur-3xl pointer-events-none" />
+    <section id="calculator" className="bg-cream-2 py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <SectionHeader number="03" label="الحاسبة" title="تقدير التكلفة" intro="اختر النموذج والمساحة والإضافات، واحصل على نطاق سعري مبدئي." />
 
-      <div className="relative z-10">
-        {/* الترويسة */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 border-b border-[#cba157]/20 pb-6">
-          <div>
-            <h3 className="text-2xl sm:text-3xl font-black text-white">احسب تكلفة كوخك أو برجولتك المستقبلية بدقة</h3>
-            <p className="text-sm text-neutral-400 mt-1">حدد النموذج والمساحة والمميزات للحصول على تقدير استثماري فوري وشفاف</p>
-          </div>
-          <div className="hidden sm:flex items-center gap-2 text-xs text-[#cba157]">
-            <Sparkles className="w-4 h-4" />
-            <span>تسعير بالريال السعودي شامل التوريد والتركيب</span>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="mt-14 grid lg:grid-cols-12 gap-10 lg:gap-16 text-right">
           {/* المدخلات */}
-          <div className="lg:col-span-7 space-y-6 text-right">
-            {/* 1. النموذج */}
-            <div>
-              <label className="block text-sm font-bold text-white mb-3">1. اختر نوع النموذج الخشبي:</label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {CALC_MODELS.map((m) => (
-                  <button
-                    key={m.id}
-                    type="button"
-                    onClick={() => setModelId(m.id)}
-                    className={`p-3.5 rounded-xl border text-right transition-all flex flex-col justify-between ${
-                      modelId === m.id
-                        ? "bg-[#cba157]/20 border-[#cba157] text-white shadow-lg shadow-[#cba157]/10 ring-1 ring-[#cba157]"
-                        : "bg-[#14171d] border-neutral-800 text-neutral-300 hover:border-[#cba157]/40 hover:bg-[#1a1f27]"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-bold text-sm text-[#f7dfa5]">{m.name}</span>
-                      {modelId === m.id && <Check className="w-4 h-4 text-[#cba157]" />}
-                    </div>
-                    <span className="text-[11px] text-neutral-400 leading-relaxed mb-2">{m.desc}</span>
-                    <span className="text-xs font-semibold text-[#cba157]">{m.ratePerMeter} ر.س / م² تقريباً</span>
-                  </button>
-                ))}
-              </div>
-            </div>
+          <div className="lg:col-span-7 space-y-12">
+            {/* النموذج */}
+            <Reveal>
+              <h3 className="text-xs tracking-[0.18em] text-walnut mb-2">النموذج</h3>
+              <ul className="border-t border-line">
+                {CALC_MODELS.map((m) => {
+                  const active = m.id === modelId;
+                  return (
+                    <li key={m.id} className="border-b border-line">
+                      <button
+                        type="button"
+                        onClick={() => setModelId(m.id)}
+                        aria-pressed={active}
+                        className={`w-full flex items-center gap-4 py-4 text-right transition-colors ${active ? "text-ink" : "text-ink/60 hover:text-ink"}`}
+                      >
+                        <span className={`w-4 h-4 rounded-full border shrink-0 transition-colors ${active ? "bg-walnut-deep border-walnut-deep" : "border-walnut/40"}`} />
+                        <span className="flex-1 min-w-0">
+                          <span className="block font-medium">{m.name}</span>
+                          <span className="block text-sm text-ink/55">{m.desc}</span>
+                        </span>
+                        <span className="text-sm num whitespace-nowrap">{fmt(m.ratePerMeter)} ر.س / م²</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </Reveal>
 
-            {/* 2. المساحة */}
-            <div className="bg-[#14171d] p-5 rounded-2xl border border-neutral-800 space-y-4">
-              <div className="flex justify-between items-center gap-3">
-                <span className="text-sm font-bold text-white">2. المساحة الإجمالية المطلوبة:</span>
-                <span className="text-xl font-black text-[#f7dfa5] px-3 py-1 bg-[#cba157]/15 rounded-lg border border-[#cba157]/30 whitespace-nowrap shrink-0">
-                  {area} <span className="text-xs font-normal text-neutral-300">متر مربع</span>
+            {/* المساحة */}
+            <Reveal>
+              <div className="flex items-baseline justify-between mb-5">
+                <h3 className="text-xs tracking-[0.18em] text-walnut">المساحة</h3>
+                <span className="font-display text-3xl num text-ink">
+                  {area} <span className="text-base text-ink/60">م²</span>
                 </span>
               </div>
               <Slider.Root
@@ -101,124 +86,98 @@ export default function CostCalculator({ onOpenConsultation }) {
                 max={400}
                 step={5}
                 dir="rtl"
-                className="relative flex w-full touch-none items-center select-none py-2"
+                className="relative flex w-full touch-none items-center select-none py-3"
+                aria-label="المساحة بالمتر المربع"
               >
-                <Slider.Track className="bg-muted relative grow overflow-hidden rounded-full h-1.5 w-full">
-                  <Slider.Range className="bg-primary absolute h-full" />
+                <Slider.Track className="relative grow h-px bg-walnut/30">
+                  <Slider.Range className="absolute h-full bg-walnut-deep" />
                 </Slider.Track>
-                <Slider.Thumb className="border-primary ring-ring/50 block size-4 shrink-0 rounded-full border bg-white shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden" />
+                <Slider.Thumb className="block w-5 h-5 rounded-full bg-cream border-2 border-walnut-deep shadow-sm focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-walnut/20" />
               </Slider.Root>
-              <div className="flex justify-between text-[11px] text-neutral-500 font-medium">
-                <span>25 م² (كوخ حديقة صغير)</span>
-                <span className="hidden sm:inline">120 م² (كوخ متوسط)</span>
-                <span>400 م² (قصر ريفي متكامل)</span>
+              <div className="flex justify-between text-xs text-ink/50 num mt-1">
+                <span>25 م²</span>
+                <span>400 م²</span>
               </div>
-            </div>
+            </Reveal>
 
-            {/* 3. الملحقات */}
-            <div>
-              <label className="block text-sm font-bold text-white mb-3">3. ملحقات وتجهيزات استثنائية (اختياري):</label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {CALC_ADDONS.map((addon) => {
-                  const active = addons.includes(addon.id);
+            {/* الإضافات */}
+            <Reveal>
+              <h3 className="text-xs tracking-[0.18em] text-walnut mb-2">إضافات (اختياري)</h3>
+              <ul className="border-t border-line">
+                {CALC_ADDONS.map((a) => {
+                  const active = addons.includes(a.id);
                   return (
-                    <button
-                      key={addon.id}
-                      type="button"
-                      onClick={() => toggleAddon(addon.id)}
-                      className={`p-3 rounded-xl border text-right transition-all flex items-center justify-between ${
-                        active
-                          ? "bg-[#cba157]/15 border-[#cba157] text-white"
-                          : "bg-[#14171d] border-neutral-800 text-neutral-400 hover:border-neutral-700"
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <div
-                          className={`w-4 h-4 rounded border flex items-center justify-center ${
-                            active ? "bg-[#cba157] border-[#cba157] text-black" : "border-neutral-600"
+                    <li key={a.id} className="border-b border-line">
+                      <button
+                        type="button"
+                        onClick={() => toggleAddon(a.id)}
+                        aria-pressed={active}
+                        className={`w-full flex items-center gap-4 py-4 text-right transition-colors ${active ? "text-ink" : "text-ink/60 hover:text-ink"}`}
+                      >
+                        <span
+                          className={`w-4 h-4 rounded-sm border shrink-0 flex items-center justify-center text-[10px] transition-colors ${
+                            active ? "bg-walnut-deep border-walnut-deep text-cream" : "border-walnut/40"
                           }`}
                         >
-                          {active && <Check className="w-3 h-3 stroke-[3]" />}
-                        </div>
-                        <span className="text-xs font-medium text-neutral-200">{addon.name}</span>
-                      </div>
-                      <span className="text-xs text-[#cba157] font-semibold">+{fmt(addon.cost)} ر.س</span>
-                    </button>
+                          {active && "✓"}
+                        </span>
+                        <span className="flex-1">{a.name}</span>
+                        <span className="text-sm num whitespace-nowrap">+{fmt(a.cost)} ر.س</span>
+                      </button>
+                    </li>
                   );
                 })}
-              </div>
-            </div>
+              </ul>
+            </Reveal>
           </div>
 
-          {/* النتيجة */}
-          <div className="lg:col-span-5 bg-gradient-to-b from-[#181c24] to-[#0f1115] border-2 border-[#cba157]/40 rounded-3xl p-4 sm:p-7 shadow-2xl space-y-6 relative">
-            <div className="text-right">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#cba157]">التقدير المالي المبدئي للمشروع</span>
-              <h4 className="text-xl font-black text-white mt-1">{model.name}</h4>
-              <p className="text-xs text-neutral-400">مساحة إجمالية: {area} متر مربع</p>
-            </div>
+          {/* النتيجة — لوحة بنية */}
+          <Reveal delay={120} className="lg:col-span-5">
+            <div className="lg:sticky lg:top-28 bg-walnut-deep text-cream rounded-lg p-7 sm:p-9">
+              <span className="text-xs tracking-[0.18em] text-cream/55">التقدير المبدئي</span>
+              <h4 className="mt-2 font-display font-semibold text-2xl">{model.name}</h4>
+              <p className="text-sm text-cream/60 num">{area} م²</p>
 
-            <div className="space-y-3 border-y border-neutral-800 py-4 text-xs text-neutral-300">
-              <div className="flex justify-between items-center">
-                <span>تكلفة الهيكل الخشبي والتصنيع:</span>
-                <span className="font-bold text-white">{fmt(structureCost)} ر.س</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>قيمة الملحقات المختارة ({addons.length}):</span>
-                <span className="font-bold text-white">+{fmt(addonsCost)} ر.س</span>
-              </div>
-              <div className="flex justify-between items-center text-emerald-400">
-                <span>خصم خاص لمشاريع اليوم الوطني وعروض الموسم:</span>
-                <span className="font-bold">مشمول بالاستشارة</span>
-              </div>
-            </div>
+              <dl className="mt-8 space-y-3 text-sm border-y border-line-dark py-5">
+                <div className="flex justify-between gap-4">
+                  <dt className="text-cream/65">الهيكل الخشبي والتصنيع</dt>
+                  <dd className="num">{fmt(structureCost)} ر.س</dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-cream/65">الإضافات ({addons.length})</dt>
+                  <dd className="num">{fmt(addonsCost)} ر.س</dd>
+                </div>
+              </dl>
 
-            <div className="bg-[#0b0c0e]/80 border border-[#cba157]/30 rounded-2xl p-4 text-center">
-              <span className="text-xs text-neutral-400 block mb-1">متوسط التكلفة التقديرية</span>
-              <div className="text-2xl sm:text-4xl font-black text-[#f7dfa5] tracking-tight">
-                <span className="whitespace-nowrap">{fmt(minCost)} - {fmt(maxCost)}</span>
-                <span className="block sm:inline text-sm font-normal text-neutral-400 sm:mr-2 mt-1 sm:mt-0">ريال سعودي</span>
+              <div className="mt-7">
+                <span className="text-xs text-cream/55">النطاق التقديري</span>
+                <div className="mt-1 font-display font-bold text-3xl sm:text-4xl num leading-tight">
+                  {fmt(minCost)} – {fmt(maxCost)}
+                  <span className="block text-base font-normal text-cream/60 mt-1">ريال سعودي</span>
+                </div>
               </div>
-              <p className="text-[11px] text-neutral-400 mt-2">
-                * التكلفة نهائية تعتمد على المخطط التفصيلي، الموقع الجغرافي، ونوعية التشطيب الداخلي
+
+              <p className="mt-5 text-xs text-cream/50 leading-relaxed">
+                التكلفة النهائية تعتمد على المخطط التفصيلي والموقع ونوع التشطيب.
               </p>
-            </div>
 
-            <div className="space-y-2.5">
-              <button
-                type="button"
-                onClick={sendToWhatsApp}
-                className="w-full inline-flex items-center justify-center whitespace-nowrap bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-12 text-sm sm:text-base px-3 shadow-lg shadow-emerald-950/50 gap-2 rounded-xl transition-all"
-              >
-                <MessageCircle className="w-5 h-5" />
-                تثبيت الحسبة والمحادثة عبر الواتساب
-              </button>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="mt-8 space-y-3">
                 <button
                   type="button"
-                  onClick={() => onOpenConsultation(model.name)}
-                  className="inline-flex items-center justify-center whitespace-nowrap border bg-transparent border-[#cba157] text-[#f7dfa5] hover:bg-[#cba157]/15 font-bold h-11 text-xs gap-1.5 px-2 rounded-xl transition-all"
+                  onClick={sendToWhatsApp}
+                  className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-md bg-cream text-ink font-medium hover:bg-cream-2 transition-colors"
                 >
-                  <Sparkles className="w-4 h-4 text-[#cba157]" />
-                  طلب استشارة مجانية
+                  إرسال التقدير عبر الواتساب
+                  <span aria-hidden>←</span>
                 </button>
-                <a
-                  href={telLink}
-                  className="inline-flex items-center justify-center whitespace-nowrap border bg-transparent border-neutral-700 text-white hover:bg-neutral-800 font-bold h-11 text-xs gap-1.5 px-2 rounded-xl transition-all"
-                >
-                  <Phone className="w-4 h-4 text-[#cba157]" />
-                  اتصال هاتفي مباشر
+                <a href={telLink} className="block text-center text-sm text-cream/70 link-underline w-fit mx-auto">
+                  أو اتصل على <span className="num" dir="ltr">{CONTACT.phoneDisplay}</span>
                 </a>
               </div>
             </div>
-
-            <div className="flex items-center justify-center gap-2 text-[11px] text-neutral-400 pt-1">
-              <ShieldCheck className="w-4 h-4 text-[#cba157]" />
-              <span>ضمان 15 سنة • جدران خشب سنوبر 12 سم • أسقف 5 طبقات</span>
-            </div>
-          </div>
+          </Reveal>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

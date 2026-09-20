@@ -1,73 +1,148 @@
-import { TreePine, Fence, ShieldCheck, MessageCircle, Phone } from "lucide-react";
-import { waLink, telLink } from "../config/contact";
-import { IMAGES } from "../data/content";
+import { useLayoutEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import Cabin from "../components/Cabin";
+import { CONTACT, waLink, telLink } from "../config/contact";
+import { HERO } from "../data/content";
 
-const HIGHLIGHTS = [
-  { icon: TreePine, text: "أكواخ ريفية من خشب السنوبر" },
-  { icon: Fence, text: "برجولات حديثة بتصاميم عصرية" },
-  { icon: ShieldCheck, text: "ضمان شامل يصل إلى 15 سنة" },
-];
+gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
 
 export default function Hero() {
+  const sectionRef = useRef(null);
+  const cabinRef = useRef(null);
+  const textRef = useRef(null);
+  const hintRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      // دخول النص عند التحميل
+      gsap.from(textRef.current.querySelectorAll("[data-line]"), {
+        y: 26,
+        opacity: 0,
+        duration: 1.1,
+        stagger: 0.09,
+        ease: "power3.out",
+        delay: 0.15,
+      });
+
+      const mm = gsap.matchMedia();
+      mm.add(
+        {
+          desktop: "(min-width: 1024px) and (prefers-reduced-motion: no-preference)",
+          mobile: "(max-width: 1023px) and (prefers-reduced-motion: no-preference)",
+          reduced: "(prefers-reduced-motion: reduce)",
+        },
+        (c) => {
+          const q = gsap.utils.selector(cabinRef);
+          const part = (n) => q(`[data-part="${n}"]`);
+          const seams = q('[data-part="seams"] path');
+
+          if (c.conditions.reduced) {
+            gsap.set(seams, { opacity: 0 });
+            return;
+          }
+
+          // ── الحالة المفككة ──
+          gsap.set(part("ridge"), { y: -240 });
+          gsap.set(part("roofL"), { rotation: -14, x: -150, y: -30, svgOrigin: "500 40" });
+          gsap.set(part("roofR"), { rotation: 14, x: 150, y: -30, svgOrigin: "500 40" });
+          gsap.set(part("glassTop"), { scale: 0.72, opacity: 0.85, svgOrigin: "500 380" });
+          gsap.set(part("beam"), { y: 110 });
+          gsap.set(part("glassBottom"), { y: 150, opacity: 0.85 });
+          gsap.set(part("deck"), { y: 170, opacity: 0.6 });
+          gsap.set(part("shadow"), { opacity: 0, scaleX: 0.5, svgOrigin: "500 772" });
+          gsap.set([part("lights"), part("glow")], { opacity: 0 });
+          gsap.set(seams, { drawSVG: "0%", opacity: 0 });
+
+          // ── التركيب ──
+          const tl = gsap.timeline({ defaults: { ease: "power2.inOut" }, paused: true });
+          tl.to(part("ridge"), { y: 0, duration: 1 }, 0)
+            .to(part("roofL"), { rotation: 0, x: 0, y: 0, duration: 1.5 }, 0.15)
+            .to(part("roofR"), { rotation: 0, x: 0, y: 0, duration: 1.5 }, 0.3)
+            .to(part("beam"), { y: 0, duration: 0.9 }, 1.4)
+            .to(part("glassTop"), { scale: 1, opacity: 1, duration: 0.9 }, 1.6)
+            .to(part("glassBottom"), { y: 0, opacity: 1, duration: 0.9 }, 2.0)
+            .to(part("deck"), { y: 0, opacity: 1, duration: 0.9 }, 2.3)
+            .to(part("shadow"), { opacity: 0.1, scaleX: 1, duration: 0.8 }, 2.5)
+            // اللحام: خطوط ضوء تمر على الوصلات ثم تختفي
+            .to(seams, { drawSVG: "100%", opacity: 1, duration: 0.55, stagger: 0.06, ease: "power1.out" }, 3.1)
+            .to(seams, { opacity: 0, duration: 0.5, ease: "power1.in" }, 3.9)
+            .to(part("lights"), { opacity: 1, duration: 0.5 }, 3.8)
+            .to(part("glow"), { opacity: 1, duration: 0.9 }, 3.9);
+
+          if (c.conditions.desktop) {
+            tl.to(hintRef.current, { opacity: 0, duration: 0.4 }, 0);
+            ScrollTrigger.create({
+              trigger: sectionRef.current,
+              start: "top top",
+              end: "+=140%",
+              pin: true,
+              scrub: 0.8,
+              animation: tl,
+              anticipatePin: 1,
+            });
+          } else {
+            // الجوال: يتركّب تلقائياً عند ظهوره
+            tl.timeScale(1.15);
+            ScrollTrigger.create({
+              trigger: cabinRef.current,
+              start: "top 80%",
+              once: true,
+              onEnter: () => tl.play(),
+            });
+          }
+        },
+      );
+    }, sectionRef);
+
+    document.fonts?.ready.then(() => ScrollTrigger.refresh());
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="hero" className="relative min-h-[90vh] flex items-center justify-center pt-8 pb-20 overflow-hidden">
-      {/* الخلفية */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src={IMAGES.hero}
-          alt="كوخ خشبي فاخر من خشبي WOODEN"
-          className="w-full h-full object-cover object-center scale-105 animate-pulse duration-[10000ms]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0c0e] via-[#0b0c0e]/80 to-[#0b0c0e]/40" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(11,12,14,0.3)_0%,rgba(11,12,14,0.95)_100%)]" />
-      </div>
+    <section id="hero" ref={sectionRef} className="relative bg-cream">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 min-h-screen grid lg:grid-cols-12 items-center gap-10 lg:gap-6 pt-28 pb-16 lg:py-0">
+        {/* النص — على اليمين */}
+        <div ref={textRef} className="lg:col-span-5 text-right">
+          <p data-line className="text-xs sm:text-sm text-walnut font-medium tracking-wide">
+            {HERO.kicker}
+          </p>
+          <h1 className="mt-5 text-[2.6rem] leading-[1.15] sm:text-6xl lg:text-[3.75rem] font-bold text-ink">
+            {HERO.title.map((line) => (
+              <span data-line key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </h1>
+          <p data-line className="mt-6 max-w-md text-base sm:text-lg text-ink/75 leading-relaxed">
+            {HERO.text}
+          </p>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 text-center">
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-snug sm:leading-snug max-w-5xl mx-auto space-y-2">
-          <span className="block">حوّل حلمك إلى واقع ريفي ساحر مع</span>
-          <span className="gold-gradient-text inline-flex items-center gap-3 font-serif font-black text-3xl sm:text-5xl md:text-6xl">
-            خَـشَـبِـي
-            <span className="font-sans text-xl sm:text-3xl md:text-4xl text-[#f7dfa5] font-bold tracking-widest uppercase border-r-2 border-[#cba157] pr-3">
-              WOODEN
-            </span>
-          </span>
-        </h1>
-
-        <p className="text-base sm:text-xl text-[#d4cbbe] max-w-3xl mx-auto mt-6 leading-relaxed font-normal">
-          <span className="text-[#f7dfa5] font-semibold">أكواخ ريفية</span> من خشب السنوبر الطبيعي،{" "}
-          <span className="text-[#f7dfa5] font-semibold">وبرجولات حديثة</span> بتصاميم عصرية تُنفَّذ بأعلى معايير الجودة، مع{" "}
-          <span className="text-[#f7dfa5] font-semibold">ضمان حقيقي يصل إلى 15 سنة</span>.
-        </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto mt-8 text-xs text-neutral-300">
-          {HIGHLIGHTS.map(({ icon: Icon, text }) => (
-            <div
-              key={text}
-              className="p-3 rounded-xl bg-[#11141a]/80 border border-[#cba157]/20 backdrop-blur-sm flex items-center justify-center gap-2"
+          <div data-line className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+            <a
+              href={waLink(HERO.whatsapp)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 h-12 px-6 rounded-md bg-walnut-deep text-cream font-medium hover:bg-walnut transition-colors"
             >
-              <Icon className="w-4 h-4 text-[#cba157]" />
-              <span>{text}</span>
-            </div>
-          ))}
+              محادثة واتساب
+              <span aria-hidden>←</span>
+            </a>
+            <a href={telLink} className="link-underline text-ink font-medium num" dir="ltr">
+              {CONTACT.phoneDisplay}
+            </a>
+          </div>
+
+          <div ref={hintRef} className="hidden lg:flex items-center gap-3 mt-16 text-xs text-walnut">
+            <span className="block w-px h-10 bg-walnut/40" />
+            <span>{HERO.scrollHint}</span>
+          </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mt-10 max-w-xl mx-auto">
-          <a
-            href={waLink("مرحباً مؤسسة خشبي WOODEN، أرغب في استفسار حول بناء كوخ خشبي فاخر.")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full sm:w-auto sm:flex-1 inline-flex items-center justify-center gap-2.5 h-13 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base shadow-xl shadow-emerald-950/60 transition-all active:scale-95"
-          >
-            <MessageCircle className="w-5 h-5" />
-            <span>محادثة واتساب فورية</span>
-          </a>
-          <a
-            href={telLink}
-            className="w-full sm:w-auto sm:flex-1 inline-flex items-center justify-center gap-2.5 h-13 px-6 rounded-2xl bg-[#161a22] hover:bg-[#202532] text-[#f7dfa5] border-2 border-[#cba157]/50 font-bold text-base shadow-xl transition-all active:scale-95"
-          >
-            <Phone className="w-5 h-5 text-[#cba157]" />
-            <span>اتصال هاتفي مباشر</span>
-          </a>
+        {/* الكوخ — على اليسار */}
+        <div ref={cabinRef} className="lg:col-span-7 lg:pl-4">
+          <Cabin className="w-full h-auto max-h-[68vh]" />
         </div>
       </div>
     </section>

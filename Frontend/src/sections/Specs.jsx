@@ -1,96 +1,211 @@
-import { BrickWall, Layers, AppWindow, Check } from "lucide-react";
+import { useLayoutEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import SectionHeader from "../components/SectionHeader";
 import { SPECS } from "../data/content";
+import { Reveal } from "../lib/motion";
+
+gsap.registerPlugin(ScrollTrigger);
+
+/* طبقات السقف من الداخل (الأسفل) إلى الخارج (الأعلى) — السماكات بوحدات الرسم */
+const LAYER_THICKNESS = [36, 44, 12, 14];
+const SLOPE = 140; // فرق الارتفاع بين طرفي السقف
+const X0 = 70;
+const X1 = 570;
+
+const layerGeometry = () => {
+  let bottom = 340;
+  return LAYER_THICKNESS.map((t) => {
+    const yb = bottom;
+    const yt = bottom - t;
+    bottom = yt;
+    return { yb, yt, t };
+  });
+};
+
+function RoofLayers({ innerRef }) {
+  const geo = layerGeometry();
+  const fills = ["url(#sp-wood)", "url(#sp-hatch)", "#5b3d2a", "#9aa0a6"];
+  const strokes = ["#a67a4e", "#b9a893", "#3a2214", "#6b7178"];
+
+  // تموّج الجرميد على السطح العلوي للطبقة الأخيرة
+  const metal = geo[3];
+  const corrugation = Array.from({ length: 26 }, (_, i) => {
+    const x = X0 + i * 20;
+    const base = metal.yt - ((x - X0) / (X1 - X0)) * SLOPE;
+    return `${i === 0 ? "M" : "L"} ${x} ${base + (i % 2 ? 6 : -2)}`;
+  }).join(" ");
+
+  return (
+    <svg ref={innerRef} viewBox="0 0 640 400" className="w-full h-auto" role="img" aria-label="مقطع في سقف من طبقات متعددة">
+      <defs>
+        <pattern id="sp-wood" patternUnits="userSpaceOnUse" width="640" height="480">
+          <image href="/textures/wood-light.svg" width="640" height="480" />
+        </pattern>
+        <pattern id="sp-hatch" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
+          <rect width="10" height="10" fill="#efe7da" />
+          <line x1="0" y1="0" x2="0" y2="10" stroke="#c9b9a1" strokeWidth="2" />
+        </pattern>
+      </defs>
+      {geo.map((g, i) => (
+        <g key={i} data-layer={i}>
+          <polygon
+            points={`${X0},${g.yb} ${X1},${g.yb - SLOPE} ${X1},${g.yt - SLOPE} ${X0},${g.yt}`}
+            fill={fills[i]}
+            stroke={strokes[i]}
+            strokeWidth="1.5"
+          />
+          {i === 3 && <path d={corrugation} fill="none" stroke="#6b7178" strokeWidth="2" />}
+          {/* رقم الطبقة عند الطرف الأيمن (الأعلى) */}
+          <g transform={`translate(${X1 + 26}, ${(g.yb + g.yt) / 2 - SLOPE})`}>
+            <circle r="12" fill="#3a2214" />
+            <text
+              textAnchor="middle"
+              dominantBaseline="central"
+              fill="#f3eee6"
+              fontSize="12"
+              fontWeight="600"
+              className="num"
+            >
+              {i + 1}
+            </text>
+          </g>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+function WallSection() {
+  return (
+    <svg viewBox="0 0 400 250" className="w-full h-auto" role="img" aria-label="مقطع أفقي في جدار خشبي بسماكة 12 سم">
+      <defs>
+        <pattern id="sp-wood-wall" patternUnits="userSpaceOnUse" width="400" height="300">
+          <image href="/textures/wood-light.svg" width="400" height="300" />
+        </pattern>
+      </defs>
+      {/* الجدار */}
+      <rect x="160" y="52" width="80" height="180" fill="url(#sp-wood-wall)" stroke="#a67a4e" strokeWidth="1.5" />
+      {/* خط الأبعاد */}
+      <g stroke="#3a2214" strokeWidth="1.5">
+        <line x1="160" y1="30" x2="240" y2="30" />
+        <line x1="160" y1="24" x2="160" y2="36" />
+        <line x1="240" y1="24" x2="240" y2="36" />
+        <line x1="160" y1="36" x2="160" y2="50" strokeDasharray="2 3" />
+        <line x1="240" y1="36" x2="240" y2="50" strokeDasharray="2 3" />
+      </g>
+      <text x="200" y="20" textAnchor="middle" fill="#3a2214" fontSize="15" fontWeight="600" className="num">
+        12 سم
+      </text>
+      {/* خارج / داخل */}
+      <text x="80" y="146" textAnchor="middle" fill="#6b4a32" fontSize="13">
+        خارج
+      </text>
+      <text x="320" y="146" textAnchor="middle" fill="#6b4a32" fontSize="13">
+        داخل
+      </text>
+      <line x1="110" y1="142" x2="150" y2="142" stroke="#6b4a32" strokeWidth="1" strokeDasharray="3 3" />
+      <line x1="250" y1="142" x2="290" y2="142" stroke="#6b4a32" strokeWidth="1" strokeDasharray="3 3" />
+    </svg>
+  );
+}
 
 export default function Specs() {
   const { walls, roof, glass } = SPECS;
+  const roofRef = useRef(null);
+
+  // الطبقات تبدأ متباعدة ثم تتراكب مع التمرير — صدى لحركة الكوخ في الهيرو
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const layers = roofRef.current.querySelectorAll("[data-layer]");
+        gsap.set(layers, { y: (i) => -i * 42 });
+        gsap.to(layers, {
+          y: 0,
+          ease: "none",
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: roofRef.current,
+            start: "top 85%",
+            end: "top 35%",
+            scrub: 0.6,
+          },
+        });
+      });
+    }, roofRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section id="specs" className="py-20 bg-[#0e1015] border-t border-[#cba157]/20 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-          <h2 className="text-3xl sm:text-5xl font-black text-white">
-            المواصفات الفنية لأكواخ <span className="gold-gradient-text">خشبي WOODEN</span>
-          </h2>
-          <p className="text-sm sm:text-base text-neutral-400 leading-relaxed">
-            تفاصيل البناء التي تحدد جودة الكوخ ومتانته: الجدران، الأسقف، والزجاج.
-          </p>
+    <section id="specs" className="bg-cream py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <SectionHeader number="01" label="المواصفات" title="المواصفات الفنية" intro={SPECS.intro} />
+
+        <div className="mt-16 sm:mt-20 grid lg:grid-cols-12 gap-12 lg:gap-16 text-right">
+          {/* الجدران */}
+          <div className="lg:col-span-5">
+            <Reveal className="flex items-baseline justify-between gap-4 border-b border-line pb-4">
+              <h3 className="font-display font-semibold text-2xl text-ink">{walls.title}</h3>
+              <span className="text-xs tracking-widest text-walnut">{walls.material}</span>
+            </Reveal>
+            <Reveal delay={100} className="mt-8">
+              <WallSection />
+            </Reveal>
+            <Reveal delay={160} className="mt-6 flex items-end gap-4">
+              <span className="wood-text-dark font-display font-bold text-7xl leading-none num">{walls.value}</span>
+              <span className="font-display text-2xl text-walnut mb-1">{walls.unit}</span>
+            </Reveal>
+            <Reveal as="p" delay={220} className="mt-4 text-ink/70 leading-relaxed max-w-sm">
+              {walls.description}
+            </Reveal>
+          </div>
+
+          {/* السقف */}
+          <div className="lg:col-span-7">
+            <Reveal className="flex items-baseline justify-between gap-4 border-b border-line pb-4">
+              <h3 className="font-display font-semibold text-2xl text-ink">{roof.title}</h3>
+              <span className="text-xs tracking-widest text-walnut">{roof.description}</span>
+            </Reveal>
+            <div className="mt-8 grid sm:grid-cols-12 gap-8 items-center">
+              <div className="sm:col-span-7 lg:col-span-8">
+                <RoofLayers innerRef={roofRef} />
+              </div>
+              <ol className="sm:col-span-5 lg:col-span-4 space-y-4">
+                {roof.layers.map((layer, i) => (
+                  <Reveal as="li" key={layer.name} delay={i * 80} className="flex items-start gap-3">
+                    <span className="mt-1 w-6 h-6 rounded-full bg-walnut-deep text-cream text-[11px] font-semibold flex items-center justify-center shrink-0 num">
+                      {i + 1}
+                    </span>
+                    <div>
+                      <span className="block font-medium text-ink">{layer.name}</span>
+                      <span className="block text-sm text-ink/60">{layer.note}</span>
+                    </div>
+                  </Reveal>
+                ))}
+              </ol>
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 text-right">
-          {/* الجدران */}
-          <div className="lg:col-span-4 p-7 rounded-3xl bg-[#12151b] border border-[#cba157]/20 hover:border-[#cba157]/50 transition-all flex flex-col justify-between gap-6">
-            <div className="space-y-3">
-              <div className="w-11 h-11 rounded-xl bg-[#181c24] border border-[#cba157]/30 flex items-center justify-center text-[#cba157]">
-                <BrickWall className="w-5 h-5" />
-              </div>
-              <h3 className="text-xl font-bold text-white">{walls.title}</h3>
-              <p className="text-xs text-neutral-400 leading-relaxed">{walls.description}</p>
-            </div>
-            <div className="p-4 rounded-2xl bg-[#171a22] border border-[#cba157]/20 flex items-center justify-between gap-4">
-              <div>
-                <span className="block text-[11px] text-neutral-500">سماكة الجدار</span>
-                <span className="text-sm font-bold text-[#f7dfa5]">{walls.material}</span>
-              </div>
-              <div className="text-3xl sm:text-4xl font-black text-[#f7dfa5] tracking-tight whitespace-nowrap">
-                {walls.value} <span className="text-base font-bold text-neutral-300">{walls.unit}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* الأسقف */}
-          <div className="lg:col-span-8 p-7 rounded-3xl bg-[#12151b] border border-[#cba157]/20 hover:border-[#cba157]/50 transition-all">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="w-11 h-11 rounded-xl bg-[#181c24] border border-[#cba157]/30 flex items-center justify-center text-[#cba157] shrink-0">
-                <Layers className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-white">{roof.title}</h3>
-                <p className="text-xs text-neutral-400 leading-relaxed mt-1">{roof.description}</p>
-              </div>
-            </div>
-
-            <ol className="space-y-2.5">
-              {roof.layers.map((layer, i) => (
-                <li
-                  key={layer.name}
-                  className="flex items-center gap-4 p-3.5 rounded-2xl bg-[#171a22] border border-neutral-800 hover:border-[#cba157]/40 transition-all"
-                >
-                  <span className="w-9 h-9 rounded-xl gold-gradient-bg text-black font-black text-sm flex items-center justify-center shrink-0">
-                    {i + 1}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <span className="block text-[11px] text-[#cba157] font-semibold">{layer.label}</span>
-                    <span className="block text-sm font-bold text-white">{layer.name}</span>
-                  </div>
-                  <span className="hidden sm:block text-xs text-neutral-400 shrink-0">{layer.note}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-
-          {/* الزجاج */}
-          <div className="lg:col-span-12 p-7 rounded-3xl bg-[#12151b] border border-[#cba157]/20 hover:border-[#cba157]/50 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="flex items-start gap-4">
-              <div className="w-11 h-11 rounded-xl bg-[#181c24] border border-[#cba157]/30 flex items-center justify-center text-[#cba157] shrink-0">
-                <AppWindow className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-white">{glass.title}</h3>
-                <p className="text-xs text-neutral-400 leading-relaxed mt-1 max-w-2xl">{glass.description}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 shrink-0">
-              {glass.options.map((opt) => (
-                <span
-                  key={opt}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#171a22] border border-[#cba157]/30 text-[#f7dfa5] font-black text-lg whitespace-nowrap"
-                >
-                  <Check className="w-4 h-4 text-[#cba157]" />
-                  {opt}
+        {/* الزجاج */}
+        <div className="mt-16 sm:mt-20 border-t border-line pt-10 grid lg:grid-cols-12 gap-8 items-center text-right">
+          <Reveal className="lg:col-span-5">
+            <h3 className="font-display font-semibold text-2xl text-ink">{glass.title}</h3>
+            <p className="mt-2 text-ink/70 leading-relaxed max-w-sm">{glass.description}</p>
+          </Reveal>
+          <Reveal delay={120} className="lg:col-span-7 flex items-baseline gap-6 sm:gap-10 lg:justify-end">
+            {glass.options.map((opt, i) => {
+              const [n, unit] = opt.split(" ");
+              return (
+                <span key={opt} className="flex items-baseline gap-2">
+                  {i > 0 && <span className="text-3xl text-line ms-0 me-4 sm:me-8" aria-hidden>/</span>}
+                  <span className="wood-text-dark font-display font-bold text-6xl sm:text-7xl leading-none num">{n}</span>
+                  <span className="font-display text-xl text-walnut">{unit}</span>
                 </span>
-              ))}
-            </div>
-          </div>
+              );
+            })}
+          </Reveal>
         </div>
       </div>
     </section>
