@@ -20,9 +20,9 @@ export const waButtonClass = (size = "md", extra = "") =>
   `wa-btn inline-flex items-center justify-center rounded-full font-semibold whitespace-nowrap ${SIZES[size]} ${extra}`;
 
 /* رابط واتساب بشكل زر أخضر مع الأيقونة */
-export default function WhatsAppButton({ message, children = "محادثة واتساب", size = "md", className = "", iconClass }) {
+export default function WhatsAppButton({ message, children = "محادثة واتساب", size = "md", className = "", iconClass, ...rest }) {
   return (
-    <a href={waLink(message)} target="_blank" rel="noopener noreferrer" className={waButtonClass(size, className)}>
+    <a href={waLink(message)} target="_blank" rel="noopener noreferrer" className={waButtonClass(size, className)} {...rest}>
       <WhatsAppIcon className={iconClass || (size === "sm" ? "w-4 h-4" : "w-5 h-5")} />
       {children}
     </a>
