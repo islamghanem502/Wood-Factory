@@ -1,105 +1,65 @@
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionHeader from "../components/SectionHeader";
 import { TESTIMONIALS, REVIEWS_TITLE } from "../data/content";
-import { Reveal, prefersReducedMotion } from "../lib/motion";
 
-const INTERVAL = 7000;
+gsap.registerPlugin(ScrollTrigger);
 
 /*
-  آراء العملاء: اقتباس كبير واحد على اليمين، وقائمة أصحاب الآراء على اليسار.
-  يتقدّم تلقائياً كل 7 ثوانٍ مع خط تقدّم رفيع، ويتوقف عند المرور بالمؤشر.
+  آراء العملاء: بطاقات على شكل ألواح خشب فوق خلفية إسبريسو بنسيج خشب.
+  الألواح "تُرصّ" واحداً تلو الآخر عند دخولها الشاشة (إزاحة + ميل خفيف).
 */
 export default function Testimonials() {
-  const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const [cycle, setCycle] = useState(0); // يعيد تشغيل خط التقدّم
-  const timer = useRef(null);
-  const total = TESTIMONIALS.length;
-  const t = TESTIMONIALS[index];
-  const autoplay = !prefersReducedMotion();
+  const gridRef = useRef(null);
 
-  const go = (i) => {
-    setIndex((i + total) % total);
-    setCycle((c) => c + 1);
-  };
-
-  useEffect(() => {
-    if (!autoplay || paused) return;
-    timer.current = setTimeout(() => go(index + 1), INTERVAL);
-    return () => clearTimeout(timer.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, paused, cycle, autoplay]);
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const cards = gridRef.current.querySelectorAll("[data-card]");
+        gsap.set(cards, { y: 48, opacity: 0, rotate: (i) => (i % 2 ? 1.5 : -1.5), transformOrigin: "50% 100%" });
+        ScrollTrigger.create({
+          trigger: gridRef.current,
+          start: "top 80%",
+          once: true,
+          onEnter: () =>
+            gsap.to(cards, { y: 0, opacity: 1, rotate: 0, duration: 1.1, stagger: 0.14, ease: "power3.out", clearProps: "transform" }),
+        });
+      });
+    }, gridRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section id="reviews" className="bg-espresso text-white py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+    <section id="reviews" className="relative bg-espresso wood-overlay text-white py-24 sm:py-32">
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeader number="04" label="آراء العملاء" title={REVIEWS_TITLE} dark />
 
-        <div
-          className="mt-14 grid lg:grid-cols-12 gap-12 lg:gap-16 text-right"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-        >
-          {/* الاقتباس */}
-          <Reveal className="lg:col-span-8">
-            <div className="relative">
-              <span className="absolute -top-10 -right-2 font-display text-[9rem] leading-none text-oak/25 select-none" aria-hidden>
-                «
-              </span>
-              <blockquote key={index} className="fade-in relative pt-6">
-                <p className="font-display font-medium text-2xl sm:text-4xl lg:text-[2.6rem] leading-[1.5] text-white">{t.text}</p>
-                <footer className="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-1 text-sm">
-                  <cite className="not-italic font-medium text-white">{t.name}</cite>
-                  <span className="text-white/45">{t.city}</span>
-                  <span className="text-oak-light">{t.type}</span>
-                </footer>
-              </blockquote>
-
-              {/* خط التقدّم */}
-              <div className="mt-10 h-px bg-white/15 overflow-hidden">
-                {autoplay && (
-                  <span
-                    key={cycle}
-                    className="block h-full bg-oak-light origin-right"
-                    style={{
-                      animation: `progress ${INTERVAL}ms linear forwards`,
-                      animationPlayState: paused ? "paused" : "running",
-                    }}
-                  />
-                )}
+        <div ref={gridRef} className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-7">
+          {TESTIMONIALS.map((t, i) => (
+            <article
+              key={t.name}
+              data-card
+              className="wood-card rounded-2xl p-7 sm:p-8 flex flex-col justify-between gap-8 text-right text-espresso min-h-[300px]"
+            >
+              <div>
+                <span className="block font-display text-5xl leading-none text-walnut/45 select-none" aria-hidden>
+                  «
+                </span>
+                <p className="mt-2 text-[15px] leading-[1.9] text-espresso/90">{t.text}</p>
               </div>
-            </div>
-          </Reveal>
-
-          {/* القائمة */}
-          <Reveal delay={120} className="lg:col-span-4">
-            <ol className="border-t border-line-dark">
-              {TESTIMONIALS.map((r, i) => {
-                const active = i === index;
-                return (
-                  <li key={r.name} className="border-b border-line-dark">
-                    <button
-                      type="button"
-                      onClick={() => go(i)}
-                      aria-current={active}
-                      className={`w-full flex items-center gap-4 py-4 text-right transition-colors ${
-                        active ? "text-white" : "text-white/45 hover:text-white/80"
-                      }`}
-                    >
-                      <span className={`w-0.5 self-stretch rounded-full transition-colors ${active ? "bg-oak-light" : "bg-transparent"}`} />
-                      <span className="flex-1 min-w-0">
-                        <span className="block font-medium truncate">{r.name}</span>
-                        <span className="block text-xs opacity-70 truncate">
-                          {r.city} · {r.type}
-                        </span>
-                      </span>
-                      <span className="num text-xs opacity-60">{String(i + 1).padStart(2, "0")}</span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ol>
-          </Reveal>
+              <footer className="flex items-end justify-between gap-3 border-t border-espresso/15 pt-4">
+                <div className="min-w-0">
+                  <span className="block font-display font-semibold text-sm truncate">{t.name}</span>
+                  <span className="block text-xs text-espresso/60 mt-0.5 truncate">
+                    {t.city} · {t.type}
+                  </span>
+                </div>
+                <span className="num text-xs text-espresso/45 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+              </footer>
+            </article>
+          ))}
         </div>
       </div>
     </section>
