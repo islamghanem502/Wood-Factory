@@ -199,8 +199,7 @@ export default function Specs() {
         <div className="mt-10 lg:mt-12 grid lg:grid-cols-12 gap-10 lg:gap-8 border-t border-line pt-10 text-right">
           {/* الجدار */}
           <div className="lg:col-span-3 lg:border-e lg:border-line lg:pe-8">
-            <Reveal className="text-xs tracking-[0.18em] text-walnut">01 — الجدار</Reveal>
-            <Reveal as="h3" delay={60} className="mt-2 font-display font-bold text-2xl text-ink">
+            <Reveal as="h3" delay={60} className="font-display font-bold text-2xl text-ink">
               {walls.title}
             </Reveal>
             <Reveal delay={120} className="mt-4 flex items-end gap-2">
@@ -217,8 +216,7 @@ export default function Specs() {
 
           {/* السقف */}
           <div className="lg:col-span-6 lg:border-e lg:border-line lg:pe-8">
-            <Reveal className="text-xs tracking-[0.18em] text-walnut">02 — السقف</Reveal>
-            <Reveal as="h3" delay={60} className="mt-2 font-display font-bold text-2xl text-ink">
+            <Reveal as="h3" delay={60} className="font-display font-bold text-2xl text-ink">
               {roof.title}
             </Reveal>
             <div className="mt-3 max-w-[420px] mx-auto">
@@ -239,8 +237,7 @@ export default function Specs() {
 
           {/* الزجاج */}
           <div className="lg:col-span-3">
-            <Reveal className="text-xs tracking-[0.18em] text-walnut">03 — الزجاج</Reveal>
-            <Reveal as="h3" delay={60} className="mt-2 font-display font-bold text-2xl text-ink">
+            <Reveal as="h3" delay={60} className="font-display font-bold text-2xl text-ink">
               {glass.title}
             </Reveal>
             <Reveal delay={120} className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-2">
