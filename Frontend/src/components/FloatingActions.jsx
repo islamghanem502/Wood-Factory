@@ -1,44 +1,51 @@
 import { useEffect, useState } from "react";
-import { Phone, MessageCircle } from "lucide-react";
+import { Phone } from "lucide-react";
+import { WhatsAppIcon } from "./WhatsAppButton";
 import { waLink, telLink } from "../config/contact";
+import { HERO } from "../data/content";
 
+/* زرا الواتساب والاتصال — يظهران بعد تجاوز الهيرو */
 export default function FloatingActions() {
   const [visible, setVisible] = useState(false);
+  const [calcInView, setCalcInView] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 250);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    const onScroll = () => setVisible(window.scrollY > window.innerHeight * 2.2);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    // على الجوال يفسح المكان لشريط الحاسبة السفلي
+    const calc = document.getElementById("calculator");
+    const io = calc ? new IntersectionObserver(([e]) => setCalcInView(e.isIntersecting), { threshold: 0.05 }) : null;
+    io?.observe(calc);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      io?.disconnect();
+    };
   }, []);
 
   return (
     <div
-      className={`fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-50 transition-all duration-300 ${
-        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
+      className={`fixed bottom-5 left-5 z-50 flex flex-col gap-2.5 transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"} ${calcInView ? "max-lg:opacity-0 max-lg:pointer-events-none" : ""
       }`}
     >
-      <div className="flex flex-col items-end">
-        <div className="flex items-center gap-2 bg-[#0d0f13]/95 backdrop-blur-xl p-2 rounded-2xl border border-[#cba157]/30 shadow-2xl">
-          <a
-            href={telLink}
-            className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#1e232c] hover:bg-[#282f3c] text-[#f7dfa5] border border-[#cba157]/30 transition-all active:scale-95 shadow-md"
-            title="اتصال هاتفي مباشر"
-            aria-label="اتصال هاتفي مباشر"
-          >
-            <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-[#cba157]" />
-          </a>
-          <a
-            href={waLink("مرحباً مؤسسة خشبي WOODEN، أرغب في الاستفسار عن تفصيل كوخ خشبي فاخر.")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white transition-all active:scale-95 shadow-lg shadow-emerald-950/60"
-            title="محادثة واتساب مباشرة"
-            aria-label="محادثة واتساب مباشرة"
-          >
-            <MessageCircle className="w-5 h-5" />
-          </a>
-        </div>
-      </div>
+      <a
+        href={waLink(HERO.whatsapp)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="wa-btn w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center"
+        title="محادثة واتساب"
+        aria-label="محادثة واتساب"
+      >
+        <WhatsAppIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+      </a>
+      <a
+        href={telLink}
+        className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white text-ink border border-line flex items-center justify-center shadow-lg shadow-ink/10 hover:bg-stone transition-colors"
+        title="اتصال هاتفي"
+        aria-label="اتصال هاتفي"
+      >
+        <Phone className="w-5 h-5" />
+      </a>
     </div>
   );
 }

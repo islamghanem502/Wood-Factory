@@ -1,224 +1,334 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as Slider from "@radix-ui/react-slider";
-import { Sparkles, Check, MessageCircle, Phone, ShieldCheck } from "lucide-react";
+import gsap from "gsap";
+import SectionHeader from "./SectionHeader";
 import { CONTACT, telLink } from "../config/contact";
-import { CALC_MODELS, CALC_ADDONS } from "../data/content";
+import { CALC, CALC_MODELS, CALC_ADDONS, OFFER } from "../data/content";
+import { Reveal, prefersReducedMotion } from "../lib/motion";
+import { WhatsAppIcon, waButtonClass } from "./WhatsAppButton";
 
-const fmt = (n) => n.toLocaleString("ar-SA");
+const fmt = (n) => Math.round(n).toLocaleString("en-US");
 
-export default function CostCalculator({ onOpenConsultation }) {
+/* أيقونات خطية لكل نوع (viewBox 32×24) */
+const ICONS = {
+  aframe: (
+    <>
+      <path d="M3 21 16 3l13 18Z" />
+      <path d="M13 21v-6h6v6M9.5 12h13" />
+    </>
+  ),
+  twofloor: (
+    <>
+      <path d="M4 11 16 3l12 8" />
+      <path d="M6 11v10h20V11M6 16h20" />
+      <path d="M10 16v-2.5h12V16M9.5 19h3M19.5 19h3" />
+    </>
+  ),
+  single: (
+    <>
+      <path d="M2 8h28" />
+      <path d="M5 8v13h22V8" />
+      <path d="M8 11h11v10M22 13h3v8" />
+    </>
+  ),
+  kiosk: (
+    <>
+      <path d="M5 10v11h22V10" />
+      <path d="M3 10l3-5h20l3 5" />
+      <path d="M3 10c1 2.4 3 2.4 4 0 1 2.4 3 2.4 4 0 1 2.4 3 2.4 4 0 1 2.4 3 2.4 4 0 1 2.4 3 2.4 4 0 1 2.4 3 2.4 4 0" />
+      <path d="M9 13h14v5H9Z" />
+    </>
+  ),
+  pergola: (
+    <>
+      <path d="M3 7h26" />
+      <path d="M6 7v14M26 7v14" />
+      <path d="M10 4v3M14 4v3M18 4v3M22 4v3" />
+      <path d="M10 21v-5h12v5" />
+    </>
+  ),
+};
+
+function ModelIcon({ id, className = "" }) {
+  return (
+    <svg viewBox="0 0 32 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" aria-hidden>
+      {ICONS[id]}
+    </svg>
+  );
+}
+
+/* رقم يتحرك نحو قيمته الجديدة */
+function CountUp({ value, className = "" }) {
+  const ref = useRef(null);
+  const state = useRef({ v: value });
+  useEffect(() => {
+    const el = ref.current;
+    if (prefersReducedMotion()) {
+      el.textContent = fmt(value);
+      state.current.v = value;
+      return;
+    }
+    const tween = gsap.to(state.current, {
+      v: value,
+      duration: 0.6,
+      ease: "power2.out",
+      onUpdate: () => {
+        el.textContent = fmt(state.current.v);
+      },
+    });
+    return () => tween.kill();
+  }, [value]);
+  return (
+    <span ref={ref} className={className}>
+      {fmt(value)}
+    </span>
+  );
+}
+
+const Label = ({ children }) => <span className="block text-[11px] tracking-[0.18em] text-walnut mb-3">{children}</span>;
+
+export default function CostCalculator() {
   const [modelId, setModelId] = useState(CALC_MODELS[0].id);
   const [area, setArea] = useState(80);
-  const [addons, setAddons] = useState(["terrace", "glass"]);
+  const [addons, setAddons] = useState([]);
+  const [inView, setInView] = useState(false);
+  const sectionRef = useRef(null);
+
+  // الشريط السفلي على الجوال يظهر فقط أثناء وجود الحاسبة على الشاشة
+  useEffect(() => {
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.05 });
+    io.observe(sectionRef.current);
+    return () => io.disconnect();
+  }, []);
 
   const model = useMemo(() => CALC_MODELS.find((m) => m.id === modelId) || CALC_MODELS[0], [modelId]);
+  // أثناء العرض يُحسب بسعر العرض ويظهر السعر الأصلي مشطوباً
+  const rate = OFFER.active ? OFFER.price : model.ratePerMeter;
+  const toggleAddon = (id) => setAddons((prev) => (prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]));
 
-  const toggleAddon = (id) =>
-    setAddons((prev) => (prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]));
-
-  const structureCost = useMemo(() => area * model.ratePerMeter, [area, model]);
-  const addonsCost = useMemo(
-    () => addons.reduce((sum, id) => sum + (CALC_ADDONS.find((a) => a.id === id)?.cost || 0), 0),
-    [addons],
-  );
+  const structureCost = area * rate;
+  const addonsCost = addons.reduce((sum, id) => sum + (CALC_ADDONS.find((a) => a.id === id)?.cost || 0), 0);
   const total = structureCost + addonsCost;
-  const minCost = Math.round(total * 0.95);
-  const maxCost = Math.round(total * 1.08);
+  const minCost = total * 0.95;
+  const maxCost = total * 1.08;
 
   const sendToWhatsApp = () => {
     const addonNames = addons
       .map((id) => CALC_ADDONS.find((a) => a.id === id)?.name)
       .filter(Boolean)
-      .join(", ");
+      .join("، ");
     const message =
-      `مرحباً خشبي WOODEN 👋%0A%0Aاستخدمت حاسبة التكاليف التفاعلية في موقعكم وأرغب في تثبيت هذا العرض التقديري:` +
-      `%0A- النموذج المختار: ${model.name}` +
-      `%0A- المساحة: ${area} متر مربع` +
-      `%0A- الإضافات المختارة: ${addonNames || "بدون إضافات"}` +
-      `%0A- التكلفة التقديرية المحسوبة: ${fmt(minCost)} - ${fmt(maxCost)} ر.س` +
-      `%0A%0Aأرجو تزويدي بدراسة تفصيلية وموعد بدء التنفيذ.`;
+      CALC.whatsapp +
+      `%0A- النوع: ${model.name}` +
+      `%0A- المساحة: ${area} م²` +
+      `%0A- الإضافات: ${addonNames || "بدون"}` +
+      `%0A- التقدير: ${fmt(minCost)} – ${fmt(maxCost)} ر.س` +
+      (OFFER.active ? `%0A- بسعر عرض ${OFFER.badge} (${fmt(OFFER.price)} ر.س/م²)` : "");
     window.open(`${CONTACT.whatsappUrl}?text=${message}`, "_blank");
   };
 
   return (
-    <div className="relative rounded-3xl p-4 sm:p-10 gold-glass border border-[#cba157]/30 shadow-2xl overflow-hidden">
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#cba157]/10 rounded-full blur-3xl pointer-events-none" />
+    <section id="calculator" ref={sectionRef} className="bg-white py-14 sm:py-20 lg:py-24">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <SectionHeader number="03" label="الحاسبة" title={CALC.title} intro={CALC.intro} size="sm" />
 
-      <div className="relative z-10">
-        {/* الترويسة */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 border-b border-[#cba157]/20 pb-6">
-          <div>
-            <h3 className="text-2xl sm:text-3xl font-black text-white">احسب تكلفة كوخك أو برجولتك المستقبلية بدقة</h3>
-            <p className="text-sm text-neutral-400 mt-1">حدد النموذج والمساحة والمميزات للحصول على تقدير استثماري فوري وشفاف</p>
-          </div>
-          <div className="hidden sm:flex items-center gap-2 text-xs text-[#cba157]">
-            <Sparkles className="w-4 h-4" />
-            <span>تسعير بالريال السعودي شامل التوريد والتركيب</span>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* المدخلات */}
-          <div className="lg:col-span-7 space-y-6 text-right">
-            {/* 1. النموذج */}
-            <div>
-              <label className="block text-sm font-bold text-white mb-3">1. اختر نوع النموذج الخشبي:</label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {CALC_MODELS.map((m) => (
-                  <button
-                    key={m.id}
-                    type="button"
-                    onClick={() => setModelId(m.id)}
-                    className={`p-3.5 rounded-xl border text-right transition-all flex flex-col justify-between ${
-                      modelId === m.id
-                        ? "bg-[#cba157]/20 border-[#cba157] text-white shadow-lg shadow-[#cba157]/10 ring-1 ring-[#cba157]"
-                        : "bg-[#14171d] border-neutral-800 text-neutral-300 hover:border-[#cba157]/40 hover:bg-[#1a1f27]"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-bold text-sm text-[#f7dfa5]">{m.name}</span>
-                      {modelId === m.id && <Check className="w-4 h-4 text-[#cba157]" />}
-                    </div>
-                    <span className="text-[11px] text-neutral-400 leading-relaxed mb-2">{m.desc}</span>
-                    <span className="text-xs font-semibold text-[#cba157]">{m.ratePerMeter} ر.س / م² تقريباً</span>
-                  </button>
-                ))}
+        <Reveal delay={120} className="mt-8 sm:mt-10">
+          <div className="grid lg:grid-cols-12 rounded-3xl border border-line overflow-hidden bg-white text-right">
+            {/* ── المدخلات ── */}
+            <div className="lg:col-span-8 min-w-0 p-4 sm:p-8 space-y-7 sm:space-y-8">
+              {/* النوع */}
+              <div>
+                <Label>النوع</Label>
+                <div className="flex gap-2 overflow-x-auto hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
+                  {CALC_MODELS.map((m) => {
+                    const active = m.id === modelId;
+                    return (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={() => setModelId(m.id)}
+                        aria-pressed={active}
+                        className={`shrink-0 inline-flex items-center gap-2 sm:gap-2.5 h-11 sm:h-12 ps-3.5 pe-4 sm:ps-4 sm:pe-5 rounded-full border text-[13px] sm:text-sm font-medium transition-colors duration-300 ${
+                          active ? "bg-espresso border-espresso text-white" : "border-line text-ink hover:border-ink/40"
+                        }`}
+                      >
+                        <ModelIcon id={m.icon} className={`w-7 h-5 ${active ? "text-oak-light" : "text-walnut"}`} />
+                        {m.name}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
 
-            {/* 2. المساحة */}
-            <div className="bg-[#14171d] p-5 rounded-2xl border border-neutral-800 space-y-4">
-              <div className="flex justify-between items-center gap-3">
-                <span className="text-sm font-bold text-white">2. المساحة الإجمالية المطلوبة:</span>
-                <span className="text-xl font-black text-[#f7dfa5] px-3 py-1 bg-[#cba157]/15 rounded-lg border border-[#cba157]/30 whitespace-nowrap shrink-0">
-                  {area} <span className="text-xs font-normal text-neutral-300">متر مربع</span>
-                </span>
-              </div>
-              <Slider.Root
-                value={[area]}
-                onValueChange={(v) => setArea(v[0])}
-                min={25}
-                max={400}
-                step={5}
-                dir="rtl"
-                className="relative flex w-full touch-none items-center select-none py-2"
-              >
-                <Slider.Track className="bg-muted relative grow overflow-hidden rounded-full h-1.5 w-full">
-                  <Slider.Range className="bg-primary absolute h-full" />
-                </Slider.Track>
-                <Slider.Thumb className="border-primary ring-ring/50 block size-4 shrink-0 rounded-full border bg-white shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden" />
-              </Slider.Root>
-              <div className="flex justify-between text-[11px] text-neutral-500 font-medium">
-                <span>25 م² (كوخ حديقة صغير)</span>
-                <span className="hidden sm:inline">120 م² (كوخ متوسط)</span>
-                <span>400 م² (قصر ريفي متكامل)</span>
-              </div>
-            </div>
-
-            {/* 3. الملحقات */}
-            <div>
-              <label className="block text-sm font-bold text-white mb-3">3. ملحقات وتجهيزات استثنائية (اختياري):</label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {CALC_ADDONS.map((addon) => {
-                  const active = addons.includes(addon.id);
-                  return (
-                    <button
-                      key={addon.id}
-                      type="button"
-                      onClick={() => toggleAddon(addon.id)}
-                      className={`p-3 rounded-xl border text-right transition-all flex items-center justify-between ${
-                        active
-                          ? "bg-[#cba157]/15 border-[#cba157] text-white"
-                          : "bg-[#14171d] border-neutral-800 text-neutral-400 hover:border-neutral-700"
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <div
-                          className={`w-4 h-4 rounded border flex items-center justify-center ${
-                            active ? "bg-[#cba157] border-[#cba157] text-black" : "border-neutral-600"
+              {/* المساحة */}
+              <div>
+                <div className="flex flex-wrap items-end justify-between gap-4 mb-2">
+                  <div>
+                    <Label>المساحة</Label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {CALC.areaPresets.map((p) => (
+                        <button
+                          key={p}
+                          type="button"
+                          onClick={() => setArea(p)}
+                          aria-pressed={area === p}
+                          className={`h-9 px-3.5 rounded-full border text-xs num transition-colors ${
+                            area === p ? "bg-espresso border-espresso text-white" : "border-line text-ink/80 hover:border-ink/40"
                           }`}
                         >
-                          {active && <Check className="w-3 h-3 stroke-[3]" />}
-                        </div>
-                        <span className="text-xs font-medium text-neutral-200">{addon.name}</span>
-                      </div>
-                      <span className="text-xs text-[#cba157] font-semibold">+{fmt(addon.cost)} ر.س</span>
+                          {p} م²
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2.5">
+                    <button
+                      type="button"
+                      onClick={() => setArea((a) => Math.max(25, a - 5))}
+                      className="w-9 h-9 rounded-full border border-line text-ink hover:bg-stone transition-colors"
+                      aria-label="تقليل المساحة"
+                    >
+                      −
                     </button>
-                  );
-                })}
+                    <span className="font-display font-bold text-2xl sm:text-3xl num text-ink w-14 sm:w-16 text-center tabular-nums">{area}</span>
+                    <button
+                      type="button"
+                      onClick={() => setArea((a) => Math.min(400, a + 5))}
+                      className="w-9 h-9 rounded-full border border-line text-ink hover:bg-stone transition-colors"
+                      aria-label="زيادة المساحة"
+                    >
+                      +
+                    </button>
+                    <span className="text-xs text-ink/50">م²</span>
+                  </div>
+                </div>
+                <Slider.Root
+                  value={[area]}
+                  onValueChange={(v) => setArea(v[0])}
+                  min={25}
+                  max={400}
+                  step={5}
+                  dir="rtl"
+                  className="relative flex w-full touch-none items-center select-none py-3"
+                  aria-label="المساحة بالمتر المربع"
+                >
+                  <Slider.Track className="relative grow h-1 rounded-full bg-stone">
+                    <Slider.Range className="absolute h-full rounded-full bg-espresso" />
+                  </Slider.Track>
+                  <Slider.Thumb className="block w-5 h-5 rounded-full bg-white border-2 border-espresso shadow focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-espresso/15" />
+                </Slider.Root>
+              </div>
+
+              {/* الإضافات */}
+              <div>
+                <Label>إضافات (اختياري)</Label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {CALC_ADDONS.map((a) => {
+                    const active = addons.includes(a.id);
+                    return (
+                      <button
+                        key={a.id}
+                        type="button"
+                        role="checkbox"
+                        aria-checked={active}
+                        onClick={() => toggleAddon(a.id)}
+                        className={`flex items-center justify-between gap-3 h-11 px-3.5 rounded-xl border text-sm transition-colors ${
+                          active ? "border-espresso bg-espresso/5 text-ink" : "border-line text-ink/75 hover:border-ink/40"
+                        }`}
+                      >
+                        <span className="flex items-center gap-2.5">
+                          <span
+                            className={`w-4.5 h-4.5 rounded-md border flex items-center justify-center text-[10px] transition-colors ${
+                              active ? "bg-espresso border-espresso text-white" : "border-ink/30"
+                            }`}
+                          >
+                            {active && "✓"}
+                          </span>
+                          {a.name}
+                        </span>
+                        <span className="text-xs num text-ink/50">+{fmt(a.cost)}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* ── النتيجة — بني بنسيج خشب ── */}
+            <div className="lg:col-span-4 min-w-0 relative bg-espresso wood-overlay text-white">
+              <div className="relative p-5 sm:p-8 h-full flex flex-col">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <span className="block text-[11px] tracking-[0.18em] text-white/50">
+                      التقدير
+                      {OFFER.active && <span className="ms-2 inline-flex items-center h-5 px-2 rounded-full bg-[#006c35] text-white text-[10px] tracking-normal align-middle">{OFFER.badge}</span>}
+                    </span>
+                    <span className="block mt-1 font-display font-semibold text-lg">{model.name}</span>
+                  </div>
+                  <ModelIcon id={model.icon} className="w-12 h-9 text-oak-light shrink-0" />
+                </div>
+
+                <div className="mt-7">
+                  <div className="font-display font-bold text-[1.7rem] sm:text-3xl xl:text-[2.4rem] leading-none num flex flex-wrap items-baseline gap-x-2">
+                    <CountUp value={minCost} />
+                    <span className="text-white/35 text-xl">–</span>
+                    <CountUp value={maxCost} />
+                  </div>
+                  <span className="block mt-2 text-xs text-white/55">ر.س · شامل التوريد والتركيب</span>
+                </div>
+
+                <dl className="mt-6 pt-5 border-t border-line-dark grid grid-cols-3 gap-3 text-xs">
+                  <div>
+                    <dt className="text-white/45">المساحة</dt>
+                    <dd className="num mt-0.5">{area} م²</dd>
+                  </div>
+                  <div>
+                    <dt className="text-white/45">سعر المتر</dt>
+                    <dd className="num mt-0.5">
+                      {fmt(rate)}
+                      {OFFER.active && <span className="ms-1.5 text-white/40 line-through">{fmt(model.ratePerMeter)}</span>}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-white/45">الإضافات</dt>
+                    <dd className="num mt-0.5">{fmt(addonsCost)}</dd>
+                  </div>
+                </dl>
+
+                <div className="mt-auto pt-7 space-y-3">
+                  <button type="button" onClick={sendToWhatsApp} className={waButtonClass("md", "w-full")}>
+                    <WhatsAppIcon />
+                    أرسل التقدير على الواتساب
+                  </button>
+                  <a href={telLink} className="block text-center text-xs text-white/60 link-underline w-fit mx-auto">
+                    أو اتصل: <span className="num" dir="ltr">{CONTACT.phoneDisplay}</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-
-          {/* النتيجة */}
-          <div className="lg:col-span-5 bg-gradient-to-b from-[#181c24] to-[#0f1115] border-2 border-[#cba157]/40 rounded-3xl p-4 sm:p-7 shadow-2xl space-y-6 relative">
-            <div className="text-right">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#cba157]">التقدير المالي المبدئي للمشروع</span>
-              <h4 className="text-xl font-black text-white mt-1">{model.name}</h4>
-              <p className="text-xs text-neutral-400">مساحة إجمالية: {area} متر مربع</p>
-            </div>
-
-            <div className="space-y-3 border-y border-neutral-800 py-4 text-xs text-neutral-300">
-              <div className="flex justify-between items-center">
-                <span>تكلفة الهيكل الخشبي والتصنيع:</span>
-                <span className="font-bold text-white">{fmt(structureCost)} ر.س</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>قيمة الملحقات المختارة ({addons.length}):</span>
-                <span className="font-bold text-white">+{fmt(addonsCost)} ر.س</span>
-              </div>
-              <div className="flex justify-between items-center text-emerald-400">
-                <span>خصم خاص لمشاريع اليوم الوطني وعروض الموسم:</span>
-                <span className="font-bold">مشمول بالاستشارة</span>
-              </div>
-            </div>
-
-            <div className="bg-[#0b0c0e]/80 border border-[#cba157]/30 rounded-2xl p-4 text-center">
-              <span className="text-xs text-neutral-400 block mb-1">متوسط التكلفة التقديرية</span>
-              <div className="text-2xl sm:text-4xl font-black text-[#f7dfa5] tracking-tight">
-                <span className="whitespace-nowrap">{fmt(minCost)} - {fmt(maxCost)}</span>
-                <span className="block sm:inline text-sm font-normal text-neutral-400 sm:mr-2 mt-1 sm:mt-0">ريال سعودي</span>
-              </div>
-              <p className="text-[11px] text-neutral-400 mt-2">
-                * التكلفة نهائية تعتمد على المخطط التفصيلي، الموقع الجغرافي، ونوعية التشطيب الداخلي
-              </p>
-            </div>
-
-            <div className="space-y-2.5">
-              <button
-                type="button"
-                onClick={sendToWhatsApp}
-                className="w-full inline-flex items-center justify-center whitespace-nowrap bg-emerald-600 hover:bg-emerald-500 text-white font-bold h-12 text-sm sm:text-base px-3 shadow-lg shadow-emerald-950/50 gap-2 rounded-xl transition-all"
-              >
-                <MessageCircle className="w-5 h-5" />
-                تثبيت الحسبة والمحادثة عبر الواتساب
-              </button>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => onOpenConsultation(model.name)}
-                  className="inline-flex items-center justify-center whitespace-nowrap border bg-transparent border-[#cba157] text-[#f7dfa5] hover:bg-[#cba157]/15 font-bold h-11 text-xs gap-1.5 px-2 rounded-xl transition-all"
-                >
-                  <Sparkles className="w-4 h-4 text-[#cba157]" />
-                  طلب استشارة مجانية
-                </button>
-                <a
-                  href={telLink}
-                  className="inline-flex items-center justify-center whitespace-nowrap border bg-transparent border-neutral-700 text-white hover:bg-neutral-800 font-bold h-11 text-xs gap-1.5 px-2 rounded-xl transition-all"
-                >
-                  <Phone className="w-4 h-4 text-[#cba157]" />
-                  اتصال هاتفي مباشر
-                </a>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center gap-2 text-[11px] text-neutral-400 pt-1">
-              <ShieldCheck className="w-4 h-4 text-[#cba157]" />
-              <span>ضمان 15 سنة • جدران خشب سنوبر 12 سم • أسقف 5 طبقات</span>
-            </div>
-          </div>
-        </div>
+        </Reveal>
       </div>
-    </div>
+
+      {/* شريط ثابت أسفل الشاشة على الجوال */}
+      <div
+        className={`lg:hidden fixed bottom-0 inset-x-0 z-30 bg-espresso text-white border-t border-line-dark px-5 py-3 flex items-center justify-between gap-4 transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${
+          inView ? "translate-y-0" : "translate-y-full"
+        }`}
+        style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
+        aria-hidden={!inView}
+      >
+        <div className="min-w-0">
+          <span className="block text-[10px] tracking-widest text-white/50">التقدير</span>
+          <span className="block font-display font-semibold num text-lg leading-tight truncate">
+            {fmt(minCost)} – {fmt(maxCost)} <span className="text-xs font-normal text-white/60">ر.س</span>
+          </span>
+        </div>
+        <button type="button" onClick={sendToWhatsApp} className={waButtonClass("sm", "shrink-0")}>
+          <WhatsAppIcon className="w-4 h-4" />
+          واتساب
+        </button>
+      </div>
+    </section>
   );
 }
