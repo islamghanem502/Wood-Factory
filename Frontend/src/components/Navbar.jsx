@@ -33,8 +33,7 @@ export default function Navbar() {
         <a href="#hero" className="flex items-center gap-3" onClick={() => setOpen(false)}>
           <img src={open ? IMAGES.logoCream : IMAGES.logo} alt="" className="h-7 sm:h-9 w-auto" width="32" height="36" />
           <span className={`font-display font-bold text-base sm:text-xl leading-none ${open ? "text-white" : "text-ink"}`}>
-            خشبي
-            <span className={`ms-1.5 sm:ms-2 text-[8px] sm:text-[10px] font-medium tracking-[0.2em] ${open ? "text-white/60" : "text-walnut"}`}>WOODEN</span>
+            وتد الأخشاب
           </span>
         </a>
 

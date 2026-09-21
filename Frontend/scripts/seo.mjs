@@ -158,7 +158,7 @@ export default function seoPlugin() {
         source: JSON.stringify(
           {
             name: SITE.name,
-            short_name: "خشبي",
+            short_name: "وتد الأخشاب",
             lang: "ar",
             dir: "rtl",
             start_url: "/",

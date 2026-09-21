@@ -27,12 +27,9 @@ export default function Footer() {
         <div className="py-6 pb-8 border-t border-line-dark flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
           <a href="#hero" className="flex items-center gap-3 text-white">
             <img src={IMAGES.logoCream} alt="" className="h-8 w-auto opacity-90" width="32" height="36" />
-            <span className="font-display font-bold text-lg leading-none">
-              خشبي
-              <span className="ms-2 text-[10px] font-medium tracking-[0.2em] text-white/50">WOODEN</span>
-            </span>
+            <span className="font-display font-bold text-lg leading-none">وتد الأخشاب</span>
           </a>
-          <p>© {new Date().getFullYear()} خشبي WOODEN. جميع الحقوق محفوظة.</p>
+          <p>© {new Date().getFullYear()} وتد الأخشاب للصناعة. جميع الحقوق محفوظة.</p>
           <button type="button" onClick={scrollToTop} className="link-underline hover:text-white">
             العودة للأعلى ↑
           </button>
