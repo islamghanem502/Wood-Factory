@@ -8,7 +8,9 @@ import Numbers from "./sections/Numbers";
 import Offer from "./sections/Offer";
 import Specs from "./sections/Specs";
 import Ideas from "./sections/Ideas";
+import Process from "./sections/Process";
 import Testimonials from "./sections/Testimonials";
+import { SECTIONS } from "./data/content";
 import Faq from "./sections/Faq";
 
 /* ترتيب الأقسام وإيقاع الألوان: أبيض → إسبريسو → أبيض → إسبريسو → أبيض → إسبريسو → أبيض → إسبريسو */
@@ -23,7 +25,8 @@ export default function App() {
         <Specs />
         <Ideas />
         <CostCalculator />
-        <Testimonials />
+        <Process />
+        {SECTIONS.reviews && <Testimonials />}
         <Faq />
       </main>
       <FloatingActions />
