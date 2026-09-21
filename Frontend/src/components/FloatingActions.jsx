@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Phone } from "lucide-react";
 import { WhatsAppIcon } from "./WhatsAppButton";
 import { waLink, telLink } from "../config/contact";
+import { trackContact, trackCall, sourceLine } from "../lib/analytics";
 import { HERO } from "../data/content";
 
 /* زرا الواتساب والاتصال — يظهران بعد تجاوز الهيرو */
@@ -29,7 +30,8 @@ export default function FloatingActions() {
       }`}
     >
       <a
-        href={waLink(HERO.whatsapp)}
+        href={waLink(HERO.whatsapp + sourceLine())}
+        onClick={() => trackContact("floating")}
         target="_blank"
         rel="noopener noreferrer"
         className="wa-btn w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center"
@@ -40,6 +42,7 @@ export default function FloatingActions() {
       </a>
       <a
         href={telLink}
+        onClick={() => trackCall("floating")}
         className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white text-ink border border-line flex items-center justify-center shadow-lg shadow-ink/10 hover:bg-stone transition-colors"
         title="اتصال هاتفي"
         aria-label="اتصال هاتفي"

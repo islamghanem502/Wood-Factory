@@ -1,5 +1,14 @@
-import { createRoot } from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
+import { captureSource } from "./lib/analytics";
 
-createRoot(document.getElementById("root")).render(<App />);
+captureSource();
+
+// في الإنتاج يكون الجذر مُصيَّراً مسبقاً (prerender) فنُرطّبه؛ في التطوير نصيّر من الصفر
+const root = document.getElementById("root");
+if (root.hasChildNodes()) {
+  hydrateRoot(root, <App />);
+} else {
+  createRoot(root).render(<App />);
+}

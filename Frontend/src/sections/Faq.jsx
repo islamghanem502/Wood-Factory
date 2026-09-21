@@ -31,7 +31,7 @@ export default function Faq() {
             <Reveal delay={200} className="hidden lg:block mt-10 rounded-2xl border border-line p-6">
               <span className="block font-display font-semibold text-lg text-ink">{FAQ.moreTitle}</span>
               <p className="mt-1.5 text-sm text-ink/60 leading-relaxed">{FAQ.moreText}</p>
-              <WhatsAppButton message={FAQ.whatsapp} size="sm" className="mt-5">
+              <WhatsAppButton message={FAQ.whatsapp} placement="faq" size="sm" className="mt-5">
                 اسأل على الواتساب
               </WhatsAppButton>
             </Reveal>
@@ -90,7 +90,7 @@ export default function Faq() {
           <Reveal delay={100} className="lg:hidden mt-8 rounded-2xl border border-line p-5">
             <span className="block font-display font-semibold text-base text-ink">{FAQ.moreTitle}</span>
             <p className="mt-1 text-sm text-ink/60 leading-relaxed">{FAQ.moreText}</p>
-            <WhatsAppButton message={FAQ.whatsapp} size="sm" className="mt-4">
+            <WhatsAppButton message={FAQ.whatsapp} placement="faq" size="sm" className="mt-4">
               اسأل على الواتساب
             </WhatsAppButton>
           </Reveal>

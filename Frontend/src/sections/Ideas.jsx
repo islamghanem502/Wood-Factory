@@ -169,7 +169,7 @@ export default function Ideas() {
                   </div>
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 px-2 pt-3 sm:pt-4 pb-2 text-right">
                     <p className="text-[13px] sm:text-sm text-ink/75 leading-relaxed">{d.description}</p>
-                    <WhatsAppButton message={IDEAS.whatsapp(n)} size="sm" className="shrink-0 self-start sm:self-auto" tabIndex={i >= DESIGNS.length ? -1 : undefined}>
+                    <WhatsAppButton message={IDEAS.whatsapp(n)} placement={`idea_${n}`} size="sm" className="shrink-0 self-start sm:self-auto" tabIndex={i >= DESIGNS.length ? -1 : undefined}>
                       {IDEAS.cta}
                     </WhatsAppButton>
                   </div>

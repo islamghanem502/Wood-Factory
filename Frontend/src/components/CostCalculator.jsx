@@ -2,10 +2,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import * as Slider from "@radix-ui/react-slider";
 import gsap from "gsap";
 import SectionHeader from "./SectionHeader";
-import { CONTACT, telLink } from "../config/contact";
+import { CONTACT } from "../config/contact";
 import { CALC, CALC_MODELS, CALC_ADDONS, OFFER } from "../data/content";
 import { Reveal, prefersReducedMotion } from "../lib/motion";
-import { WhatsAppIcon, waButtonClass } from "./WhatsAppButton";
+import { WhatsAppIcon, waButtonClass, CallLink } from "./WhatsAppButton";
+import { trackLead, sourceLine } from "../lib/analytics";
 
 const fmt = (n) => Math.round(n).toLocaleString("en-US");
 
@@ -123,7 +124,9 @@ export default function CostCalculator() {
       `%0A- المساحة: ${area} م²` +
       `%0A- الإضافات: ${addonNames || "بدون"}` +
       `%0A- التقدير: ${fmt(minCost)} – ${fmt(maxCost)} ر.س` +
-      (OFFER.active ? `%0A- بسعر عرض ${OFFER.badge} (${fmt(OFFER.price)} ر.س/م²)` : "");
+      (OFFER.active ? `%0A- بسعر عرض ${OFFER.badge} (${fmt(OFFER.price)} ر.س/م²)` : "") +
+      encodeURIComponent(sourceLine());
+    trackLead({ model: model.id, area, value: Math.round((minCost + maxCost) / 2), addons: addons.join(",") });
     window.open(`${CONTACT.whatsappUrl}?text=${message}`, "_blank");
   };
 
@@ -300,9 +303,9 @@ export default function CostCalculator() {
                     <WhatsAppIcon />
                     أرسل التقدير على الواتساب
                   </button>
-                  <a href={telLink} className="block text-center text-xs text-white/60 link-underline w-fit mx-auto">
+                  <CallLink placement="calculator" className="block text-center text-xs text-white/60 link-underline w-fit mx-auto">
                     أو اتصل: <span className="num" dir="ltr">{CONTACT.phoneDisplay}</span>
-                  </a>
+                  </CallLink>
                 </div>
               </div>
             </div>

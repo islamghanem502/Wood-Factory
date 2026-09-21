@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { CONTACT, telLink } from "../config/contact";
-import WhatsAppButton from "./WhatsAppButton";
+import { CONTACT } from "../config/contact";
+import WhatsAppButton, { CallLink } from "./WhatsAppButton";
 import { IMAGES, NAV_LINKS, HERO } from "../data/content";
 
 export default function Navbar() {
@@ -49,10 +49,10 @@ export default function Navbar() {
 
         {/* التواصل */}
         <div className="hidden md:flex items-center gap-6">
-          <a href={telLink} className="link-underline text-sm text-ink num" dir="ltr">
+          <CallLink placement="navbar" className="link-underline text-sm text-ink num" dir="ltr">
             {CONTACT.phoneDisplay}
-          </a>
-          <WhatsAppButton message={HERO.whatsapp} size="sm">واتساب</WhatsAppButton>
+          </CallLink>
+          <WhatsAppButton message={HERO.whatsapp} placement="navbar" size="sm">واتساب</WhatsAppButton>
         </div>
 
         {/* زر القائمة */}
@@ -89,10 +89,10 @@ export default function Navbar() {
             ))}
           </nav>
           <div className="space-y-4">
-            <a href={telLink} className="block text-xl num" dir="ltr" style={{ textAlign: "right" }}>
+            <CallLink placement="mobile_menu" className="block text-xl num" dir="ltr" style={{ textAlign: "right" }}>
               {CONTACT.phoneDisplay}
-            </a>
-            <WhatsAppButton message={HERO.whatsapp} size="md" className="w-full">محادثة واتساب</WhatsAppButton>
+            </CallLink>
+            <WhatsAppButton message={HERO.whatsapp} placement="mobile_menu" size="md" className="w-full">محادثة واتساب</WhatsAppButton>
           </div>
         </div>
       </div>

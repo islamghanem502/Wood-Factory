@@ -1,4 +1,6 @@
+import { useEffect, useRef } from "react";
 import WhatsAppButton from "../components/WhatsAppButton";
+import { trackViewOffer } from "../lib/analytics";
 import { OFFER } from "../data/content";
 import { Reveal } from "../lib/motion";
 
@@ -9,10 +11,28 @@ const fmt = (n) => n.toLocaleString("en-US");
   لوحة فاتحة بحدود ناعمة، شارة خضراء صغيرة لليوم الوطني، والسعر القديم مشطوب.
 */
 export default function Offer() {
+  const ref = useRef(null);
+
+  // حدث "view_offer" مرة واحدة عند ظهور نصف القسم
+  useEffect(() => {
+    if (!OFFER.active || !ref.current) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          trackViewOffer();
+          io.disconnect();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    io.observe(ref.current);
+    return () => io.disconnect();
+  }, []);
+
   if (!OFFER.active) return null;
 
   return (
-    <section id="offer" className="bg-white py-14 sm:py-20 lg:py-24">
+    <section id="offer" ref={ref} className="bg-white py-14 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <Reveal>
           <div className="relative rounded-3xl bg-stone border border-line overflow-hidden">
@@ -57,7 +77,7 @@ export default function Offer() {
                 </Reveal>
 
                 <Reveal delay={340} className="mt-6 sm:mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
-                  <WhatsAppButton message={OFFER.whatsapp} size="lg">
+                  <WhatsAppButton message={OFFER.whatsapp} placement="offer" size="lg">
                     {OFFER.cta}
                   </WhatsAppButton>
                   <a href="#calculator" className="link-underline text-ink font-medium">

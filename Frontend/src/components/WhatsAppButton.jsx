@@ -1,4 +1,5 @@
-import { waLink } from "../config/contact";
+import { waLink, telLink } from "../config/contact";
+import { trackContact, trackCall, sourceLine } from "../lib/analytics";
 
 /* أيقونة واتساب الرسمية (Simple Icons، CC0) */
 export function WhatsAppIcon({ className = "w-5 h-5" }) {
@@ -20,10 +21,35 @@ export const waButtonClass = (size = "md", extra = "") =>
   `wa-btn inline-flex items-center justify-center rounded-full font-semibold whitespace-nowrap ${SIZES[size]} ${extra}`;
 
 /* رابط واتساب بشكل زر أخضر مع الأيقونة */
-export default function WhatsAppButton({ message, children = "محادثة واتساب", size = "md", className = "", iconClass, ...rest }) {
+export default function WhatsAppButton({ message, placement = "unknown", children = "محادثة واتساب", size = "md", className = "", iconClass, onClick, ...rest }) {
+  const handleClick = (e) => {
+    trackContact(placement);
+    onClick?.(e);
+  };
   return (
-    <a href={waLink(message)} target="_blank" rel="noopener noreferrer" className={waButtonClass(size, className)} {...rest}>
+    <a
+      href={waLink(message + sourceLine())}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={waButtonClass(size, className)}
+      onClick={handleClick}
+      data-placement={placement}
+      {...rest}
+    >
       <WhatsAppIcon className={iconClass || (size === "sm" ? "w-4 h-4" : "w-5 h-5")} />
+      {children}
+    </a>
+  );
+}
+
+/* رابط اتصال هاتفي مع تتبع */
+export function CallLink({ placement = "unknown", className = "", children, onClick, ...rest }) {
+  const handleClick = (e) => {
+    trackCall(placement);
+    onClick?.(e);
+  };
+  return (
+    <a href={telLink} className={className} onClick={handleClick} data-placement={placement} {...rest}>
       {children}
     </a>
   );

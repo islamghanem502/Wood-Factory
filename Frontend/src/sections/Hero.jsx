@@ -3,8 +3,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import Cabin from "../components/Cabin";
-import { CONTACT, telLink } from "../config/contact";
-import WhatsAppButton from "../components/WhatsAppButton";
+import { CONTACT } from "../config/contact";
+import WhatsAppButton, { CallLink } from "../components/WhatsAppButton";
 import { HERO } from "../data/content";
 
 gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
@@ -18,14 +18,11 @@ export default function Hero() {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       // دخول النص عند التحميل
-      gsap.from(textRef.current.querySelectorAll("[data-line]"), {
-        y: 26,
-        opacity: 0,
-        duration: 1.1,
-        stagger: 0.09,
-        ease: "power3.out",
-        delay: 0.15,
-      });
+      gsap.fromTo(
+        textRef.current.querySelectorAll("[data-line]"),
+        { y: 26, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.1, stagger: 0.09, ease: "power3.out", delay: 0.15, clearProps: "opacity,transform" },
+      );
 
       const mm = gsap.matchMedia();
       mm.add(
@@ -99,6 +96,8 @@ export default function Hero() {
       );
     }, sectionRef);
 
+    // الحالة الأولية جاهزة — أظهر الهيرو (انظر .js:not(.hydrated) في index.css)
+    document.documentElement.classList.add("hydrated");
     document.fonts?.ready.then(() => ScrollTrigger.refresh());
     return () => ctx.revert();
   }, []);
@@ -124,10 +123,10 @@ export default function Hero() {
 
           {/* الأزرار — على الشاشات الكبيرة تحت النص مباشرة */}
           <div data-line className="hidden lg:flex mt-9 flex-wrap items-center gap-x-6 gap-y-4">
-            <WhatsAppButton message={HERO.whatsapp} size="lg">محادثة واتساب</WhatsAppButton>
-            <a href={telLink} className="link-underline text-ink font-medium num" dir="ltr">
+            <WhatsAppButton message={HERO.whatsapp} placement="hero" size="lg">محادثة واتساب</WhatsAppButton>
+            <CallLink placement="hero" className="link-underline text-ink font-medium num" dir="ltr">
               {CONTACT.phoneDisplay}
-            </a>
+            </CallLink>
           </div>
         </div>
 
@@ -138,10 +137,10 @@ export default function Hero() {
 
         {/* الأزرار — على الجوال بعد الكوخ */}
         <div className="lg:hidden -mt-2 flex flex-wrap items-center gap-x-6 gap-y-4 text-right">
-          <WhatsAppButton message={HERO.whatsapp} size="lg">محادثة واتساب</WhatsAppButton>
-          <a href={telLink} className="link-underline text-ink font-medium num" dir="ltr">
+          <WhatsAppButton message={HERO.whatsapp} placement="hero" size="lg">محادثة واتساب</WhatsAppButton>
+          <CallLink placement="hero" className="link-underline text-ink font-medium num" dir="ltr">
             {CONTACT.phoneDisplay}
-          </a>
+          </CallLink>
         </div>
       </div>
 

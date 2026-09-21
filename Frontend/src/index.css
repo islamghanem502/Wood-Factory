@@ -160,6 +160,15 @@
 /* ───────── أرقام بخط العرض ───────── */
 .num { font-family: var(--font-display); font-variant-numeric: tabular-nums lining-nums; }
 
+/* ───────── بلا JavaScript (الزواحف والقراءة المسبقة): كل شيء ظاهر ───────── */
+.no-js .reveal, .no-js .reveal-clip > *, .no-js .reveal-line {
+  opacity: 1; transform: none; clip-path: none;
+}
+/* مع JavaScript: يبقى الهيرو مخفياً حتى يبدأ التحريك بعد الترطيب (يمنع الوميض) */
+.js:not(.hydrated) #hero [data-line],
+.js:not(.hydrated) #hero svg { opacity: 0; }
+#hero svg { transition: opacity 0.35s ease-out; }
+
 /* ───────── تقليل الحركة ───────── */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
