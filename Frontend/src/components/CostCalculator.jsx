@@ -221,7 +221,7 @@ export default function CostCalculator() {
 
               {/* الإضافات */}
               <div>
-                <Label>إضافات (اختياري)</Label>
+                <Label>إضافات مجانية (اختياري)</Label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {CALC_ADDONS.map((a) => {
                     const active = addons.includes(a.id);
@@ -246,7 +246,7 @@ export default function CostCalculator() {
                           </span>
                           {a.name}
                         </span>
-                        <span className="text-xs num text-ink/50">+{fmt(a.cost)}</span>
+                        <span className="text-xs num text-ink/50">{a.cost ? `+${fmt(a.cost)}` : "مجاناً"}</span>
                       </button>
                     );
                   })}
@@ -291,7 +291,7 @@ export default function CostCalculator() {
                   </div>
                   <div>
                     <dt className="text-white/45">الإضافات</dt>
-                    <dd className="num mt-0.5">{fmt(addonsCost)}</dd>
+                    <dd className="num mt-0.5">{addonsCost ? fmt(addonsCost) : "مجاناً"}</dd>
                   </div>
                 </dl>
 
