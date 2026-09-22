@@ -19,7 +19,7 @@ export const buildSite = (env = {}) => ({
   gtmId: env.VITE_GTM_ID || "GTM-TCG59CBN",
   ga4Id: env.VITE_GA4_ID || "",
   metaPixelId: env.VITE_META_PIXEL_ID || "",
-  snapPixelId: env.VITE_SNAP_PIXEL_ID || "",
+  snapPixelId: env.VITE_SNAP_PIXEL_ID || "82f0052b-232b-41e3-8f30-0d3796835cec",
   tiktokPixelId: env.VITE_TIKTOK_PIXEL_ID || "",
 });
 

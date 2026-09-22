@@ -89,15 +89,19 @@ const headTags = () => {
     ${jsonLd()}`;
 };
 
+/*
+  التتبع: GTM يُحقن إن وُجد معرّفه، وكل بكسل يُحقن مباشرة إن وُجد معرّفه.
+  قاعدة: أي بكسل موضوع هنا مباشرةً يجب ألا يُضاف داخل GTM أيضاً (وإلا يُحسب الحدث مرتين).
+  الحالي: جوجل (GA4/Ads) من داخل GTM، وسناب من الكود مباشرة.
+*/
 const trackingHead = () => {
+  let out = "";
   if (SITE.gtmId) {
-    return `
+    out += `
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${SITE.gtmId}');</script>
     <!-- End Google Tag Manager -->`;
   }
-  // بدون GTM: البكسلات مباشرة (كل واحد يُحقن فقط إن وُجد معرّفه)
-  let out = "";
   if (SITE.ga4Id) {
     out += `
     <script async src="https://www.googletagmanager.com/gtag/js?id=${SITE.ga4Id}"></script>
@@ -109,7 +113,9 @@ const trackingHead = () => {
   }
   if (SITE.snapPixelId) {
     out += `
-    <script>(function(e,t,n){if(e.snaptr)return;var a=e.snaptr=function(){a.handleRequest?a.handleRequest.apply(a,arguments):a.queue.push(arguments)};a.queue=[];var s='script';var r=t.createElement(s);r.async=!0;r.src=n;var u=t.getElementsByTagName(s)[0];u.parentNode.insertBefore(r,u);})(window,document,'https://sc-static.net/scevent.min.js');snaptr('init','${SITE.snapPixelId}');snaptr('track','PAGE_VIEW');</script>`;
+    <!-- Snap Pixel Code -->
+    <script>(function(e,t,n){if(e.snaptr)return;var a=e.snaptr=function(){a.handleRequest?a.handleRequest.apply(a,arguments):a.queue.push(arguments)};a.queue=[];var s='script';var r=t.createElement(s);r.async=!0;r.src=n;var u=t.getElementsByTagName(s)[0];u.parentNode.insertBefore(r,u);})(window,document,'https://sc-static.net/scevent.min.js');snaptr('init','${SITE.snapPixelId}',{});snaptr('track','PAGE_VIEW');</script>
+    <!-- End Snap Pixel Code -->`;
   }
   if (SITE.tiktokPixelId) {
     out += `
