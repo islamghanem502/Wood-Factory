@@ -66,6 +66,7 @@ Frontend/
 - الأحداث (`src/lib/analytics.js`): `contact` (واتساب) · `call` (اتصال) · `lead` (تقدير الحاسبة) · `view_offer` — تُرسل إلى `dataLayer` وإلى Meta/Snap/TikTok إن كانت محمّلة. كل زر يحمل `data-placement`.
 - مصدر الإعلان: إذا وصل الزائر بـ `?utm_source=snapchat` يُحفظ ويُضاف سطر «قادم من إعلان سناب شات» إلى رسالة الواتساب.
 - صورة المشاركة: `public/og.jpg` (1200×630). صفحة الخصوصية: `public/privacy.html`.
+- إحصاءات Vercel: `<Analytics />` من `@vercel/analytics/react` في `App.jsx` (تعمل على نشر Vercel فقط).
 
 ## تغيير رقم الواتساب
 

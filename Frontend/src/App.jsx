@@ -1,3 +1,5 @@
+import { Analytics } from "@vercel/analytics/react";
+
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import FloatingActions from "./components/FloatingActions";
@@ -31,6 +33,8 @@ export default function App() {
       </main>
       <FloatingActions />
       <Footer />
+      {/* إحصاءات Vercel (زيارات ومشاهدات الصفحات) */}
+      <Analytics />
     </div>
   );
 }
