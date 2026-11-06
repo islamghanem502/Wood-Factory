@@ -3,7 +3,9 @@ import { CONTACT } from "../config/contact";
 import WhatsAppButton, { CallLink } from "./WhatsAppButton";
 import { IMAGES, NAV_LINKS, HERO } from "../data/content";
 
-export default function Navbar() {
+/* home=false في الصفحات الأخرى: روابط الأقسام (#...) تعود إلى الرئيسية */
+export default function Navbar({ home = true }) {
+  const link = (href) => (!home && href.startsWith("#") ? `/${href}` : href);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -30,7 +32,7 @@ export default function Navbar() {
     >
       <div className="mx-auto max-w-7xl px-5 sm:px-8 h-14 sm:h-20 flex items-center justify-between">
         {/* الشعار */}
-        <a href="#hero" className="flex items-center gap-3" onClick={() => setOpen(false)}>
+        <a href={home ? "#hero" : "/"} className="flex items-center gap-3" onClick={() => setOpen(false)}>
           <img src={open ? IMAGES.logoCream : IMAGES.logo} alt="" className="h-7 sm:h-9 w-auto" width="32" height="36" />
           <span className={`font-display font-bold text-base sm:text-xl leading-none ${open ? "text-white" : "text-ink"}`}>
             وتد الأخشاب
@@ -40,7 +42,7 @@ export default function Navbar() {
         {/* الروابط */}
         <nav className="hidden md:flex items-center gap-8 text-sm text-ink/80">
           {NAV_LINKS.map((l) => (
-            <a key={l.href} href={l.href} className="link-underline hover:text-ink transition-colors">
+            <a key={l.href} href={link(l.href)} aria-current={!home && l.href === "/about/" ? "page" : undefined} className="link-underline hover:text-ink transition-colors">
               {l.label}
             </a>
           ))}
@@ -78,7 +80,7 @@ export default function Navbar() {
             {NAV_LINKS.map((l, i) => (
               <a
                 key={l.href}
-                href={l.href}
+                href={link(l.href)}
                 onClick={() => setOpen(false)}
                 className="font-display text-2xl font-semibold py-3.5 border-b border-line-dark"
                 style={{ transitionDelay: `${i * 40}ms` }}
