@@ -4,13 +4,14 @@ import WhatsAppButton, { CallLink } from "./WhatsAppButton";
 import { Reveal } from "../lib/motion";
 
 /* الفوتر: دعوة أخيرة + الشعار والحقوق */
-export default function Footer({ home = true, ctaTitle = FOOTER.ctaTitle, message = FOOTER.whatsapp }) {
+export default function Footer({ home = true, cta = true, ctaTitle = FOOTER.ctaTitle, message = FOOTER.whatsapp }) {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
     <footer className="relative bg-espresso wood-overlay text-white overflow-hidden">
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
-        {/* الدعوة الأخيرة */}
+        {/* الدعوة الأخيرة (تُخفى في صفحة المقالة) */}
+        {cta && (
         <Reveal className="pt-14 sm:pt-20 pb-10 sm:pb-14 flex flex-col lg:flex-row lg:items-center justify-between gap-6 sm:gap-8 text-right">
           <h2 className="font-display font-bold text-xl sm:text-4xl lg:text-5xl">{ctaTitle}</h2>
           <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
@@ -22,9 +23,10 @@ export default function Footer({ home = true, ctaTitle = FOOTER.ctaTitle, messag
             </CallLink>
           </div>
         </Reveal>
+        )}
 
         {/* الشعار والحقوق */}
-        <div className="py-6 pb-8 border-t border-line-dark flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
+        <div className={`py-6 pb-8 ${cta ? "border-t border-line-dark" : "pt-8"} flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50`}>
           <a href={home ? "#hero" : "/"} className="flex items-center gap-3 text-white">
             <img src={IMAGES.logoCream} alt="" className="h-8 w-auto opacity-90" width="32" height="36" />
             <span className="font-display font-bold text-lg leading-none">وتد الأخشاب</span>
