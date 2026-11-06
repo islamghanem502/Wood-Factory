@@ -14,7 +14,14 @@ let SITE = buildSite();
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 const abs = (p) => (p.startsWith("http") ? p : SITE.url + p);
 
-const jsonLd = () => {
+/* الصفحة الحالية من مسار ملف HTML: about/index.html → about، وغير ذلك الرئيسية */
+const pageOf = (path = "") => (path.replace(/^\//, "").startsWith("about/") ? "about" : "home");
+const meta = (page) =>
+  page === "home"
+    ? { path: "/", title: SITE.title, description: SITE.description }
+    : SITE.pages[page];
+
+const jsonLd = (page) => {
   const business = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -58,35 +65,56 @@ const jsonLd = () => {
     url: SITE.url,
     inLanguage: "ar",
   };
-  return [business, faq, site].map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join("\n    ");
+  const m = meta(page);
+  const about = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: m.title,
+    url: SITE.url + m.path,
+    inLanguage: "ar",
+    description: m.description,
+    about: { "@id": SITE.url + "/#business" },
+  };
+  const breadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "الرئيسية", item: SITE.url + "/" },
+      { "@type": "ListItem", position: 2, name: "من نحن", item: SITE.url + m.path },
+    ],
+  };
+  const list = page === "about" ? [business, about, breadcrumb] : [business, faq, site];
+  return list.map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join("\n    ");
 };
 
-const headTags = () => {
+const headTags = (page) => {
   const og = abs(SITE.ogImage);
+  const m = meta(page);
+  const url = SITE.url + m.path;
   return `
-    <meta name="description" content="${esc(SITE.description)}" />
+    <meta name="description" content="${esc(m.description)}" />
     <meta name="keywords" content="${esc(SITE.keywords)}" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
-    <link rel="canonical" href="${SITE.url}/" />
+    <link rel="canonical" href="${url}" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="${esc(SITE.name)}" />
     <meta property="og:locale" content="${SITE.locale}" />
-    <meta property="og:url" content="${SITE.url}/" />
-    <meta property="og:title" content="${esc(SITE.title)}" />
-    <meta property="og:description" content="${esc(SITE.description)}" />
+    <meta property="og:url" content="${url}" />
+    <meta property="og:title" content="${esc(m.title)}" />
+    <meta property="og:description" content="${esc(m.description)}" />
     <meta property="og:image" content="${og}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="${esc(SITE.name)}" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="${esc(SITE.title)}" />
-    <meta name="twitter:description" content="${esc(SITE.description)}" />
+    <meta name="twitter:title" content="${esc(m.title)}" />
+    <meta name="twitter:description" content="${esc(m.description)}" />
     <meta name="twitter:image" content="${og}" />
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    ${jsonLd()}`;
+    ${jsonLd(page)}`;
 };
 
 /*
@@ -136,9 +164,10 @@ export default function seoPlugin() {
     config(_, { mode }) {
       SITE = buildSite(loadEnv(mode, process.cwd(), "VITE_"));
     },
-    transformIndexHtml(html) {
+    transformIndexHtml(html, ctx) {
+      const page = pageOf(ctx?.path);
       return html
-        .replace("</head>", `${headTags()}${trackingHead()}\n  </head>`)
+        .replace("</head>", `${headTags(page)}${trackingHead()}\n  </head>`)
         .replace(/<body([^>]*)>/, (m) => `${m}${trackingBody()}`);
     },
     generateBundle() {
@@ -149,6 +178,7 @@ export default function seoPlugin() {
         source: `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${SITE.url}/</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>${SITE.url}${SITE.pages.about.path}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>${SITE.url}/privacy.html</loc><lastmod>${today}</lastmod><changefreq>yearly</changefreq><priority>0.2</priority></url>
 </urlset>
 `,

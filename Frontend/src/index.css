@@ -155,7 +155,8 @@
   transition: width 0.35s var(--ease-out);
 }
 .link-underline:hover::after,
-.link-underline[aria-current="true"]::after { width: 100%; }
+.link-underline[aria-current="true"]::after,
+.link-underline[aria-current="page"]::after { width: 100%; }
 
 /* ───────── أرقام بخط العرض ───────── */
 .num { font-family: var(--font-display); font-variant-numeric: tabular-nums lining-nums; }
