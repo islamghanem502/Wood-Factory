@@ -147,9 +147,8 @@ const trackingHead = () => {
   }
   if (SITE.openaiPixelId) {
     out += `
-    <!-- OpenAI Ads Measurement Pixel -->
-    <script>window.oaiq=window.oaiq||function(){(window.oaiq.q=window.oaiq.q||[]).push(arguments);};oaiq("init",{pixelId:"${SITE.openaiPixelId}"});</script>
-    <script async src="https://bzrcdn.openai.com/sdk/oaiq.min.js"></script>
+    <!-- OpenAI Ads Measurement Pixel (كود الإعداد الرسمي من Ads Manager) -->
+    <script>!function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var j=d.createElement(s);j.async=1;j.src=u;var f=d.getElementsByTagName(s)[0];f.parentNode.insertBefore(j,f)}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");oaiq("init",{pixelId:"${SITE.openaiPixelId}",debug:${SITE.openaiPixelDebug}});</script>
     <!-- End OpenAI Ads Measurement Pixel -->`;
   }
   if (SITE.tiktokPixelId) {
