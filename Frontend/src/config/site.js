@@ -30,8 +30,10 @@ export const buildSite = (env = {}) => ({
   metaPixelId: env.VITE_META_PIXEL_ID || "",
   snapPixelId: env.VITE_SNAP_PIXEL_ID || "82f0052b-232b-41e3-8f30-0d3796835cec",
   tiktokPixelId: env.VITE_TIKTOK_PIXEL_ID || "",
-  // OpenAI Ads (إعلانات ChatGPT) — Measurement Pixel
-  openaiPixelId: env.VITE_OPENAI_PIXEL_ID || "XhtjRzai2rXJap8mt58kYU",
+  // OpenAI Ads (إعلانات ChatGPT) — Measurement Pixel من حساب «وتد الأخشاب»
+  openaiPixelId: env.VITE_OPENAI_PIXEL_ID || "NbjVXj5ebRHaHSSjvDrMTH",
+  // وضع الفحص: يطبع الأحداث في Console المتصفح. اجعله false بعد التأكد من وصول الأحداث
+  openaiPixelDebug: (env.VITE_OPENAI_PIXEL_DEBUG ?? "true") === "true",
 });
 
 export const SITE = buildSite((typeof import.meta !== "undefined" && import.meta.env) || {});
