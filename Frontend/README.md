@@ -64,10 +64,10 @@ Frontend/
 - النطاق ومعرّفات التتبع في ملف `.env` (انسخ `.env.example`) أو في Vercel → Environment Variables:
   - `VITE_SITE_URL` — النطاق النهائي (canonical / Open Graph / sitemap)
   - `VITE_GTM_ID` — Google Tag Manager (الأفضل: كل البكسلات من داخله)
-  - أو مباشرة: `VITE_GA4_ID` · `VITE_META_PIXEL_ID` · `VITE_SNAP_PIXEL_ID` · `VITE_TIKTOK_PIXEL_ID`
+  - أو مباشرة: `VITE_GA4_ID` · `VITE_META_PIXEL_ID` · `VITE_SNAP_PIXEL_ID` · `VITE_TIKTOK_PIXEL_ID` · `VITE_OPENAI_PIXEL_ID`
 - وقت البناء (`scripts/seo.mjs`): وسوم الوصف وOpen Graph وJSON-LD (LocalBusiness + FAQPage + Offer)، و`sitemap.xml` و`robots.txt` و`site.webmanifest`.
 - Prerender: `npm run build` يولّد HTML كاملاً داخل `dist/index.html` (React SSR) ثم يرطّبه المتصفح.
-- الأحداث (`src/lib/analytics.js`): `contact` (واتساب) · `call` (اتصال) · `lead` (تقدير الحاسبة) · `view_offer` — تُرسل إلى `dataLayer` وإلى Meta/Snap/TikTok إن كانت محمّلة. كل زر يحمل `data-placement`.
+- الأحداث (`src/lib/analytics.js`): `contact` (واتساب) · `call` (اتصال) · `lead` (تقدير الحاسبة) · `view_offer` — تُرسل إلى `dataLayer` وإلى Meta/Snap/TikTok/OpenAI إن كانت محمّلة. في OpenAI Ads: `contact` و`call` و`lead` تُرسل كلها كحدث `lead_created`. كل زر يحمل `data-placement`.
 - مصدر الإعلان: إذا وصل الزائر بـ `?utm_source=snapchat` يُحفظ ويُضاف سطر «قادم من إعلان سناب شات» إلى رسالة الواتساب.
 - صورة المشاركة: `public/og.jpg` (1200×630). صفحة الخصوصية: `public/privacy.html`.
 - إحصاءات Vercel: `<Analytics />` من `@vercel/analytics/react` في `App.jsx` (تعمل على نشر Vercel فقط).
