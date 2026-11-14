@@ -120,7 +120,7 @@ const headTags = (page) => {
 /*
   التتبع: GTM يُحقن إن وُجد معرّفه، وكل بكسل يُحقن مباشرة إن وُجد معرّفه.
   قاعدة: أي بكسل موضوع هنا مباشرةً يجب ألا يُضاف داخل GTM أيضاً (وإلا يُحسب الحدث مرتين).
-  الحالي: جوجل (GA4/Ads) من داخل GTM، وسناب من الكود مباشرة.
+  الحالي: جوجل (GA4/Ads) من داخل GTM، وسناب وOpenAI من الكود مباشرة.
 */
 const trackingHead = () => {
   let out = "";
@@ -144,6 +144,13 @@ const trackingHead = () => {
     <!-- Snap Pixel Code -->
     <script>(function(e,t,n){if(e.snaptr)return;var a=e.snaptr=function(){a.handleRequest?a.handleRequest.apply(a,arguments):a.queue.push(arguments)};a.queue=[];var s='script';var r=t.createElement(s);r.async=!0;r.src=n;var u=t.getElementsByTagName(s)[0];u.parentNode.insertBefore(r,u);})(window,document,'https://sc-static.net/scevent.min.js');snaptr('init','${SITE.snapPixelId}',{});snaptr('track','PAGE_VIEW');</script>
     <!-- End Snap Pixel Code -->`;
+  }
+  if (SITE.openaiPixelId) {
+    out += `
+    <!-- OpenAI Ads Measurement Pixel -->
+    <script>window.oaiq=window.oaiq||function(){(window.oaiq.q=window.oaiq.q||[]).push(arguments);};oaiq("init",{pixelId:"${SITE.openaiPixelId}"});</script>
+    <script async src="https://bzrcdn.openai.com/sdk/oaiq.min.js"></script>
+    <!-- End OpenAI Ads Measurement Pixel -->`;
   }
   if (SITE.tiktokPixelId) {
     out += `

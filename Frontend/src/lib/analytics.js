@@ -1,7 +1,7 @@
 /*
   طبقة التتبع: مصدر واحد للأحداث يرسلها إلى
   - window.dataLayer (Google Tag Manager / GA4)
-  - fbq (Meta) · snaptr (Snapchat) · ttq (TikTok) · gtag (Google Ads) إن كانت محمّلة
+  - fbq (Meta) · snaptr (Snapchat) · ttq (TikTok) · oaiq (OpenAI Ads) إن كانت محمّلة
   الأحداث: contact (واتساب) · call (اتصال) · lead (تقدير من الحاسبة) · view_offer
 */
 
@@ -77,6 +77,12 @@ function push(event, params = {}) {
 const META = { contact: "Contact", call: "Contact", lead: "Lead", view_offer: "ViewContent" };
 const SNAP = { contact: "SIGN_UP", call: "SIGN_UP", lead: "SUBMIT_FORM", view_offer: "VIEW_CONTENT" };
 const TIKTOK = { contact: "Contact", call: "Contact", lead: "SubmitForm", view_offer: "ViewContent" };
+/* OpenAI Ads: كل تواصل (واتساب، اتصال، تقدير الحاسبة) = عميل محتمل. view_offer ليس تحويلاً فلا يُرسل */
+const OPENAI = { contact: "lead_created", call: "lead_created", lead: "lead_created" };
+
+/* معرّف فريد لكل حدث — يمنع احتساب الحدث مرتين إن أُرسل لاحقاً من الخادم أيضاً */
+const eventId = () =>
+  w?.crypto?.randomUUID ? w.crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 
 export function track(event, params = {}) {
   push(event, params);
@@ -85,6 +91,7 @@ export function track(event, params = {}) {
     if (w.fbq && META[event]) w.fbq("track", META[event], params);
     if (w.snaptr && SNAP[event]) w.snaptr("track", SNAP[event], params);
     if (w.ttq?.track && TIKTOK[event]) w.ttq.track(TIKTOK[event], params);
+    if (w.oaiq && OPENAI[event]) w.oaiq("measure", OPENAI[event], { type: "customer_action" }, { event_id: eventId() });
   } catch {
     /* بكسل مفقود أو محظور — لا يوقف الصفحة */
   }
