@@ -32,8 +32,8 @@ export const buildSite = (env = {}) => ({
   tiktokPixelId: env.VITE_TIKTOK_PIXEL_ID || "",
   // OpenAI Ads (إعلانات ChatGPT) — Measurement Pixel من حساب «وتد الأخشاب»
   openaiPixelId: env.VITE_OPENAI_PIXEL_ID || "NbjVXj5ebRHaHSSjvDrMTH",
-  // وضع الفحص: يطبع الأحداث في Console المتصفح. اجعله false بعد التأكد من وصول الأحداث
-  openaiPixelDebug: (env.VITE_OPENAI_PIXEL_DEBUG ?? "true") === "true",
+  // وضع الفحص: يطبع الأحداث في Console المتصفح. مغلق افتراضياً؛ للتشغيل: VITE_OPENAI_PIXEL_DEBUG=true
+  openaiPixelDebug: env.VITE_OPENAI_PIXEL_DEBUG === "true",
 });
 
 export const SITE = buildSite((typeof import.meta !== "undefined" && import.meta.env) || {});
