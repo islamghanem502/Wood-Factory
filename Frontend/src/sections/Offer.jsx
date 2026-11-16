@@ -1,10 +1,17 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import WhatsAppButton from "../components/WhatsAppButton";
 import { trackViewOffer } from "../lib/analytics";
 import { OFFER } from "../data/content";
 import { Reveal } from "../lib/motion";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const fmt = (n) => n.toLocaleString("en-US");
+
+// useLayoutEffect في المتصفح فقط (التصيير المسبق يعمل على الخادم)
+const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 /*
   العرض الخاص: الصورة على اليمين، والعرض على اليسار.
@@ -27,6 +34,27 @@ export default function Offer() {
     );
     io.observe(ref.current);
     return () => io.disconnect();
+  }, []);
+
+  // التظليل يُرسم مع الاسكرول: من 0% عند دخول العنوان أسفل الشاشة إلى 100% قرب منتصفها
+  useIsoLayoutEffect(() => {
+    if (!OFFER.active || !ref.current) return;
+    const ctx = gsap.context(() => {
+      gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+        const mark = ref.current.querySelector(".offer-mark");
+        if (!mark) return;
+        gsap.fromTo(
+          mark,
+          { "--hl": "0%" },
+          {
+            "--hl": "100%",
+            ease: "none",
+            scrollTrigger: { trigger: mark, start: "top 88%", end: "top 50%", scrub: 0.6 },
+          },
+        );
+      });
+    }, ref);
+    return () => ctx.revert();
   }, []);
 
   if (!OFFER.active) return null;
