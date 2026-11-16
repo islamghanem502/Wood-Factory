@@ -7,7 +7,7 @@
 import { loadEnv } from "vite";
 import { buildSite } from "../src/config/site.js";
 import { CONTACT } from "../src/config/contact.js";
-import { FAQS, OFFER, HERO } from "../src/data/content.js";
+import { FAQS, OFFER } from "../src/data/content.js";
 
 let SITE = buildSite();
 
@@ -39,7 +39,7 @@ const jsonLd = (page) => {
     makesOffer: OFFER.active
       ? {
           "@type": "Offer",
-          name: HERO.kicker,
+          name: `${OFFER.badge} — ${SITE.name}`,
           description: OFFER.text,
           price: String(OFFER.price),
           priceCurrency: "SAR",

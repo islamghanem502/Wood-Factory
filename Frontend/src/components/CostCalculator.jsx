@@ -217,7 +217,7 @@ export default function CostCalculator() {
                   <div>
                     <span className="block text-[11px] tracking-[0.18em] text-white/50">
                       التقدير
-                      {OFFER.active && <span className="ms-2 inline-flex items-center h-5 px-2 rounded-full bg-[#006c35] text-white text-[10px] tracking-normal align-middle">{OFFER.badge}</span>}
+                      {OFFER.active && <span className="ms-2 inline-flex items-center h-5 px-2 rounded-full bg-white text-ink font-semibold text-[10px] tracking-normal align-middle">{OFFER.badge}</span>}
                     </span>
                     <span className="block mt-1 font-display font-semibold text-lg">{model.name}</span>
                   </div>
