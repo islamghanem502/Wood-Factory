@@ -88,7 +88,7 @@ export default function Offer() {
                     return (
                       <span key={line} className="block">
                         {before}
-                        {after !== null && <mark className="offer-mark">{OFFER.highlight}</mark>}
+                        {after !== null && <mark className="offer-mark" data-text={OFFER.highlight}>{OFFER.highlight}</mark>}
                         {after}
                       </span>
                     );

@@ -171,7 +171,7 @@
 #hero svg { transition: opacity 0.35s ease-out; }
 
 /* ───────── تظليل كلمة في عنوان العرض ─────────
-   خلفية بلون الخشب الفاتح بحواف دائرية. --hl نسبة المرسوم منها (0% → 100%)،
+   خلفية بنية غامقة بحواف دائرية والنص فوقها أبيض. --hl نسبة المرسوم منها (0% → 100%)،
    يحرّكها GSAP مع الاسكرول في Offer.jsx؛ القيمة الافتراضية 100% (بلا JavaScript يظهر كاملاً).
    clip-path يقصّ من اليسار فيُرسم من اليمين، و"round" يُبقي الحافة المتحركة دائرية. */
 .offer-mark {
@@ -190,8 +190,19 @@
   z-index: -1;
   inset: 0.04em 0 -0.02em;
   border-radius: 0.38em;
-  background: var(--oak-light);
+  background: var(--espresso);
   clip-path: inset(0 0 0 calc(100% - var(--hl)) round 0.38em);
+}
+/* نسخة بيضاء من الكلمة فوق الخلفية، مقصوصة بنفس المقدار: النص يبيضّ حيث رُسمت الخلفية فقط */
+.offer-mark::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  padding-inline: 0.28em;
+  color: #fff;
+  white-space: nowrap;
+  clip-path: inset(0 0 0 calc(100% - var(--hl)));
+  pointer-events: none;
 }
 
 /* ───────── تقليل الحركة ───────── */
