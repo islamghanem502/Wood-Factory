@@ -54,11 +54,17 @@ export default function Offer() {
               {/* النص — على اليسار */}
               <div className="lg:col-span-6 text-right lg:ps-6">
                 <Reveal as="h2" delay={120} className="font-display font-bold text-[1.35rem] sm:text-4xl lg:text-[2.6rem] leading-[1.3] text-ink">
-                  {OFFER.title.map((line) => (
-                    <span key={line} className="block">
-                      {line}
-                    </span>
-                  ))}
+                  {OFFER.title.map((line) => {
+                    // الكلمة المميّزة تُلفّ بـ <mark> ويُرسم تحتها خط تظليل عند الظهور (انظر .offer-mark في index.css)
+                    const [before, after] = OFFER.highlight && line.includes(OFFER.highlight) ? line.split(OFFER.highlight) : [line, null];
+                    return (
+                      <span key={line} className="block">
+                        {before}
+                        {after !== null && <mark className="offer-mark">{OFFER.highlight}</mark>}
+                        {after}
+                      </span>
+                    );
+                  })}
                 </Reveal>
 
                 <Reveal delay={200} className="mt-6 flex items-end gap-4">
